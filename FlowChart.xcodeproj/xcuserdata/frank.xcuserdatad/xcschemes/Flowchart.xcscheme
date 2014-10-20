@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "010719DD19F1A9AD006CA4AA"
-               BuildableName = "FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename.app"
-               BlueprintName = "FlowChart"
-               ReferencedContainer = "container:FlowChart.xcodeproj">
+               BuildableName = "Flowchart.app"
+               BlueprintName = "Flowchart"
+               ReferencedContainer = "container:Flowchart.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "010719F519F1A9AE006CA4AA"
-               BuildableName = "FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest"
-               BlueprintName = "FlowChartTests"
-               ReferencedContainer = "container:FlowChart.xcodeproj">
+               BuildableName = "Flowchart.temp_caseinsensitive_rename.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest"
+               BlueprintName = "FlowchartTests"
+               ReferencedContainer = "container:Flowchart.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "010719F519F1A9AE006CA4AA"
-               BuildableName = "FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest"
-               BlueprintName = "FlowChartTests"
-               ReferencedContainer = "container:FlowChart.xcodeproj">
+               BuildableName = "Flowchart.temp_caseinsensitive_rename.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest"
+               BlueprintName = "FlowchartTests"
+               ReferencedContainer = "container:Flowchart.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "010719DD19F1A9AD006CA4AA"
-            BuildableName = "FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename.app"
-            BlueprintName = "FlowChart"
-            ReferencedContainer = "container:FlowChart.xcodeproj">
+            BuildableName = "Flowchart.app"
+            BlueprintName = "Flowchart"
+            ReferencedContainer = "container:Flowchart.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -76,9 +76,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "010719DD19F1A9AD006CA4AA"
-            BuildableName = "FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename.app"
-            BlueprintName = "FlowChart"
-            ReferencedContainer = "container:FlowChart.xcodeproj">
+            BuildableName = "Flowchart.app"
+            BlueprintName = "Flowchart"
+            ReferencedContainer = "container:Flowchart.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "010719DD19F1A9AD006CA4AA"
-            BuildableName = "FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename.app"
-            BlueprintName = "FlowChart"
-            ReferencedContainer = "container:FlowChart.xcodeproj">
+            BuildableName = "Flowchart.app"
+            BlueprintName = "Flowchart"
+            ReferencedContainer = "container:Flowchart.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
