@@ -56,7 +56,7 @@ class CoreDataHelper: NSObject {
 			NSLog("Error saving coredata: %@", desc!)
 			
 			var alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Sorry.", comment: "Coredata error - title")
+			alertView.title = NSLocalizedString("Sorry!", comment: "Coredata error - title")
 			alertView.message = NSLocalizedString("We were unable to save your flow data.\n\nTake a deep breath. Everything will be OK.", comment: "Coredata error - message")
 			alertView.addButtonWithTitle("Dismiss")
 			alertView.show()

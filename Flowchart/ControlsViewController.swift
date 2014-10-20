@@ -36,6 +36,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		}
 		
 		CoreDataHelper.sharedInstance.saveCurrentRecord(datestamp, location:location, flowRate:flowRate, puffs:puffs)
+		HealthKitHelper.sharedInstance.writePeakFlowValue(flowRate, date:datestamp)
 	}
 	
 	@IBAction func locationAction(sender: AnyObject) {
@@ -110,6 +111,8 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		flow.selectRow((averageFlow/10)-1, inComponent: 0, animated:true)
 		
 		puffs.text = String(Int(puffStepper.value))
+		
+		HealthKitHelper.sharedInstance.connect()
 	}
 	
 	override func viewDidDisappear(animated: Bool) {

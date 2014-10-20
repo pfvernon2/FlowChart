@@ -44,7 +44,6 @@
 		010719F619F1A9AE006CA4AA /* Flowchart.temp_caseinsensitive_rename.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Flowchart.temp_caseinsensitive_rename.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		010719FB19F1A9AE006CA4AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		010719FC19F1A9AE006CA4AA /* FlowchartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowchartTests.swift; sourceTree = "<group>"; };
-		01071A0619F22CCB006CA4AA /* FlowChart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FlowChart.entitlements; sourceTree = "<group>"; };
 		01071A0A19F23252006CA4AA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		0132BB7019F36F3C00ACFBF6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		0132BB7219F4210000ACFBF6 /* LocationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
@@ -116,7 +115,6 @@
 			isa = PBXGroup;
 			children = (
 				01A9FE0719F4C8110001E223 /* Flowchart.entitlements */,
-				01071A0619F22CCB006CA4AA /* FlowChart.entitlements */,
 				010719E219F1A9AD006CA4AA /* Info.plist */,
 			);
 			name = "Supporting Files";

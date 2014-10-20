@@ -87,7 +87,9 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 	}
 	
 	func stop() {
-		locationManager.stopUpdatingLocation()
+		if locationManager != nil {
+			locationManager.stopUpdatingLocation()
+		}
 	}
 	
 	//MARK: CLLocationManagerDelegate
