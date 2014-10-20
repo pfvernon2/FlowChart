@@ -8,7 +8,7 @@
         <!--Controls-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" userLabel="Controls" customClass="ControlsViewController" customModule="FlowChart_temp_caseinsensitive_rename_temp_caseinsensitive_renamet_temp_caseinsensitive_rename" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" userLabel="Controls" customClass="ControlsViewController" customModule="Flowchart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -113,6 +113,20 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PERFormance" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BWU-1T-bTw">
+                                <rect key="frame" x="245" y="480" width="111" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="C2q-BO-BKK"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="C2q-BO-BKK"/>
+                                    </mask>
+                                </variation>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -128,8 +142,10 @@
                             <constraint firstAttribute="trailingMargin" secondItem="3fp-ez-oe9" secondAttribute="trailing" constant="-16" id="KNx-3z-1tG"/>
                             <constraint firstAttribute="centerX" secondItem="4E8-Pr-t4u" secondAttribute="centerX" id="MBe-xG-rRQ"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="idx-qA-YOx" secondAttribute="bottom" constant="8" id="Mfb-9B-JhJ"/>
+                            <constraint firstAttribute="centerX" secondItem="BWU-1T-bTw" secondAttribute="centerX" id="PRs-tn-xmC"/>
                             <constraint firstAttribute="centerX" secondItem="I4l-N9-og6" secondAttribute="centerX" id="SPY-3L-eNA"/>
                             <constraint firstItem="3fp-ez-oe9" firstAttribute="top" secondItem="2tm-or-GsA" secondAttribute="bottom" id="SqP-Uk-yXx"/>
+                            <constraint firstItem="BWU-1T-bTw" firstAttribute="top" secondItem="T57-R9-zxR" secondAttribute="bottom" constant="18" id="VVp-Qc-7qO"/>
                             <constraint firstItem="T57-R9-zxR" firstAttribute="top" secondItem="rzg-dx-4CZ" secondAttribute="bottom" constant="8" id="a2z-9N-KlF"/>
                             <constraint firstAttribute="centerX" secondItem="kDw-jU-SOt" secondAttribute="centerX" id="bSM-Mf-Bif"/>
                             <constraint firstAttribute="centerX" secondItem="T57-R9-zxR" secondAttribute="centerX" id="dfU-8X-WgZ"/>
@@ -161,7 +177,7 @@
         <!--Settings View Controller-->
         <scene sceneID="48f-30-6xR">
             <objects>
-                <viewController id="wGA-13-w1B" customClass="SettingsViewController" customModule="FlowChart_temp_caseinsensitive_rename_temp_caseinsensitive_renamet_temp_caseinsensitive_rename" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="wGA-13-w1B" customClass="SettingsViewController" customModule="Flowchart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Syl-NI-tjb"/>
                         <viewControllerLayoutGuide type="bottom" id="c8R-XS-F7c"/>

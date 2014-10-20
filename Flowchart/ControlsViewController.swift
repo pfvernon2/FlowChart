@@ -37,6 +37,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		
 		CoreDataHelper.sharedInstance.saveCurrentRecord(datestamp, location:location, flowRate:flowRate, puffs:puffs)
 		HealthKitHelper.sharedInstance.writePeakFlowValue(flowRate, date:datestamp)
+		HealthKitHelper.sharedInstance.writeInhalerUsage(puffs, date:datestamp)
 	}
 	
 	@IBAction func locationAction(sender: AnyObject) {
