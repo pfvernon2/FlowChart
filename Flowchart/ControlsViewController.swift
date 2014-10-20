@@ -183,8 +183,8 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			result = view
 		}
 		else {
-			let cell:UITableViewCell = UITableViewCell(style: .Default, reuseIdentifier: "pickerCell")!
-			var label:UILabel = cell.textLabel!
+			let cell:UITableViewCell = UITableViewCell(style: .Default, reuseIdentifier: "pickerCell")
+			var label:UILabel = cell.textLabel
 			label.textAlignment = .Center
 			label.font = UIFont.systemFontOfSize(36.0)
 			label.text = String(value)
