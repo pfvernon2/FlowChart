@@ -169,6 +169,10 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		return String((row+1) * 10)
 	}
 	
+//	func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+//		return 36.0
+//	}
+	
 	//http://www.hopkinsmedicine.org/healthlibrary/test_procedures/pulmonary/peak_flow_measurement_92,P07755/
 	func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
 		
@@ -182,10 +186,14 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			let cell:UITableViewCell = UITableViewCell(style: .Default, reuseIdentifier: "pickerCell")!
 			var label:UILabel = cell.textLabel!
 			label.textAlignment = .Center
+			label.font = UIFont.systemFontOfSize(36.0)
 			label.text = String(value)
 			cell.userInteractionEnabled = false
 
-			if (Double(value) >= (Double(maxPeakFlow) * 0.8)) {
+			if maxPeakFlow == 0 {
+				label.textColor = UIColor.blackColor()
+			}
+			else if (Double(value) >= (Double(maxPeakFlow) * 0.8)) {
 				label.textColor = UIColor.greenColor()
 			}
 			else if (Double(value) >= (Double(maxPeakFlow) * 0.5)) {
