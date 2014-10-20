@@ -21,6 +21,8 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	@IBOutlet var puffStepper: UIStepper!
 	@IBOutlet var location: UIButton!
 	
+	var maxPeakFlow : Int = 0
+	
 	//MARK: Actions
 	@IBAction func puffAction(sender: UIStepper) {
 		puffs.text = String(Int(puffStepper.value))
@@ -111,6 +113,8 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		let averageFlow = CoreDataHelper.sharedInstance.peakFlowMovingAverage()
 		flow.selectRow((averageFlow/10)-1, inComponent: 0, animated:true)
 		
+		maxPeakFlow = CoreDataHelper.sharedInstance.peakFlowMax()
+		
 		puffs.text = String(Int(puffStepper.value))
 		
 		HealthKitHelper.sharedInstance.connect()
@@ -165,5 +169,37 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		return String((row+1) * 10)
 	}
 	
+	//http://www.hopkinsmedicine.org/healthlibrary/test_procedures/pulmonary/peak_flow_measurement_92,P07755/
+	func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+		
+		let value:Int = (row+1) * 10
+		
+		var result:UIView! = nil
+		if view != nil {
+			result = view
+		}
+		else {
+			let cell:UITableViewCell = UITableViewCell(style: .Default, reuseIdentifier: "pickerCell")!
+			var label:UILabel = cell.textLabel!
+			label.textAlignment = .Center
+			label.text = String(value)
+			cell.userInteractionEnabled = false
+
+			if (Double(value) >= (Double(maxPeakFlow) * 0.8)) {
+				label.textColor = UIColor.greenColor()
+			}
+			else if (Double(value) >= (Double(maxPeakFlow) * 0.5)) {
+				label.textColor = UIColor.yellowColor()
+			}
+			else {
+				label.textColor = UIColor.redColor()
+			}
+			
+			result = cell
+		}
+		
+		return result
+	}
+
 }
 

@@ -89,4 +89,26 @@ class CoreDataHelper: NSObject {
 		return 450
 	}
 
+	func peakFlowMax() -> NSInteger {
+		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+		let managedContext = appDelegate.managedObjectContext!
+		
+		let fetchRequest = NSFetchRequest(entityName:kCoreDataHelperEntity)
+		let peakSort = NSSortDescriptor(key:kCoreDataHelderPeakFlowAttribute, ascending:false)
+		fetchRequest.sortDescriptors = [peakSort]
+		fetchRequest.fetchLimit = 1
+		
+		var error: NSError?
+		let fetchCount:Int = managedContext.countForFetchRequest(fetchRequest, error: &error);
+		if (fetchCount > 0) {
+			let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as [NSManagedObject]?
+			if let results:[NSManagedObject] = fetchedResults {
+				let result:Int = results[0].valueForKey("peakflow") as Int
+				return result
+			}
+		}
+		
+		return 0
+	}
+
 }
