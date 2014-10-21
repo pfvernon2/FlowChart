@@ -11,7 +11,8 @@ import CoreData
 import CoreLocation
 
 class CoreDataHelper: NSObject {
-	
+	var dateFormatter = NSDateFormatter()
+
 	//Singleton access
 	class var sharedInstance:CoreDataHelper {
 		struct Singleton {
@@ -28,8 +29,14 @@ class CoreDataHelper: NSObject {
 	let kCoreDataHelderPeakFlowAttribute:String = "peakflow"
 	let kCoreDataHelderPuffsAttribute:String = "puffs"
 	
+	override init() {
+		super.init()
+		//cache date formatter for performance
+		dateFormatter.dateFormat = "MM/dd/yy hh:mm a"
+	}
+	
 	//MARK: CoreData
-	func saveCurrentRecord(date:NSDate, location:CLLocation!, flowRate:NSInteger, puffs:NSInteger) {
+	func saveRecord(date:NSDate, flowRate:NSInteger, puffs:NSInteger, location:CLLocation?) -> Bool {
 		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
 		
@@ -41,8 +48,8 @@ class CoreDataHelper: NSObject {
 		var lat:Double = 0.0
 		var long:Double = 0.0
 		if location != nil {
-			lat = location.coordinate.latitude
-			long = location.coordinate.longitude
+			lat = location!.coordinate.latitude
+			long = location!.coordinate.longitude
 		}
 		
 		peakflow.setValue(lat, forKey: kCoreDataHelderLatitudeAttribute)
@@ -55,12 +62,10 @@ class CoreDataHelper: NSObject {
 			let desc = error?.localizedDescription
 			NSLog("Error saving coredata: %@", desc!)
 			
-			var alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Sorry!", comment: "Coredata error - title")
-			alertView.message = NSLocalizedString("We were unable to save your flow data.\n\nTake a deep breath. Everything will be OK.", comment: "Coredata error - message")
-			alertView.addButtonWithTitle("Dismiss")
-			alertView.show()
+			return false
 		}
+		
+		return true
 	}
 	
 	func peakFlowMovingAverage() -> NSInteger {
@@ -78,11 +83,16 @@ class CoreDataHelper: NSObject {
 			let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &error) as [NSManagedObject]?
 			if let results:[NSManagedObject] = fetchedResults {
 				var result:Int = 0;
+				var count:Int = 0;
 				for (index,value:NSManagedObject) in enumerate(results) {
 					let current = value.valueForKey("peakflow") as Int
-					result += current
+					//ignore 0 values, missing records
+					if current > 0 {
+						result += current
+						++count
+					}
 				}
-				return result/results.count
+				return result/count
 			}
 		}
 		
@@ -111,4 +121,51 @@ class CoreDataHelper: NSObject {
 		return 0
 	}
 
+	func importRecord(dict:Dictionary<NSObject,AnyObject>) -> Bool {
+		//We support: July 8, 2014 8:00 AM
+		let dateString:String = dict["date"] as String
+		let recordDate = self.dateFormatter.dateFromString(dateString)
+		if recordDate == nil {
+			return false;
+		}
+		
+		let flowRate:Int = NSString(string: dict["flowrate"] as String).integerValue
+		let puffs:Int = NSString(string: dict["inhaler"] as String).integerValue
+		let lat:Double = NSString(string: dict["latitude"] as String).doubleValue
+		let long:Double = NSString(string: dict["longitude"] as String).doubleValue
+		var location:CLLocation? = nil
+		
+		if lat != 0.0 || long != 0.0 {
+			location = CLLocation(latitude: lat, longitude: long)
+		}
+
+		return self.saveRecord(recordDate!, flowRate:flowRate, puffs:puffs, location:location)
+	}
+	
+	func importData(data:String) -> Int {
+		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+		let managedContext = appDelegate.managedObjectContext!
+		
+		let records:[String] = split(data, {(c:Character) -> Bool in return c == "\r\n"}, maxSplit:10000, allowEmptySlices:true)
+		var columns:[String] = [""]
+		managedContext.undoManager?.beginUndoGrouping()
+		for (index,value) in enumerate(records) {
+			let record = split(value, {(c:Character) -> Bool in return c == ","}, maxSplit:10, allowEmptySlices:true)
+			println(record)
+			if index == 0 {
+				columns = record
+			}
+			
+			else if record.count == columns.count {
+				var dict:Dictionary = NSDictionary(objects:record, forKeys:columns)
+				if !self.importRecord(dict) {
+					managedContext.undoManager?.undo()
+					return -1
+				}
+			}
+		}
+		managedContext.undoManager?.endUndoGrouping()
+		
+		return records.count
+	}
 }

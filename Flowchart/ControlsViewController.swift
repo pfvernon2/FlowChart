@@ -37,9 +37,17 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			location = LocationHelper.sharedInstance.locationManager.location
 		}
 		
-		CoreDataHelper.sharedInstance.saveCurrentRecord(datestamp, location:location, flowRate:flowRate, puffs:puffs)
-		HealthKitHelper.sharedInstance.writePeakFlowValue(flowRate, date:datestamp)
-		HealthKitHelper.sharedInstance.writeInhalerUsage(puffs, date:datestamp)
+		if CoreDataHelper.sharedInstance.saveRecord(datestamp, flowRate:flowRate, puffs:puffs, location:location) {
+			HealthKitHelper.sharedInstance.writePeakFlowValue(flowRate, date:datestamp)
+			HealthKitHelper.sharedInstance.writeInhalerUsage(puffs, date:datestamp)
+		}
+		else {
+			var alertView = UIAlertView()
+			alertView.title = NSLocalizedString("Sorry!", comment: "Coredata error - title")
+			alertView.message = NSLocalizedString("We were unable to save your flow data.\n\nTake a deep breath. Everything will be OK.", comment: "Coredata error - message")
+			alertView.addButtonWithTitle("Dismiss")
+			alertView.show()
+		}
 	}
 	
 	@IBAction func locationAction(sender: AnyObject) {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	
 	@IBOutlet var recordLocationSwitch: UISwitch!
 	@IBOutlet var locationWarningImageView: UIImageView!
@@ -24,6 +24,14 @@ class SettingsViewController: UIViewController {
 		alertView.message = locationDisplay
 		alertView.addButtonWithTitle("Dismiss")
 		alertView.show()
+	}
+	
+	@IBAction func importAction(sender: AnyObject) {
+		let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.comma-separated-values-text"], inMode: .Import)
+		documentPicker.delegate = self;
+		documentPicker.modalPresentationStyle = .FullScreen
+		self.presentViewController(documentPicker, animated: true) { () -> Void in
+		}
 	}
 	
 	@IBAction func locationSettingAction(sender: AnyObject) {
@@ -63,6 +71,36 @@ class SettingsViewController: UIViewController {
 		}
 	}
 	
+	//MARK: - DocumentPicker
+	func documentPicker(controller: UIDocumentPickerViewController, didPickDocumentAtURL url: NSURL)
+	{
+		var csvData:NSData = NSData(contentsOfURL: url)!
+		var dataString:String = NSString(data: csvData, encoding:NSASCIIStringEncoding)!
+		
+		let count = CoreDataHelper.sharedInstance.importData(dataString)
+		if count <= 0 {
+			var alertView = UIAlertView()
+			alertView.title = NSLocalizedString("Import Failed", comment: "Import Failed - title")
+			let locationDisplay:String = NSLocalizedString("The import of your data has failed. No data was imported. Please check your data format and try again, or don't, I'm not your mother.", comment: "Import Failed - message")
+			alertView.message = locationDisplay
+			alertView.addButtonWithTitle("Dismiss")
+			alertView.show()
+		} else {
+			var alertView = UIAlertView()
+			alertView.title = NSLocalizedString("Success!", comment: "Import success - title")
+			var locationDisplay:String = NSLocalizedString("We imported %lu records.", comment: "Import success - message")
+			locationDisplay = String(format: locationDisplay, count)
+			alertView.message = locationDisplay
+			alertView.addButtonWithTitle("Yeah!")
+			alertView.show()
+		}
+	}
+	
+	func documentPickerWasCancelled(controller: UIDocumentPickerViewController)
+	{
+		
+	}
+
     /*
     // MARK: - Navigation
 

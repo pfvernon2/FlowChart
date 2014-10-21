@@ -31,10 +31,9 @@ class HealthKitHelper: NSObject {
 		if (HKHealthStore.isHealthDataAvailable()) {
 			let peakFlowType:HKQuantityType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
 			let inhalerUsageType:HKQuantityType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierInhalerUsage)
-			
-			let readTypes = [peakFlowType, inhalerUsageType]
 			let writeTypes = [peakFlowType, inhalerUsageType]
-			self.healthStore.requestAuthorizationToShareTypes(NSSet(array:readTypes), readTypes:  NSSet(array:writeTypes), completion: {
+
+			self.healthStore.requestAuthorizationToShareTypes(NSSet(array:writeTypes), readTypes: nil, completion: {
 				(success:Bool, error:NSError!) -> Void in
 				
 				if (!success) {

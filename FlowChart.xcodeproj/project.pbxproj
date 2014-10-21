@@ -19,6 +19,7 @@
 		0132BB7319F4210000ACFBF6 /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0132BB7219F4210000ACFBF6 /* LocationHelper.swift */; };
 		015DA37219F486EB00D7157A /* HealthKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015DA37119F486EB00D7157A /* HealthKitHelper.swift */; };
 		01A9FE0919F4C8120001E223 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A9FE0819F4C8120001E223 /* HealthKit.framework */; };
+		01D305F519F5E6A80087D084 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D305F419F5E6A80087D084 /* CloudKit.framework */; };
 		01E987E319F45B7500854F20 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E987E219F45B7500854F20 /* CoreDataHelper.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		015DA37119F486EB00D7157A /* HealthKitHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitHelper.swift; sourceTree = "<group>"; };
 		01A9FE0719F4C8110001E223 /* Flowchart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Flowchart.entitlements; sourceTree = SOURCE_ROOT; };
 		01A9FE0819F4C8120001E223 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		01D305F419F5E6A80087D084 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		01E987E219F45B7500854F20 /* CoreDataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01D305F519F5E6A80087D084 /* CloudKit.framework in Frameworks */,
 				01071A0B19F23252006CA4AA /* CoreLocation.framework in Frameworks */,
 				01A9FE0919F4C8120001E223 /* HealthKit.framework in Frameworks */,
 			);
@@ -141,6 +144,7 @@
 		01071A0919F22D04006CA4AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				01D305F419F5E6A80087D084 /* CloudKit.framework */,
 				01A9FE0819F4C8120001E223 /* HealthKit.framework */,
 				01071A0A19F23252006CA4AA /* CoreLocation.framework */,
 			);
@@ -199,6 +203,9 @@
 						DevelopmentTeam = K8SUWT674B;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
 								enabled = 1;
 							};
 						};
