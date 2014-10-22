@@ -17,6 +17,7 @@
 		01071A0B19F23252006CA4AA /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01071A0A19F23252006CA4AA /* CoreLocation.framework */; };
 		0132BB7119F36F3C00ACFBF6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0132BB7019F36F3C00ACFBF6 /* SettingsViewController.swift */; };
 		0132BB7319F4210000ACFBF6 /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0132BB7219F4210000ACFBF6 /* LocationHelper.swift */; };
+		015AD47019F77CC800D9329F /* CSVReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015AD46F19F77CC800D9329F /* CSVReader.swift */; };
 		015DA37219F486EB00D7157A /* HealthKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015DA37119F486EB00D7157A /* HealthKitHelper.swift */; };
 		01A9FE0919F4C8120001E223 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A9FE0819F4C8120001E223 /* HealthKit.framework */; };
 		01D305F519F5E6A80087D084 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D305F419F5E6A80087D084 /* CloudKit.framework */; };
@@ -48,6 +49,7 @@
 		01071A0A19F23252006CA4AA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		0132BB7019F36F3C00ACFBF6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		0132BB7219F4210000ACFBF6 /* LocationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
+		015AD46F19F77CC800D9329F /* CSVReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSVReader.swift; sourceTree = "<group>"; };
 		015DA37119F486EB00D7157A /* HealthKitHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitHelper.swift; sourceTree = "<group>"; };
 		01A9FE0719F4C8110001E223 /* Flowchart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Flowchart.entitlements; sourceTree = SOURCE_ROOT; };
 		01A9FE0819F4C8120001E223 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
@@ -104,6 +106,7 @@
 				015DA37119F486EB00D7157A /* HealthKitHelper.swift */,
 				0132BB7219F4210000ACFBF6 /* LocationHelper.swift */,
 				01E987E219F45B7500854F20 /* CoreDataHelper.swift */,
+				015AD46F19F77CC800D9329F /* CSVReader.swift */,
 				010719EA19F1A9AD006CA4AA /* Main.storyboard */,
 				010719ED19F1A9AD006CA4AA /* Images.xcassets */,
 				010719EF19F1A9AD006CA4AA /* LaunchScreen.xib */,
@@ -260,6 +263,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				015AD47019F77CC800D9329F /* CSVReader.swift in Sources */,
 				010719E919F1A9AD006CA4AA /* ControlsViewController.swift in Sources */,
 				015DA37219F486EB00D7157A /* HealthKitHelper.swift in Sources */,
 				010719E719F1A9AD006CA4AA /* Flowchart.xcdatamodeld in Sources */,
