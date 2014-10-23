@@ -142,21 +142,21 @@ class CoreDataHelper: NSObject {
 		return self.saveRecord(recordDate!, flowRate:flowRate, puffs:puffs, location:location)
 	}
 	
-	func importData(data:String) -> Int {
+	func importData(records:[[String]]) -> Int {
 		let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
 		let managedContext = appDelegate.managedObjectContext!
 		
-		let records:[String] = split(data, {(c:Character) -> Bool in return c == "\r\n"}, maxSplit:10000, allowEmptySlices:true)
-		var columns:[String] = [""]
+		var imported = 0
+		var columns = []
 		managedContext.undoManager?.beginUndoGrouping()
-		for (index,value) in enumerate(records) {
-			let record = split(value, {(c:Character) -> Bool in return c == ","}, maxSplit:10, allowEmptySlices:true)
+		for (index,record) in enumerate(records) {
 			println(record)
 			if index == 0 {
 				columns = record
 			}
 			
 			else if record.count == columns.count {
+				++imported
 				var dict:Dictionary = NSDictionary(objects:record, forKeys:columns)
 				if !self.importRecord(dict) {
 					managedContext.undoManager?.undo()
@@ -166,6 +166,6 @@ class CoreDataHelper: NSObject {
 		}
 		managedContext.undoManager?.endUndoGrouping()
 		
-		return records.count
+		return imported
 	}
 }

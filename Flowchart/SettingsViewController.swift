@@ -53,6 +53,9 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	override func viewWillAppear(animated: Bool) {
 		self.updateDisplay()
 	}
+	
+	override func viewDidAppear(animated: Bool) {
+	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -74,11 +77,21 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	//MARK: - DocumentPicker
 	func documentPicker(controller: UIDocumentPickerViewController, didPickDocumentAtURL url: NSURL)
 	{
-		var csvData:NSData = NSData(contentsOfURL: url)!
-		var dataString:String = NSString(data: csvData, encoding:NSASCIIStringEncoding)!
+		var reader:CSVReader = CSVReader(contentsOfURL: url)
+		var table = reader.table()
+		var headers = table[0]
+		var coreDataImport = 0
+		var healthKitImport = 0
 		
-		let count = CoreDataHelper.sharedInstance.importData(dataString)
-		if count <= 0 {
+		var hasDate = contains(headers, "date")
+		var hasFlowrate = contains(headers, "flowrate")
+		if hasDate && hasFlowrate {
+			coreDataImport = CoreDataHelper.sharedInstance.importData(table)
+			healthKitImport = HealthKitHelper.sharedInstance.importSamples(table)
+		}
+		
+		var imported = min(healthKitImport, coreDataImport)
+		if imported <= 0 {
 			var alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Import Failed", comment: "Import Failed - title")
 			let locationDisplay:String = NSLocalizedString("The import of your data has failed. No data was imported. Please check your data format and try again, or don't, I'm not your mother.", comment: "Import Failed - message")
@@ -89,7 +102,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 			var alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Success!", comment: "Import success - title")
 			var locationDisplay:String = NSLocalizedString("We imported %lu records.", comment: "Import success - message")
-			locationDisplay = String(format: locationDisplay, count)
+			locationDisplay = String(format: locationDisplay, imported)
 			alertView.message = locationDisplay
 			alertView.addButtonWithTitle("Yeah!")
 			alertView.show()

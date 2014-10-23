@@ -20,6 +20,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	@IBOutlet var puffs: UILabel!
 	@IBOutlet var puffStepper: UIStepper!
 	@IBOutlet var location: UIButton!
+	@IBOutlet var activity: UIActivityIndicatorView!
 	
 	var maxPeakFlow : Int = 0
 	
@@ -29,6 +30,8 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	}
 	
 	@IBAction func submitAction(sender: AnyObject) {
+		self.activity.startAnimating()
+		
 		let flowRate = (flow.selectedRowInComponent(0)+1) * 10
 		let puffs = Int(puffStepper.value)
 		
@@ -40,8 +43,15 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		if CoreDataHelper.sharedInstance.saveRecord(datestamp, flowRate:flowRate, puffs:puffs, location:location) {
 			HealthKitHelper.sharedInstance.writePeakFlowValue(flowRate, date:datestamp)
 			HealthKitHelper.sharedInstance.writeInhalerUsage(puffs, date:datestamp)
+			
+			self.delay(1.0, closure: { () -> () in
+				self.activity.stopAnimating()
+				self.updateDisplay()
+			})
 		}
 		else {
+			self.activity.stopAnimating()
+			
 			var alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Sorry!", comment: "Coredata error - title")
 			alertView.message = NSLocalizedString("We were unable to save your flow data.\n\nTake a deep breath. Everything will be OK.", comment: "Coredata error - message")
@@ -109,23 +119,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	}
 	
 	override func viewDidAppear(animated: Bool) {
-		self.updateLocationButtonIcon()
-		
-		datestamp = NSDate()
-		let format : NSDateFormatter = NSDateFormatter()
-		format.dateStyle = .MediumStyle
-		format.timeStyle = .ShortStyle
-		date.text = format.stringFromDate(datestamp)
-
-		//select row representing moving average
-		let averageFlow = CoreDataHelper.sharedInstance.peakFlowMovingAverage()
-		flow.selectRow((averageFlow/10)-1, inComponent: 0, animated:true)
-		
-		maxPeakFlow = CoreDataHelper.sharedInstance.peakFlowMax()
-		
-		puffs.text = String(Int(puffStepper.value))
-		
-		HealthKitHelper.sharedInstance.connect()
+		self.updateDisplay()
 	}
 	
 	override func viewDidDisappear(animated: Bool) {
@@ -134,6 +128,27 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
+	}
+	
+	func updateDisplay() {
+		self.updateLocationButtonIcon()
+		
+		datestamp = NSDate()
+		let format : NSDateFormatter = NSDateFormatter()
+		format.dateStyle = .MediumStyle
+		format.timeStyle = .ShortStyle
+		date.text = format.stringFromDate(datestamp)
+		
+		//select row representing moving average
+		let averageFlow = CoreDataHelper.sharedInstance.peakFlowMovingAverage()
+		flow.selectRow((averageFlow/10)-1, inComponent: 0, animated:true)
+		
+		maxPeakFlow = CoreDataHelper.sharedInstance.peakFlowMax()
+		
+		puffStepper.value = 0.0
+		puffs.text = String(Int(puffStepper.value))
+		
+		HealthKitHelper.sharedInstance.connect()
 	}
 	
 	func updateLocationButtonIcon() {
@@ -164,6 +179,15 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		}
 	}
 	
+	func delay(delay:Double, closure:()->()) {
+		dispatch_after(
+			dispatch_time(
+				DISPATCH_TIME_NOW,
+				Int64(delay * Double(NSEC_PER_SEC))
+			),
+			dispatch_get_main_queue(), closure)
+	}
+
 	//MARK: Picker lifecycle
 	func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
 		return 1

@@ -10,7 +10,8 @@ import UIKit
 import HealthKit
 
 class HealthKitHelper: NSObject {
-	
+	var dateFormatter = NSDateFormatter()
+
 	let healthStore:HKHealthStore = HKHealthStore();
 	
 	//Singleton access
@@ -24,6 +25,7 @@ class HealthKitHelper: NSObject {
 	
 	override init() {
 		super.init()
+		dateFormatter.dateFormat = "MM/dd/yy hh:mm a"
 	}
 
 	func connect() {
@@ -83,6 +85,41 @@ class HealthKitHelper: NSObject {
 				alertView.show()
 			}
 		})
+	}
+
+	func importSamples(records:[[String]]) -> Int {
+		var imported = 0
+		var columns = []
+		for (index,record) in enumerate(records) {
+			println(record)
+			if index == 0 {
+				columns = record
+			}
+				
+			else if record.count == columns.count {
+				var dict:Dictionary = NSDictionary(objects:record, forKeys:columns)
+				
+				//We support: July 8, 2014 8:00 AM
+				let dateString:String = dict["date"] as String
+				let recordDate = self.dateFormatter.dateFromString(dateString)
+				if recordDate == nil {
+					return -1;
+				}
+				
+				if let peakFlow:Int = (dict["flowrate"] as String).toInt() {
+					self.writePeakFlowValue(peakFlow, date: recordDate!)
+				}
+				
+				if let puffs:Int = (dict["inhaler"] as String).toInt() {
+					self.writeInhalerUsage(puffs, date: recordDate!)
+				}
+				
+				++imported
+
+			}
+		}
+		
+		return imported
 	}
 
 }
