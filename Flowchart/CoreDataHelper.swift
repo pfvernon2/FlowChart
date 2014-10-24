@@ -150,7 +150,10 @@ class CoreDataHelper: NSObject {
 		var columns = []
 		managedContext.undoManager?.beginUndoGrouping()
 		for (index,record) in enumerate(records) {
-			println(record)
+			#if DEBUG
+				println(record)
+			#endif
+			
 			if index == 0 {
 				columns = record
 			}

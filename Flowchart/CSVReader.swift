@@ -11,7 +11,7 @@
 
 import UIKit
 
-public class CSVReader {
+public class CSVReader: NSObject {
 	
 	let delimiter:Character = ","
 	var characterData:String
@@ -21,7 +21,7 @@ public class CSVReader {
 	}
 	
 	//read entire file into memory, returns array of arrays
-	func table() -> [[String]] {
+	func read() -> [[String]] {
 		var table:[[String]] = []
 		
 		var quoted:Bool = false

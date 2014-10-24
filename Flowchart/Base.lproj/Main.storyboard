@@ -183,6 +183,9 @@
                                 <state key="normal" title="Export">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="exportAction:" destination="wGA-13-w1B" eventType="touchUpInside" id="puB-hf-9Aq"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Q6-MI-z6E">
                                 <rect key="frame" x="547" y="562" width="37" height="30"/>
