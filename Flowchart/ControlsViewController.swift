@@ -235,6 +235,9 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			if maxPeakFlow == 0 {
 				label.textColor = UIColor.blackColor()
 			}
+			else if (Double(value) == Double(maxPeakFlow)) {
+				label.textColor = UIColor.blueColor()
+			}
 			else if (Double(value) >= (Double(maxPeakFlow) * 0.8)) {
 				label.textColor = UIColor.greenColor()
 			}
