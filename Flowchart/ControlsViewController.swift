@@ -15,12 +15,10 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	
 	var datestamp: NSDate!
 	
-	@IBOutlet var date: UILabel!
 	@IBOutlet var flow: UIPickerView!
 	@IBOutlet var puffs: UILabel!
 	@IBOutlet var puffStepper: UIStepper!
 	@IBOutlet var location: UIButton!
-	@IBOutlet var activity: UIActivityIndicatorView!
 	
 	var maxPeakFlow : Int = 0
 	
@@ -29,32 +27,36 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		puffs.text = String(Int(puffStepper.value))
 	}
 	
-	@IBAction func submitAction(sender: AnyObject) {
-		self.activity.startAnimating()
-		
+	@IBAction func submitPEFRAction(sender: AnyObject) {
 		let flowRate = (flow.selectedRowInComponent(0)+1) * 10
+		
+		var location:CLLocation! = nil;
+		if LocationHelper.sharedInstance.locationManager != nil {
+			location = LocationHelper.sharedInstance.locationManager.location
+		}
+
+		HealthKitHelper.sharedInstance.writePeakFlowSample(flowRate, date:datestamp, location:location) { (success, error) -> () in
+			var alertView = UIAlertView()
+			alertView.title = NSLocalizedString("Peak Flow Update Failed", comment: "Peak Flow Update Failed - title")
+			alertView.message = NSLocalizedString("Unable to access your HealthKit information. Please confirm this app is configured access your HealthKit data in Settings->Privacy->Health.", comment: "Peak Flow Update Failed - message")
+			alertView.addButtonWithTitle("Dismiss")
+			alertView.show()
+		}
+		
+	}
+	
+	@IBAction func submitInhalerAction(sender: AnyObject) {
 		let puffs = Int(puffStepper.value)
 		
 		var location:CLLocation! = nil;
 		if LocationHelper.sharedInstance.locationManager != nil {
 			location = LocationHelper.sharedInstance.locationManager.location
 		}
-		
-		if CoreDataHelper.sharedInstance.saveRecord(datestamp, flowRate:flowRate, puffs:puffs, location:location) {
-			HealthKitHelper.sharedInstance.writePeakFlowValue(flowRate, date:datestamp)
-			HealthKitHelper.sharedInstance.writeInhalerUsage(puffs, date:datestamp)
-			
-			self.delay(1.0, closure: { () -> () in
-				self.activity.stopAnimating()
-				self.updateDisplay()
-			})
-		}
-		else {
-			self.activity.stopAnimating()
-			
+
+		HealthKitHelper.sharedInstance.writeInhalerUsage(puffs, date:datestamp, location:location) { (success, error) -> () in
 			var alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Sorry!", comment: "Coredata error - title")
-			alertView.message = NSLocalizedString("We were unable to save your flow data.\n\nTake a deep breath. Everything will be OK.", comment: "Coredata error - message")
+			alertView.title = NSLocalizedString("Inhaler Usage Failed", comment: "Inhaler Usage Failed - title")
+			alertView.message = NSLocalizedString("Unable to access your HealthKit information. Please confirm this app is configured access your HealthKit data in Settings->Privacy->Health.", comment: "Inhaler Usage Failed - message")
 			alertView.addButtonWithTitle("Dismiss")
 			alertView.show()
 		}
@@ -137,13 +139,21 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		let format : NSDateFormatter = NSDateFormatter()
 		format.dateStyle = .MediumStyle
 		format.timeStyle = .ShortStyle
-		date.text = format.stringFromDate(datestamp)
 		
 		//select row representing moving average
-		let averageFlow = CoreDataHelper.sharedInstance.peakFlowMovingAverage()
-		flow.selectRow((averageFlow/10)-1, inComponent: 0, animated:true)
-		
-		maxPeakFlow = CoreDataHelper.sharedInstance.peakFlowMax()
+		HealthKitHelper.sharedInstance.getMaxPeakFlowSample({ (peakFlow, error) -> () in
+			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				self.maxPeakFlow = Int(peakFlow)
+				self.flow.setNeedsDisplay()
+			})
+		})
+
+		HealthKitHelper.sharedInstance.getPeakFlowMovingAverage({ (peakFlow, error) -> () in
+			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				let averageFlow:Int = Int(peakFlow)
+				self.flow.selectRow((averageFlow/10)-1, inComponent: 0, animated:true)
+			})
+		})
 		
 		puffStepper.value = 0.0
 		puffs.text = String(Int(puffStepper.value))

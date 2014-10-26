@@ -60,12 +60,12 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 				//combine data sets... use header from first available
 				var data:[[String]] = [[String]]()
 				if peakFlow.count > 1 {
-					data += peakFlow
+					data = peakFlow
 				}
 				if inhaler.count > 1 && data.count > 1{
 					data += inhaler[1...inhaler.count-1]
 				} else {
-					data += inhaler
+					data = inhaler
 				}
 				
 				let writer:CSVWriter = CSVWriter(file: url)
@@ -138,12 +138,10 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 			var hasDate = contains(headers, "date")
 			var hasFlowrate = contains(headers, "flowrate")
 			if hasDate && hasFlowrate {
-				coreDataImport = CoreDataHelper.sharedInstance.importData(table)
 				healthKitImport = HealthKitHelper.sharedInstance.importSamples(table)
 			}
 			
-			var imported = min(healthKitImport, coreDataImport)
-			if imported <= 0 {
+			if healthKitImport <= 0 {
 				var alertView = UIAlertView()
 				alertView.title = NSLocalizedString("Import Failed", comment: "Import Failed - title")
 				let locationDisplay:String = NSLocalizedString("The import of your data has failed. No data was imported. Please check your data format and try again, or don't, I'm not your mother.", comment: "Import Failed - message")
@@ -154,7 +152,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 				var alertView = UIAlertView()
 				alertView.title = NSLocalizedString("Success!", comment: "Import success - title")
 				var locationDisplay:String = NSLocalizedString("We imported %lu records.", comment: "Import success - message")
-				locationDisplay = String(format: locationDisplay, imported)
+				locationDisplay = String(format: locationDisplay, healthKitImport)
 				alertView.message = locationDisplay
 				alertView.addButtonWithTitle("Yeah!")
 				alertView.show()
