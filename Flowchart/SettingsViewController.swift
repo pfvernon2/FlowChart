@@ -40,25 +40,46 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	}
 	
 	@IBAction func exportAction(sender: AnyObject) {
-		//create temp file with well known name
-		let dir:String = NSTemporaryDirectory()
-		let filename:String = String("PERFormance.csv")
-		let path:String = dir.stringByAppendingPathComponent(filename)
-		let url:NSURL = NSURL.fileURLWithPath(path)!
-		
-		
-		let data:[[String]] = [["f\"o\"o", "bar", "foobar"],["1","2","3"]]
-		let writer:CSVWriter = CSVWriter(file: url)
-		writer.write(data)
-		self.saveCount = countElements(data)
-
-		
-		
-		let documentPicker = UIDocumentPickerViewController(URL: url, inMode: .ExportToService)
-		documentPicker.delegate = self;
-		documentPicker.modalPresentationStyle = .FullScreen
-		self.inSave = true
-		self.presentViewController(documentPicker, animated: true) { () -> Void in
+		HealthKitHelper.sharedInstance.exportSamples { (peakFlow, inhaler, error) -> () in
+			if let reponseError = error {
+				var alertView = UIAlertView()
+				alertView.title = NSLocalizedString("Export Failed", comment: "Export Failed - title")
+				let locationDisplay:String = NSLocalizedString("We were unable to access your HealthKit data. Please ensure that you have granted this app access to your HealthKit data in Settings->Privacy->Health.", comment: "Export Failed - message")
+				alertView.message = locationDisplay
+				alertView.addButtonWithTitle("Dismiss")
+				alertView.show()
+			}
+			else {
+				//create temp file with well known name
+				let dir:String = NSTemporaryDirectory()
+				let appName:AnyObject? = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName")
+				let filename:String = String(format: "%@.csv", appName as String)
+				let path:String = dir.stringByAppendingPathComponent(filename)
+				let url:NSURL = NSURL.fileURLWithPath(path)!
+				
+				//combine data sets... use header from first available
+				var data:[[String]] = [[String]]()
+				if peakFlow.count > 1 {
+					data += peakFlow
+				}
+				if inhaler.count > 1 && data.count > 1{
+					data += inhaler[1...inhaler.count-1]
+				} else {
+					data += inhaler
+				}
+				
+				let writer:CSVWriter = CSVWriter(file: url)
+				writer.write(data)
+				self.saveCount = countElements(data)
+				
+				//move temp file to iCloud, or wherever
+				let documentPicker = UIDocumentPickerViewController(URL: url, inMode: .ExportToService)
+				documentPicker.delegate = self;
+				documentPicker.modalPresentationStyle = .FullScreen
+				self.inSave = true
+				self.presentViewController(documentPicker, animated: true) { () -> Void in
+				}
+			}
 		}
 	}
 	
