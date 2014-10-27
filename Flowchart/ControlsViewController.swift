@@ -245,16 +245,6 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			
 			view.addSubview(label)
 			
-			result = view
-			
-			
-/*
-			let cell:UITableViewCell = UITableViewCell(style: .Default, reuseIdentifier: "pickerCell")
-			cell.textLabel.textAlignment = .Center
-			cell.textLabel.font = UIFont.systemFontOfSize(36.0)
-			cell.textLabel.text = String(value)
-			cell.userInteractionEnabled = false
-*/
 			if maxPeakFlow == 0 {
 				label.textColor = UIColor.blackColor()
 			}
@@ -294,7 +284,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 				view.addSubview(tag)
 			}
 
-//			result = cell
+			result = view
 		}
 		
 		return result
