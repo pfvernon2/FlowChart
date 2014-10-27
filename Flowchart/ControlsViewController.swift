@@ -21,7 +21,9 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	@IBOutlet var location: UIButton!
 	
 	var maxPeakFlow : Int = 0
-	
+	var minPeakFlow : Int = 0
+	var avgPeakFlow : Int = 0
+
 	//MARK: Actions
 	@IBAction func puffAction(sender: UIStepper) {
 		puffs.text = String(Int(puffStepper.value))
@@ -42,7 +44,6 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			alertView.addButtonWithTitle("Dismiss")
 			alertView.show()
 		}
-		
 	}
 	
 	@IBAction func submitInhalerAction(sender: AnyObject) {
@@ -140,18 +141,28 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		format.dateStyle = .MediumStyle
 		format.timeStyle = .ShortStyle
 		
-		//select row representing moving average
+		//Get personal best
 		HealthKitHelper.sharedInstance.getMaxPeakFlowSample({ (peakFlow, error) -> () in
 			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				self.maxPeakFlow = Int(peakFlow)
+				self.maxPeakFlow = (Int(peakFlow)/10) * 10
 				self.flow.setNeedsDisplay()
 			})
 		})
 
+		//Get personal worst
+		HealthKitHelper.sharedInstance.getMinPeakFlowSample({ (peakFlow, error) -> () in
+			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				self.minPeakFlow = (Int(peakFlow)/10) * 10
+				self.flow.setNeedsDisplay()
+			})
+		})
+		
+		//select row representing moving average
 		HealthKitHelper.sharedInstance.getPeakFlowMovingAverage({ (peakFlow, error) -> () in
 			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				let averageFlow:Int = Int(peakFlow)
-				self.flow.selectRow((averageFlow/10)-1, inComponent: 0, animated:true)
+				//round down to nearest value in picker
+				self.avgPeakFlow = (Int(peakFlow)/10) * 10
+				self.flow.selectRow((self.avgPeakFlow/10)-1, inComponent: 0, animated:true)
 			})
 		})
 		
@@ -225,34 +236,68 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			result = view
 		}
 		else {
-			let cell:UITableViewCell = UITableViewCell(style: .Default, reuseIdentifier: "pickerCell")
-			var label:UILabel = cell.textLabel
+			var view:UIView = UIView(frame: CGRectMake(0, 0, pickerView.frame.size.width, 100))
+			
+			var label:UILabel = UILabel(frame: CGRectMake(0, 0, pickerView.frame.size.width, 100))
 			label.textAlignment = .Center
 			label.font = UIFont.systemFontOfSize(36.0)
 			label.text = String(value)
+			
+			view.addSubview(label)
+			
+			result = view
+			
+			
+/*
+			let cell:UITableViewCell = UITableViewCell(style: .Default, reuseIdentifier: "pickerCell")
+			cell.textLabel.textAlignment = .Center
+			cell.textLabel.font = UIFont.systemFontOfSize(36.0)
+			cell.textLabel.text = String(value)
 			cell.userInteractionEnabled = false
-
+*/
 			if maxPeakFlow == 0 {
 				label.textColor = UIColor.blackColor()
 			}
-			else if (Double(value) == Double(maxPeakFlow)) {
-				label.textColor = UIColor.blueColor()
-			}
-			else if (Double(value) >= (Double(maxPeakFlow) * 0.8)) {
+			else if Double(value) >= (Double(maxPeakFlow) * 0.8) {
 				label.textColor = UIColor.greenColor()
 			}
-			else if (Double(value) >= (Double(maxPeakFlow) * 0.5)) {
+			else if Double(value) >= (Double(maxPeakFlow) * 0.5) {
 				label.textColor = UIColor.yellowColor()
 			}
 			else {
 				label.textColor = UIColor.redColor()
 			}
 			
-			result = cell
+			//Display min/max limits
+			if Double(value) == Double(self.avgPeakFlow) {
+				var tag:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
+				tag.textAlignment = .Left
+				tag.font = UIFont.systemFontOfSize(18.0)
+				tag.text = "Average"
+				tag.textColor = UIColor.whiteColor()
+				view.addSubview(tag)
+			}
+			else if Double(value) == Double(self.maxPeakFlow) {
+				var tag:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
+				tag.textAlignment = .Left
+				tag.font = UIFont.systemFontOfSize(18.0)
+				tag.text = "Maximum"
+				tag.textColor = UIColor.whiteColor()
+				view.addSubview(tag)
+			}
+			else if Double(value) == Double(self.minPeakFlow) {
+				var tag:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
+				tag.textAlignment = .Left
+				tag.font = UIFont.systemFontOfSize(18.0)
+				tag.text = "Minimum"
+				tag.textColor = UIColor.whiteColor()
+				view.addSubview(tag)
+			}
+
+//			result = cell
 		}
 		
 		return result
 	}
-
 }
 

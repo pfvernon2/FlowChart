@@ -53,6 +53,20 @@
                                     <action selector="locationAction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="2Qf-0a-tNa"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Inhaler Usage" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDw-jU-SOt">
+                                <rect key="frame" x="237" y="363" width="127" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="uoK-SJ-z5u"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="uoK-SJ-z5u"/>
+                                    </mask>
+                                </variation>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Peak Expiratory Flow Rate" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2tm-or-GsA">
                                 <rect key="frame" x="178" y="50" width="244" height="24"/>
                                 <constraints>
@@ -112,20 +126,6 @@
                                     <action selector="submitPEFRAction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="KJW-cL-uQR"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Inhaler Usage" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDw-jU-SOt">
-                                <rect key="frame" x="237" y="363" width="127" height="24"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="uoK-SJ-z5u"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
-                                <nil key="highlightedColor"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="uoK-SJ-z5u"/>
-                                    </mask>
-                                </variation>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.52215656271620048" green="0.76882332059672132" blue="0.79385359116022103" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                         <constraints>

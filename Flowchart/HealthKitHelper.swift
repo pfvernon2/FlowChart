@@ -156,6 +156,21 @@ class HealthKitHelper: NSObject {
 		healthStore.executeQuery(statsQuery)
 	}
 	
+	func getMinPeakFlowSample(completion:(peakFlow:Double, error:NSError!)->()) {
+		let peakQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
+		
+		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType, quantitySamplePredicate: nil, options: .DiscreteMin) { (query, statistics, error:NSError!) -> Void in
+			
+			let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
+			let peakQuantity:HKQuantity = statistics.minimumQuantity()
+			let result = peakQuantity.doubleValueForUnit(peakUnit)
+			
+			completion(peakFlow:result, error:error)
+		}
+		
+		healthStore.executeQuery(statsQuery)
+	}
+
 	func getPeakFlowMovingAverage(completion:(peakFlow:Double, error:NSError!)->()) {
 		let past:NSDate = NSDate(timeIntervalSinceNow: -(60.0 * 60.0 * 24 * 30))
 		let now:NSDate = NSDate()
