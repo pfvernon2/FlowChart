@@ -173,13 +173,10 @@ class HealthKitHelper: NSObject {
 		healthStore.executeQuery(statsQuery)
 	}
 
-	func getPeakFlowMovingAverage(completion:(peakFlow:Double, error:NSError!)->()) {
-		let past:NSDate = NSDate(timeIntervalSinceNow: -(60.0 * 60.0 * 24 * 30))
-		let now:NSDate = NSDate()
-		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: now, options: .None)
+	func getPeakFlowAverageWithPredicate(predicate:NSPredicate!, completion:(peakFlow:Double, error:NSError!)->()) {
 		let peakQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
 		
-		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType, quantitySamplePredicate: datePredicate, options: .DiscreteAverage) { (query, statistics, error:NSError!) -> Void in
+		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType, quantitySamplePredicate: predicate, options: .DiscreteAverage) { (query, statistics, error:NSError!) -> Void in
 			
 			let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
 			let peakQuantity:HKQuantity = statistics.averageQuantity()
@@ -189,6 +186,18 @@ class HealthKitHelper: NSObject {
 		}
 		
 		healthStore.executeQuery(statsQuery)
+	}
+
+	func getPeakFlowMovingAverage(completion:(peakFlow:Double, error:NSError!)->()) {
+		let past:NSDate = NSDate(timeIntervalSinceNow: -(60.0 * 60.0 * 24 * 30))
+		let now:NSDate = NSDate()
+		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: now, options: .None)
+		
+		self.getPeakFlowAverageWithPredicate(datePredicate, completion)
+	}
+	
+	func getPeakFlowAverage(completion:(peakFlow:Double, error:NSError!)->()) {
+		self.getPeakFlowAverageWithPredicate(nil, completion)
 	}
 	
 	func exportPeakFlowSamples(completion:(peakFlow: [HKQuantitySample], error:NSError!)->()){

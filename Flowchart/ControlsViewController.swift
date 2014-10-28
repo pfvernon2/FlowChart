@@ -59,6 +59,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			self.delay(1.0, closure: { () -> () in
 				self.flowSubmitStatus.stopAnimating();
 				self.flowSubmit.hidden = false;
+				self.updateDisplay()
 			})
 		}
 	}
@@ -87,6 +88,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			self.delay(1.0, closure: { () -> () in
 				self.puffsSubmitStatus.stopAnimating();
 				self.puffsSubmit.hidden = false;
+				self.updateDisplay()
 			})
 		}
 	}
@@ -186,7 +188,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		})
 		
 		//select row representing moving average
-		HealthKitHelper.sharedInstance.getPeakFlowMovingAverage({ (peakFlow, error) -> () in
+		HealthKitHelper.sharedInstance.getPeakFlowAverage({ (peakFlow, error) -> () in
 			dispatch_async(dispatch_get_main_queue(), { () -> Void in
 				//round down to nearest value in picker
 				self.avgPeakFlow = (Int(peakFlow)/10) * 10
