@@ -130,5 +130,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	    }
 	}
 
+	func appNameAndVersionNumberDisplayString() -> String {
+		let infoDictionary:[NSObject : AnyObject] = NSBundle.mainBundle().infoDictionary!
+		let appDisplayName:String? = infoDictionary["CFBundleName"] as? String
+		let majorVersion:String? = infoDictionary["CFBundleShortVersionString"] as? String
+		let minorVersion:String? = infoDictionary["CFBundleVersion"] as? String
+
+		return String(format: "%@, Version %@ (%@)", appDisplayName!, majorVersion!, minorVersion!)
+	}
 }
 

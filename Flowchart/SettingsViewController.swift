@@ -12,6 +12,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	
 	@IBOutlet var recordLocationSwitch: UISwitch!
 	@IBOutlet var locationWarningImageView: UIImageView!
+	@IBOutlet var versionInfoLabel: UILabel!
 	
 	var inOpen:Bool = false
 	var inSave:Bool = false
@@ -90,6 +91,9 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+
+		self.versionInfoLabel.text = AppDelegate().appNameAndVersionNumberDisplayString()
+		
 		NSNotificationCenter.defaultCenter().addObserverForName(kLocationHelperNotification, object:nil, queue:nil) { _ in
 			self.updateDisplay()
 		}

@@ -278,6 +278,12 @@ Optiona Columns: inhaler, latitude, longitude</string>
                                     <outletCollection property="gestureRecognizers" destination="fJM-jG-URj" appends="YES" id="zsM-8Z-TOH"/>
                                 </connections>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name/Version/Build" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="NJF-bK-05K">
+                                <rect key="frame" x="249" y="572" width="102" height="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -285,7 +291,9 @@ Optiona Columns: inhaler, latitude, longitude</string>
                             <constraint firstItem="CqM-Bi-F4L" firstAttribute="top" secondItem="mfN-cM-cLm" secondAttribute="bottom" constant="20" id="0wX-Ny-EuA"/>
                             <constraint firstItem="8Pj-Jq-42M" firstAttribute="top" secondItem="f0f-61-Mwr" secondAttribute="bottom" constant="20" id="9Q6-wv-yKg"/>
                             <constraint firstItem="7Q6-MI-z6E" firstAttribute="trailing" secondItem="Ito-Wn-XYy" secondAttribute="trailingMargin" id="CVu-SC-JYN"/>
+                            <constraint firstAttribute="centerX" secondItem="NJF-bK-05K" secondAttribute="centerX" id="GXl-lu-gAW"/>
                             <constraint firstAttribute="centerX" secondItem="f0f-61-Mwr" secondAttribute="centerX" id="GuJ-3d-Aif"/>
+                            <constraint firstItem="NJF-bK-05K" firstAttribute="centerY" secondItem="7Q6-MI-z6E" secondAttribute="centerY" constant="2" id="Ih1-27-0IH"/>
                             <constraint firstAttribute="centerX" secondItem="ydS-Pl-vQg" secondAttribute="centerX" id="NyT-uH-4yR"/>
                             <constraint firstItem="S2A-gp-jI8" firstAttribute="leading" secondItem="mfN-cM-cLm" secondAttribute="trailing" constant="10" id="Q5B-OH-K1C"/>
                             <constraint firstItem="Lob-jA-XDa" firstAttribute="top" secondItem="CqM-Bi-F4L" secondAttribute="bottom" constant="30" id="S0o-Ua-SmM"/>
@@ -302,6 +310,7 @@ Optiona Columns: inhaler, latitude, longitude</string>
                     <connections>
                         <outlet property="locationWarningImageView" destination="S2A-gp-jI8" id="jxO-Jf-RA6"/>
                         <outlet property="recordLocationSwitch" destination="1md-9t-lXX" id="T6Y-9b-Gde"/>
+                        <outlet property="versionInfoLabel" destination="NJF-bK-05K" id="9Og-KN-noM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kUj-OQ-s52" userLabel="First Responder" sceneMemberID="firstResponder"/>

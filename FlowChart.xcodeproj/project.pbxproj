@@ -159,6 +159,7 @@
 			buildPhases = (
 				010719DA19F1A9AD006CA4AA /* Sources */,
 				010719DB19F1A9AD006CA4AA /* Frameworks */,
+				01352EBE19FF5D9E003EE2A8 /* Update Build Number On Archive */,
 				010719DC19F1A9AD006CA4AA /* Resources */,
 			);
 			buildRules = (
@@ -253,6 +254,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		01352EBE19FF5D9E003EE2A8 /* Update Build Number On Archive */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Update Build Number On Archive";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\nfi";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		010719DA19F1A9AD006CA4AA /* Sources */ = {
