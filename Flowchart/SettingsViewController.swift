@@ -14,6 +14,12 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	@IBOutlet var locationWarningImageView: UIImageView!
 	@IBOutlet var versionInfoLabel: UILabel!
 	
+	@IBOutlet var importButton: UIButton!
+	@IBOutlet var importStatus: UIActivityIndicatorView!
+	
+	@IBOutlet var exportButton: UIButton!
+	@IBOutlet var exportStatus: UIActivityIndicatorView!
+	
 	var inOpen:Bool = false
 	var inSave:Bool = false
 	var saveCount:Int = 0
@@ -133,34 +139,33 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 		if self.inOpen {
 			self.inOpen = false
 			
+			self.importButton.hidden = true
+			self.importStatus.startAnimating()
+			
 			var reader:CSVReader = CSVReader(contentsOfURL: url)
 			var table = reader.read()
-			var headers = table[0]
-			var coreDataImport = 0
-			var healthKitImport = 0
-			
-			var hasDate = contains(headers, "date")
-			var hasFlowrate = contains(headers, "flowrate")
-			if hasDate && hasFlowrate {
-				healthKitImport = HealthKitHelper.sharedInstance.importSamples(table)
-			}
-			
-			if healthKitImport <= 0 {
-				var alertView = UIAlertView()
-				alertView.title = NSLocalizedString("Import Failed", comment: "Import Failed - title")
-				let locationDisplay:String = NSLocalizedString("The import of your data has failed. No data was imported. Please check your data format and try again, or don't, I'm not your mother.", comment: "Import Failed - message")
-				alertView.message = locationDisplay
-				alertView.addButtonWithTitle("Dismiss")
-				alertView.show()
-			} else {
-				var alertView = UIAlertView()
-				alertView.title = NSLocalizedString("Success!", comment: "Import success - title")
-				var locationDisplay:String = NSLocalizedString("We imported %lu records.", comment: "Import success - message")
-				locationDisplay = String(format: locationDisplay, healthKitImport)
-				alertView.message = locationDisplay
-				alertView.addButtonWithTitle("Yeah!")
-				alertView.show()
-			}
+			HealthKitHelper.sharedInstance.importSamples(table, completion: { (count) -> () in
+				dispatch_async(dispatch_get_main_queue(), { () -> Void in
+					if count <= 0 {
+						var alertView = UIAlertView()
+						alertView.title = NSLocalizedString("Import Failed", comment: "Import Failed - title")
+						let locationDisplay:String = NSLocalizedString("The import of your data has failed. No data was imported. Please check your data format and try again, or don't, I'm not your mother.", comment: "Import Failed - message")
+						alertView.message = locationDisplay
+						alertView.addButtonWithTitle("Dismiss")
+						alertView.show()
+					} else {
+						var alertView = UIAlertView()
+						alertView.title = NSLocalizedString("Success!", comment: "Import success - title")
+						var locationDisplay:String = NSLocalizedString("We imported %lu records.", comment: "Import success - message")
+						locationDisplay = String(format: locationDisplay, count)
+						alertView.message = locationDisplay
+						alertView.addButtonWithTitle("Yeah!")
+						alertView.show()
+					}
+					self.importButton.hidden = false
+					self.importStatus.stopAnimating()
+				})
+			})
 		}
 		
 		else if self.inSave {

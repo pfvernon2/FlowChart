@@ -46,7 +46,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			location = LocationHelper.sharedInstance.locationManager.location
 		}
 		
-		HealthKitHelper.sharedInstance.writePeakFlowSample(flowRate, date:datestamp, location:location) { (success, error) -> () in
+		HealthKitHelper.sharedInstance.writePeakFlowSample(Double(flowRate), date:datestamp, location:location) { (success, error) -> () in
 			
 			if !success {
 				var alertView = UIAlertView()
@@ -75,7 +75,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			location = LocationHelper.sharedInstance.locationManager.location
 		}
 
-		HealthKitHelper.sharedInstance.writeInhalerUsage(puffs, date:datestamp, location:location) { (success, error) -> () in
+		HealthKitHelper.sharedInstance.writeInhalerUsage(Double(puffs), date:datestamp, location:location) { (success, error) -> () in
 			
 			if !success {
 				var alertView = UIAlertView()

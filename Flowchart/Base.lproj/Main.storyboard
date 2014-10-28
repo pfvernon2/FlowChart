@@ -266,6 +266,12 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location data is not utilized by HealthKit. It is stored in the HealthKit metadata for your reference only." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="CqM-Bi-F4L">
+                                <rect key="frame" x="162" y="90" width="276" height="47"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mfN-cM-cLm">
                                 <rect key="frame" x="150" y="40" width="300" height="42"/>
                                 <subviews>
@@ -323,25 +329,29 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location data is not utilized by HealthKit. It is stored in the HealthKit metadata for your reference only." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="CqM-Bi-F4L">
-                                <rect key="frame" x="162" y="90" width="276" height="47"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="zRe-MQ-0o1">
+                                <rect key="frame" x="282" y="173" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="K7I-UC-O6e">
+                                <rect key="frame" x="282" y="315" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.52215656269999999" green="0.76882332060000003" blue="0.79385359119999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="c8R-XS-F7c" firstAttribute="top" secondItem="7Q6-MI-z6E" secondAttribute="bottom" constant="8" id="0yz-8B-7zC"/>
+                            <constraint firstItem="8Pj-Jq-42M" firstAttribute="centerY" secondItem="K7I-UC-O6e" secondAttribute="centerY" constant="0.5" id="10h-AE-wEy"/>
                             <constraint firstAttribute="centerX" secondItem="Lob-jA-XDa" secondAttribute="centerX" id="3WP-Sw-X1u"/>
+                            <constraint firstItem="8Pj-Jq-42M" firstAttribute="centerX" secondItem="K7I-UC-O6e" secondAttribute="centerX" id="7hr-LP-0yQ"/>
                             <constraint firstItem="NJF-bK-05K" firstAttribute="centerY" secondItem="7Q6-MI-z6E" secondAttribute="centerY" constant="2" id="EXN-5H-pBV"/>
                             <constraint firstItem="CqM-Bi-F4L" firstAttribute="top" secondItem="mfN-cM-cLm" secondAttribute="bottom" constant="8" id="EbV-iv-Gw8"/>
                             <constraint firstAttribute="centerX" secondItem="NJF-bK-05K" secondAttribute="centerX" id="Idz-bu-dyx"/>
                             <constraint firstAttribute="centerX" secondItem="mfN-cM-cLm" secondAttribute="centerX" id="MKo-kX-5RZ"/>
                             <constraint firstItem="ydS-Pl-vQg" firstAttribute="top" secondItem="8Pj-Jq-42M" secondAttribute="bottom" constant="8" id="S6M-S9-nxt"/>
                             <constraint firstAttribute="centerX" secondItem="8Pj-Jq-42M" secondAttribute="centerX" id="UPM-jX-Zds"/>
+                            <constraint firstItem="zRe-MQ-0o1" firstAttribute="centerY" secondItem="Lob-jA-XDa" secondAttribute="centerY" constant="0.5" id="VGI-fx-l3Z"/>
                             <constraint firstAttribute="centerX" secondItem="ydS-Pl-vQg" secondAttribute="centerX" id="VuW-Lv-Zfe"/>
                             <constraint firstItem="mfN-cM-cLm" firstAttribute="top" secondItem="Syl-NI-tjb" secondAttribute="bottom" constant="20" id="Yws-Ln-O2v"/>
+                            <constraint firstItem="zRe-MQ-0o1" firstAttribute="centerX" secondItem="Lob-jA-XDa" secondAttribute="centerX" id="cS8-dV-nnO"/>
                             <constraint firstAttribute="centerX" secondItem="f0f-61-Mwr" secondAttribute="centerX" id="cVe-Zp-FyL"/>
                             <constraint firstItem="f0f-61-Mwr" firstAttribute="top" secondItem="Lob-jA-XDa" secondAttribute="bottom" constant="8" id="lfw-TJ-RXZ"/>
                             <constraint firstAttribute="centerX" secondItem="CqM-Bi-F4L" secondAttribute="centerX" id="sNQ-NH-cIn"/>
@@ -351,6 +361,10 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="exportButton" destination="8Pj-Jq-42M" id="U8F-T8-OAt"/>
+                        <outlet property="exportStatus" destination="K7I-UC-O6e" id="Qys-x9-m3Z"/>
+                        <outlet property="importButton" destination="Lob-jA-XDa" id="IGb-JC-OIg"/>
+                        <outlet property="importStatus" destination="zRe-MQ-0o1" id="a3X-Cb-VX4"/>
                         <outlet property="locationWarningImageView" destination="S2A-gp-jI8" id="jxO-Jf-RA6"/>
                         <outlet property="recordLocationSwitch" destination="1md-9t-lXX" id="T6Y-9b-Gde"/>
                         <outlet property="versionInfoLabel" destination="NJF-bK-05K" id="9Og-KN-noM"/>

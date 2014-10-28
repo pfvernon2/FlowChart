@@ -69,9 +69,9 @@ class HealthKitHelper: NSObject {
 		return nil
 	}
 	
-	func writePeakFlowSample(flowRate:Int, date:NSDate, location:CLLocation!, completion:(success:Bool, error:NSError!)->()) {
+	func writePeakFlowSample(flowRate:Double, date:NSDate, location:CLLocation!, completion:(success:Bool, error:NSError!)->()) {
 		let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
-		let peakQuantity = HKQuantity(unit:peakUnit, doubleValue:Double(flowRate))
+		let peakQuantity = HKQuantity(unit:peakUnit, doubleValue:flowRate)
 		let peakQuantityType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
 		let metadata = self.locationToMetadata(location)
 		
@@ -80,9 +80,9 @@ class HealthKitHelper: NSObject {
 		self.writeSample(peakFlowSample, completion)
 	}
 	
-	func writeInhalerUsage(usage:Int, date:NSDate, location:CLLocation!, completion:(success:Bool, error:NSError!)->()) {
+	func writeInhalerUsage(usage:Double, date:NSDate, location:CLLocation!, completion:(success:Bool, error:NSError!)->()) {
 		let usageUnit = HKUnit.countUnit()
-		let usageQuantity = HKQuantity(unit: usageUnit, doubleValue: Double(usage))
+		let usageQuantity = HKQuantity(unit: usageUnit, doubleValue:usage)
 		let usageQuantityType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierInhalerUsage)
 		let metadata = self.locationToMetadata(location)
 		
@@ -104,13 +104,25 @@ class HealthKitHelper: NSObject {
 		})
 	}
 
-	func importSamples(records:[[String]]) -> Int {
+	func importSamples(records:[[String]], completion:(count:Int)->()) {
 		var imported = 0
 		var columns = []
+		
+		let lock:NSLock = NSLock()
+		let hkGroup:dispatch_group_t = dispatch_group_create();
+		
 		for (index,record) in enumerate(records) {
 			println(record)
 			if index == 0 {
-				columns = record
+				//check min required headers
+				if contains(record, "type") &&
+					contains(record, "date") &&
+					contains(record, "value")
+				{
+					columns = record
+				} else {
+					break
+				}
 			}
 				
 			else if record.count == columns.count {
@@ -120,25 +132,48 @@ class HealthKitHelper: NSObject {
 				let dateString:String = dict["date"] as String
 				let recordDate = self.dateFormatter.dateFromString(dateString)
 				if recordDate == nil {
-					return -1;
+					continue;
 				}
 				
-				if let peakFlow:Int = (dict["flowrate"] as String).toInt() {
-					self.writePeakFlowSample(peakFlow, date: recordDate!, location: nil, completion: { (success, error) -> () in
+				let currType:String = dict["type"] as String
+				let currValue:Double = NSNumberFormatter().numberFromString(dict["value"] as String)!.doubleValue
+				
+				if let currMetadata:String = dict["metadata"] as? String {
+					// TODO: - Import lat/long metadata... might want to change export to make it easier on ourselves
+					if countElements(currMetadata) > 0 {
+						println(currMetadata)
+					}
+				}
+				
+				if currType == HKQuantityTypeIdentifierPeakExpiratoryFlowRate {
+					dispatch_group_enter(hkGroup);
+					self.writePeakFlowSample(currValue, date: recordDate!, location: nil, completion: { (success, error) -> () in
+						if success {
+							lock.lock()
+							++imported
+							lock.unlock()
+						}
+						dispatch_group_leave(hkGroup);
 					})
 				}
-				
-				if let puffs:Int = (dict["inhaler"] as String).toInt() {
-					self.writeInhalerUsage(puffs, date: recordDate!, location: nil, completion: { (success, error) -> () in
+					
+				else if currType == HKQuantityTypeIdentifierInhalerUsage {
+					dispatch_group_enter(hkGroup);
+					self.writeInhalerUsage(currValue, date: recordDate!, location: nil, completion: { (success, error) -> () in
+						if success {
+							lock.lock()
+							++imported
+							lock.unlock()
+						}
+						dispatch_group_leave(hkGroup);
 					})
 				}
-				
-				++imported
-				
 			}
 		}
 		
-		return imported
+		dispatch_group_notify(hkGroup, dispatch_get_main_queue(), {
+			completion(count:imported)
+		})
 	}
 	
 	// MARK: - read
@@ -245,7 +280,7 @@ class HealthKitHelper: NSObject {
 		let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
 		dispatch_async(dispatch_get_global_queue(priority, 0)) {
 			//create group so we can join operations
-			let hkGroup:dispatch_group_t  = dispatch_group_create();
+			let hkGroup:dispatch_group_t = dispatch_group_create();
 			
 			//export Peak Flow
 			var peakFlowData:[[String]] = [[String]]()
@@ -261,8 +296,7 @@ class HealthKitHelper: NSObject {
 				//ensure units are l/min
 				let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
 				let peakUnitString = peakUnit.unitString
-				let peakQuantityDescriptor = HKQuantityTypeIdentifierPeakExpiratoryFlowRate.stringByReplacingOccurrencesOfString("HKQuantityTypeIdentifier",
-					withString: "")
+				let peakQuantityDescriptor = HKQuantityTypeIdentifierPeakExpiratoryFlowRate
 				for (index, sample) in enumerate(peakFlow) {
 					let date = self.dateFormatter.stringFromDate(sample.startDate)
 					let flowRate = sample.quantity.doubleValueForUnit(peakUnit);
@@ -293,8 +327,7 @@ class HealthKitHelper: NSObject {
 				//ensure units are counts (probably always will be)
 				let inhalerUnit = HKUnit.countUnit()
 				let inhalerUnitString = inhalerUnit.unitString
-				let inhalerQuantityDescriptor = HKQuantityTypeIdentifierInhalerUsage.stringByReplacingOccurrencesOfString("HKQuantityTypeIdentifier",
-					withString: "")
+				let inhalerQuantityDescriptor = HKQuantityTypeIdentifierInhalerUsage
 				for (index, sample) in enumerate(inhaler) {
 					let date = self.dateFormatter.stringFromDate(sample.startDate)
 					let count = sample.quantity.doubleValueForUnit(inhalerUnit);
