@@ -126,14 +126,22 @@
                                     <action selector="submitPEFRAction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="KJW-cL-uQR"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Ods-a4-8Dw">
+                                <rect key="frame" x="282" y="252" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Ab7-Q4-ZIN">
+                                <rect key="frame" x="282" y="463" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.52215656271620048" green="0.76882332059672132" blue="0.79385359116022103" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="centerY" secondItem="kDw-jU-SOt" secondAttribute="centerY" id="1Hn-O4-n63"/>
+                            <constraint firstItem="rzg-dx-4CZ" firstAttribute="centerX" secondItem="Ab7-Q4-ZIN" secondAttribute="centerX" constant="-0.5" id="1Uz-HL-4HG"/>
                             <constraint firstItem="3sf-YP-s3Y" firstAttribute="top" secondItem="3fp-ez-oe9" secondAttribute="bottom" constant="8" id="1zo-uO-7gk"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="idx-qA-YOx" secondAttribute="bottom" constant="8" id="2kg-Oe-sl2"/>
                             <constraint firstAttribute="centerX" secondItem="3fp-ez-oe9" secondAttribute="centerX" id="6V9-Yb-Qea"/>
                             <constraint firstAttribute="centerX" secondItem="I4l-N9-og6" secondAttribute="centerX" id="DXe-O5-orL"/>
+                            <constraint firstItem="rzg-dx-4CZ" firstAttribute="centerY" secondItem="Ab7-Q4-ZIN" secondAttribute="centerY" constant="0.5" id="EHV-KF-T0E"/>
                             <constraint firstItem="kDw-jU-SOt" firstAttribute="top" relation="greaterThanOrEqual" secondItem="3sf-YP-s3Y" secondAttribute="bottom" priority="250" constant="15" id="He6-kI-Gpd"/>
                             <constraint firstAttribute="centerX" secondItem="kDw-jU-SOt" secondAttribute="centerX" id="MK2-Xz-heo"/>
                             <constraint firstAttribute="centerX" secondItem="3fp-ez-oe9" secondAttribute="centerX" id="NSM-0Z-edU"/>
@@ -150,7 +158,9 @@
                             <constraint firstItem="4E8-Pr-t4u" firstAttribute="top" secondItem="kDw-jU-SOt" secondAttribute="bottom" constant="8" id="pqw-SI-6tF"/>
                             <constraint firstItem="3fp-ez-oe9" firstAttribute="top" secondItem="2tm-or-GsA" secondAttribute="bottom" constant="8" id="q8K-6W-a3W"/>
                             <constraint firstItem="kDw-jU-SOt" firstAttribute="top" relation="lessThanOrEqual" secondItem="3sf-YP-s3Y" secondAttribute="bottom" priority="250" constant="100" id="sZu-J7-W4O"/>
+                            <constraint firstItem="3sf-YP-s3Y" firstAttribute="centerY" secondItem="Ods-a4-8Dw" secondAttribute="centerY" id="t1P-RK-peU"/>
                             <constraint firstAttribute="centerX" secondItem="3sf-YP-s3Y" secondAttribute="centerX" id="tnW-Ih-ehq"/>
+                            <constraint firstItem="3sf-YP-s3Y" firstAttribute="centerX" secondItem="Ods-a4-8Dw" secondAttribute="centerX" id="x5x-iK-eMX"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -161,9 +171,13 @@
                     </view>
                     <connections>
                         <outlet property="flow" destination="3fp-ez-oe9" id="ZTE-e1-zE0"/>
+                        <outlet property="flowSubmit" destination="3sf-YP-s3Y" id="Dbp-nq-vGZ"/>
+                        <outlet property="flowSubmitStatus" destination="Ods-a4-8Dw" id="HoZ-yx-7RZ"/>
                         <outlet property="location" destination="qJl-eM-DIG" id="i39-EL-QKa"/>
                         <outlet property="puffStepper" destination="I4l-N9-og6" id="kdB-BZ-vSw"/>
                         <outlet property="puffs" destination="4E8-Pr-t4u" id="7FX-bJ-UiI"/>
+                        <outlet property="puffsSubmit" destination="rzg-dx-4CZ" id="dog-B1-in9"/>
+                        <outlet property="puffsSubmitStatus" destination="Ab7-Q4-ZIN" id="dYq-oF-aoZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

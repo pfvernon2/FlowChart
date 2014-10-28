@@ -16,7 +16,13 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	var datestamp: NSDate!
 	
 	@IBOutlet var flow: UIPickerView!
+	@IBOutlet var flowSubmit: UIButton!
+	@IBOutlet var flowSubmitStatus: UIActivityIndicatorView!
+
 	@IBOutlet var puffs: UILabel!
+	@IBOutlet var puffsSubmit: UIButton!
+	@IBOutlet var puffsSubmitStatus: UIActivityIndicatorView!
+	
 	@IBOutlet var puffStepper: UIStepper!
 	@IBOutlet var location: UIButton!
 	
@@ -30,23 +36,37 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	}
 	
 	@IBAction func submitPEFRAction(sender: AnyObject) {
+		self.flowSubmit.hidden = true;
+		self.flowSubmitStatus.startAnimating();
+		
 		let flowRate = (flow.selectedRowInComponent(0)+1) * 10
 		
 		var location:CLLocation! = nil;
 		if LocationHelper.sharedInstance.locationManager != nil {
 			location = LocationHelper.sharedInstance.locationManager.location
 		}
-
+		
 		HealthKitHelper.sharedInstance.writePeakFlowSample(flowRate, date:datestamp, location:location) { (success, error) -> () in
-			var alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Peak Flow Update Failed", comment: "Peak Flow Update Failed - title")
-			alertView.message = NSLocalizedString("Unable to access your HealthKit information. Please confirm this app is configured access your HealthKit data in Settings->Privacy->Health.", comment: "Peak Flow Update Failed - message")
-			alertView.addButtonWithTitle("Dismiss")
-			alertView.show()
+			
+			if !success {
+				var alertView = UIAlertView()
+				alertView.title = NSLocalizedString("Peak Flow Update Failed", comment: "Peak Flow Update Failed - title")
+				alertView.message = NSLocalizedString("Unable to access your HealthKit information. Please confirm this app is configured access your HealthKit data in Settings->Privacy->Health.", comment: "Peak Flow Update Failed - message")
+				alertView.addButtonWithTitle("Dismiss")
+				alertView.show()
+			}
+			
+			self.delay(1.0, closure: { () -> () in
+				self.flowSubmitStatus.stopAnimating();
+				self.flowSubmit.hidden = false;
+			})
 		}
 	}
 	
 	@IBAction func submitInhalerAction(sender: AnyObject) {
+		self.puffsSubmit.hidden = true;
+		self.puffsSubmitStatus.startAnimating();
+
 		let puffs = Int(puffStepper.value)
 		
 		var location:CLLocation! = nil;
@@ -55,11 +75,19 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		}
 
 		HealthKitHelper.sharedInstance.writeInhalerUsage(puffs, date:datestamp, location:location) { (success, error) -> () in
-			var alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Inhaler Usage Failed", comment: "Inhaler Usage Failed - title")
-			alertView.message = NSLocalizedString("Unable to access your HealthKit information. Please confirm this app is configured access your HealthKit data in Settings->Privacy->Health.", comment: "Inhaler Usage Failed - message")
-			alertView.addButtonWithTitle("Dismiss")
-			alertView.show()
+			
+			if !success {
+				var alertView = UIAlertView()
+				alertView.title = NSLocalizedString("Inhaler Usage Failed", comment: "Inhaler Usage Failed - title")
+				alertView.message = NSLocalizedString("Unable to access your HealthKit information. Please confirm this app is configured access your HealthKit data in Settings->Privacy->Health.", comment: "Inhaler Usage Failed - message")
+				alertView.addButtonWithTitle("Dismiss")
+				alertView.show()
+			}
+			
+			self.delay(1.0, closure: { () -> () in
+				self.puffsSubmitStatus.stopAnimating();
+				self.puffsSubmit.hidden = false;
+			})
 		}
 	}
 	
@@ -263,24 +291,24 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 				var tag:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
 				tag.textAlignment = .Left
 				tag.font = UIFont.systemFontOfSize(18.0)
-				tag.text = "Average"
-				tag.textColor = UIColor.whiteColor()
+				tag.text = NSLocalizedString("Average", comment: "Flow rate display: Average")
+				tag.textColor = UIColor.lightGrayColor()
 				view.addSubview(tag)
 			}
 			else if Double(value) == Double(self.maxPeakFlow) {
 				var tag:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
 				tag.textAlignment = .Left
 				tag.font = UIFont.systemFontOfSize(18.0)
-				tag.text = "Maximum"
-				tag.textColor = UIColor.whiteColor()
+				tag.text = NSLocalizedString("Best", comment: "Flow rate display: Best")
+				tag.textColor = UIColor.lightGrayColor()
 				view.addSubview(tag)
 			}
 			else if Double(value) == Double(self.minPeakFlow) {
 				var tag:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
 				tag.textAlignment = .Left
 				tag.font = UIFont.systemFontOfSize(18.0)
-				tag.text = "Minimum"
-				tag.textColor = UIColor.whiteColor()
+				tag.text = NSLocalizedString("Worst", comment: "Flow rate display: Worst")
+				tag.textColor = UIColor.lightGrayColor()
 				view.addSubview(tag)
 			}
 

@@ -98,7 +98,9 @@ class HealthKitHelper: NSObject {
 				println("HealthKit access denied: " + error.localizedDescription)
 			}
 			
-			completion(success: success, error: error)
+			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				completion(success: success, error: error)
+			})
 		})
 	}
 
