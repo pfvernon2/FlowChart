@@ -267,51 +267,46 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		}
 		else {
 			var view:UIView = UIView(frame: CGRectMake(0, 0, pickerView.frame.size.width, 100))
+			view.setTranslatesAutoresizingMaskIntoConstraints(false)
 			
-			var label:UILabel = UILabel(frame: CGRectMake(0, 0, pickerView.frame.size.width, 100))
-			label.textAlignment = .Center
-			label.font = UIFont.systemFontOfSize(36.0)
-			label.text = String(value)
+			//Value label
+			var valueLabel:UILabel = UILabel(frame: CGRectMake(0, 0, pickerView.frame.size.width, 100))
+			valueLabel.textAlignment = .Center
+			valueLabel.font = UIFont.systemFontOfSize(36.0)
+			valueLabel.text = String(value)
+			view.addSubview(valueLabel)
 			
-			view.addSubview(label)
+			//Notation label
+			var notationLabel:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
+			notationLabel.textAlignment = .Left
+			notationLabel.font = UIFont.boldSystemFontOfSize(18.0)
+			notationLabel.textColor = UIColor.lightGrayColor()
+			view.addSubview(notationLabel)
 			
 			if maxPeakFlow == 0 {
-				label.textColor = UIColor.blackColor()
+				valueLabel.textColor = UIColor.blackColor()
 			}
 			else if Double(value) >= (Double(maxPeakFlow) * 0.8) {
-				label.textColor = UIColor.greenColor()
+				valueLabel.textColor = UIColor.greenColor()
 			}
 			else if Double(value) >= (Double(maxPeakFlow) * 0.5) {
-				label.textColor = UIColor.yellowColor()
+				valueLabel.textColor = UIColor.yellowColor()
 			}
 			else {
-				label.textColor = UIColor.redColor()
+				valueLabel.textColor = UIColor.redColor()
 			}
 			
 			//Display min/max limits
 			if Double(value) == Double(self.avgPeakFlow) {
-				var tag:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
-				tag.textAlignment = .Left
-				tag.font = UIFont.systemFontOfSize(18.0)
-				tag.text = NSLocalizedString("Average", comment: "Flow rate display: Average")
-				tag.textColor = UIColor.lightGrayColor()
-				view.addSubview(tag)
+				notationLabel.text = NSLocalizedString("Average", comment: "Flow rate display: Average")
 			}
 			else if Double(value) == Double(self.maxPeakFlow) {
-				var tag:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
-				tag.textAlignment = .Left
-				tag.font = UIFont.systemFontOfSize(18.0)
-				tag.text = NSLocalizedString("Best", comment: "Flow rate display: Best")
-				tag.textColor = UIColor.lightGrayColor()
-				view.addSubview(tag)
+				notationLabel.text = NSLocalizedString("Best", comment: "Flow rate display: Best")
 			}
 			else if Double(value) == Double(self.minPeakFlow) {
-				var tag:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
-				tag.textAlignment = .Left
-				tag.font = UIFont.systemFontOfSize(18.0)
-				tag.text = NSLocalizedString("Worst", comment: "Flow rate display: Worst")
-				tag.textColor = UIColor.lightGrayColor()
-				view.addSubview(tag)
+				notationLabel.text = NSLocalizedString("Worst", comment: "Flow rate display: Worst")
+			} else {
+				notationLabel.text = ""
 			}
 
 			result = view
