@@ -30,6 +30,12 @@ public class CSVReader: NSObject {
 		var field:String = ""
 		var record:[String] = []
 		for current:Character in self.characterData {
+			
+			if testEscaped && current != "\"" {
+				testEscaped = false
+				quoted = false
+			}
+
 			//check for escape sequence start
 			if current == "\"" && quoted && !testEscaped {
 				testEscaped = true
