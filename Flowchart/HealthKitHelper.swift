@@ -264,14 +264,14 @@ class HealthKitHelper: NSObject {
 				let peakQuantityDescriptor = HKQuantityTypeIdentifierPeakExpiratoryFlowRate.stringByReplacingOccurrencesOfString("HKQuantityTypeIdentifier",
 					withString: "")
 				for (index, sample) in enumerate(peakFlow) {
-					let date = sample.startDate
+					let date = self.dateFormatter.stringFromDate(sample.startDate)
 					let flowRate = sample.quantity.doubleValueForUnit(peakUnit);
 					var metadataString = ""
 					if let metadata = sample.metadata {
 						metadataString =  "\(metadata)"
 					}
 					
-					peakFlowData.append([peakQuantityDescriptor, date.description, "\(flowRate)", peakUnitString, metadataString])
+					peakFlowData.append([peakQuantityDescriptor, date, "\(flowRate)", peakUnitString, metadataString])
 					
 					println(sample.metadata)
 				}
@@ -296,14 +296,14 @@ class HealthKitHelper: NSObject {
 				let inhalerQuantityDescriptor = HKQuantityTypeIdentifierInhalerUsage.stringByReplacingOccurrencesOfString("HKQuantityTypeIdentifier",
 					withString: "")
 				for (index, sample) in enumerate(inhaler) {
-					let date = sample.startDate
+					let date = self.dateFormatter.stringFromDate(sample.startDate)
 					let count = sample.quantity.doubleValueForUnit(inhalerUnit);
 					var metadataString = ""
 					if let metadata = sample.metadata {
 						metadataString =  "\(metadata)"
 					}
 					
-					inhalerData.append([inhalerQuantityDescriptor, date.description, "\(count)", inhalerUnitString, metadataString])
+					inhalerData.append([inhalerQuantityDescriptor, date, "\(count)", inhalerUnitString, metadataString])
 				}
 				
 				dispatch_group_leave(hkGroup);
