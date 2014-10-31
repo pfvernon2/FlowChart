@@ -13,8 +13,6 @@ let kMinDistanceUpdateMeters:Double = 1000
 
 class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 	
-	var datestamp: NSDate!
-	
 	@IBOutlet var flow: UIPickerView!
 	@IBOutlet var flowSubmit: UIButton!
 	@IBOutlet var flowSubmitStatus: UIActivityIndicatorView!
@@ -46,7 +44,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			location = LocationHelper.sharedInstance.locationManager.location
 		}
 		
-		HealthKitHelper.sharedInstance.writePeakFlowSample(Double(flowRate), date:datestamp, location:location) { (success, error) -> () in
+		HealthKitHelper.sharedInstance.writePeakFlowSample(Double(flowRate), date:NSDate(), location:location) { (success, error) -> () in
 			
 			if !success {
 				var alertView = UIAlertView()
@@ -75,7 +73,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			location = LocationHelper.sharedInstance.locationManager.location
 		}
 
-		HealthKitHelper.sharedInstance.writeInhalerUsage(Double(puffs), date:datestamp, location:location) { (success, error) -> () in
+		HealthKitHelper.sharedInstance.writeInhalerUsage(Double(puffs), date:NSDate(), location:location) { (success, error) -> () in
 			
 			if !success {
 				var alertView = UIAlertView()
@@ -164,8 +162,6 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	}
 	
 	func updateDisplay() {
-		datestamp = NSDate()
-		
 		self.updateLocationButtonIcon()
 		
 		puffStepper.value = 0.0
