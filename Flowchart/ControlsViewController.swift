@@ -164,42 +164,67 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	}
 	
 	func updateDisplay() {
+		datestamp = NSDate()
+		
 		self.updateLocationButtonIcon()
 		
-		datestamp = NSDate()
-		let format : NSDateFormatter = NSDateFormatter()
-		format.dateStyle = .MediumStyle
-		format.timeStyle = .ShortStyle
+		puffStepper.value = 0.0
+		puffs.text = String(Int(puffStepper.value))
+		
+		if !HealthKitHelper.sharedInstance.connect ({ (success, error) -> () in
+			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				if (!success) {
+					var alertView = UIAlertView()
+					alertView.title = NSLocalizedString("Sorry", comment: "HealthKit access error - title")
+					alertView.message = NSLocalizedString("We were unable to access your data in HealthKit.\n\nYou can correct this in your iPhone Settings under Privacy/Health", comment: "HealthKit access error - message")
+					alertView.addButtonWithTitle("Dismiss")
+					alertView.show()
+				}
+			})
+		})
+		{
+			var alertView = UIAlertView()
+			alertView.title = NSLocalizedString("Sorry", comment: "HealthKit not available - title")
+			alertView.message = NSLocalizedString("HealthKit is not available on this device.", comment: "HealthKit not available - message")
+			alertView.addButtonWithTitle("Dismiss")
+			alertView.show()
+			
+			return;
+		}
 		
 		//Get personal best
 		HealthKitHelper.sharedInstance.getMaxPeakFlowSample({ (peakFlow, error) -> () in
+			var peakFlowMax = ceil(peakFlow)
 			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				self.maxPeakFlow = (Int(peakFlow)/10) * 10
+				self.maxPeakFlow = (Int(peakFlowMax)/10) * 10
+				self.flow.reloadAllComponents()
 				self.flow.setNeedsDisplay()
 			})
 		})
-
+		
 		//Get personal worst
 		HealthKitHelper.sharedInstance.getMinPeakFlowSample({ (peakFlow, error) -> () in
+			var peakFlowMin = ceil(peakFlow)
 			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				self.minPeakFlow = (Int(peakFlow)/10) * 10
+				self.minPeakFlow = (Int(peakFlowMin)/10) * 10
+				self.flow.reloadAllComponents()
 				self.flow.setNeedsDisplay()
 			})
 		})
 		
 		//select row representing moving average
 		HealthKitHelper.sharedInstance.getPeakFlowAverage({ (peakFlow, error) -> () in
+			var peakFlowAverage = ceil(peakFlow)
 			dispatch_async(dispatch_get_main_queue(), { () -> Void in
 				//round down to nearest value in picker
-				self.avgPeakFlow = (Int(peakFlow)/10) * 10
-				self.flow.selectRow((self.avgPeakFlow/10)-1, inComponent: 0, animated:true)
+				self.avgPeakFlow = (Int(peakFlowAverage)/10) * 10
+				if self.avgPeakFlow > 0 {
+					self.flow.selectRow((self.avgPeakFlow/10)-1, inComponent: 0, animated:true)
+				} else {
+					self.flow.selectRow((450/10)-1, inComponent: 0, animated:true)
+				}
 			})
 		})
-		
-		puffStepper.value = 0.0
-		puffs.text = String(Int(puffStepper.value))
-		
-		HealthKitHelper.sharedInstance.connect()
 	}
 	
 	func updateLocationButtonIcon() {
@@ -284,7 +309,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			view.addSubview(notationLabel)
 			
 			if maxPeakFlow == 0 {
-				valueLabel.textColor = UIColor.blackColor()
+				valueLabel.textColor = UIColor.whiteColor()
 			}
 			else if Double(value) >= (Double(maxPeakFlow) * 0.8) {
 				valueLabel.textColor = UIColor.greenColor()

@@ -29,7 +29,7 @@ class HealthKitHelper: NSObject {
 		dateFormatter.dateFormat = "MM/dd/yy hh:mm a"
 	}
 
-	func connect() {
+	func connect(completion:(success:Bool, error:NSError!)->()) -> Bool {
 		// Set up an HKHealthStore, asking the user for read/write permissions. 
 		if (HKHealthStore.isHealthDataAvailable()) {
 			let peakFlowType:HKQuantityType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
@@ -39,20 +39,17 @@ class HealthKitHelper: NSObject {
 
 			self.healthStore.requestAuthorizationToShareTypes(NSSet(array:writeTypes), readTypes: NSSet(array:readTypes), completion: {
 				(success:Bool, error:NSError!) -> Void in
-				
-				if (!success) {
+				if error != nil {
 					println("HealthKit access denied: " + error.localizedDescription)
-					
-					var alertView = UIAlertView()
-					alertView.title = NSLocalizedString("Sorry", comment: "HealthKit access error - title")
-					alertView.message = NSLocalizedString("We were unable to access your data in HealthKit.\n\nYou can correct this in your iPhone Settings under Privacy/Health", comment: "HealthKit access error - message")
-					alertView.addButtonWithTitle("Dismiss")
-					alertView.show()
 				}
+				completion(success: success, error: error)
 			})
 		} else {
 			println("HealthKit not available on device")
+			return false
 		}
+		
+		return true
 	}
 	
 	// MARK: - write
@@ -183,9 +180,13 @@ class HealthKitHelper: NSObject {
 		
 		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType, quantitySamplePredicate: nil, options: .DiscreteMax) { (query, statistics, error:NSError!) -> Void in
 			
-			let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
-			let peakQuantity:HKQuantity = statistics.maximumQuantity()
-			let result = peakQuantity.doubleValueForUnit(peakUnit)
+			var result = 0.0
+			if statistics != nil {
+				let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
+				if let peakQuantity:HKQuantity = statistics.maximumQuantity() {
+					result = peakQuantity.doubleValueForUnit(peakUnit)
+				}
+			}
 			
 			completion(peakFlow:result, error:error)
 		}
@@ -198,9 +199,13 @@ class HealthKitHelper: NSObject {
 		
 		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType, quantitySamplePredicate: nil, options: .DiscreteMin) { (query, statistics, error:NSError!) -> Void in
 			
-			let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
-			let peakQuantity:HKQuantity = statistics.minimumQuantity()
-			let result = peakQuantity.doubleValueForUnit(peakUnit)
+			var result = 0.0
+			if statistics != nil {
+				let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
+				if let peakQuantity:HKQuantity = statistics.minimumQuantity() {
+					result = peakQuantity.doubleValueForUnit(peakUnit)
+				}
+			}
 			
 			completion(peakFlow:result, error:error)
 		}
@@ -213,9 +218,13 @@ class HealthKitHelper: NSObject {
 		
 		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType, quantitySamplePredicate: predicate, options: .DiscreteAverage) { (query, statistics, error:NSError!) -> Void in
 			
-			let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
-			let peakQuantity:HKQuantity = statistics.averageQuantity()
-			let result = peakQuantity.doubleValueForUnit(peakUnit)
+			var result = 0.0
+			if statistics != nil {
+				let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
+				if let peakQuantity:HKQuantity = statistics.averageQuantity() {
+					result = peakQuantity.doubleValueForUnit(peakUnit)
+				}
+			}
 			
 			completion(peakFlow:result, error:error)
 		}

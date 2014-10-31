@@ -22,6 +22,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	
 	var inOpen:Bool = false
 	var inSave:Bool = false
+	var saveURL:NSURL? = nil
 	var saveCount:Int = 0
 
 	@IBAction func doneAction(sender: AnyObject) {
@@ -47,7 +48,15 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	}
 	
 	@IBAction func exportAction(sender: AnyObject) {
+		self.exportButton.hidden = true
+		self.exportStatus.startAnimating()
+
 		HealthKitHelper.sharedInstance.exportSamples { (peakFlow, inhaler, error) -> () in
+			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				self.exportStatus.stopAnimating()
+				self.exportButton.hidden = false
+			})
+			
 			if let reponseError = error {
 				var alertView = UIAlertView()
 				alertView.title = NSLocalizedString("Export Failed", comment: "Export Failed - title")
@@ -75,8 +84,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 					data = inhaler
 				}
 				
-				let writer:CSVWriter = CSVWriter(file: url)
-				writer.write(data)
+				CSVHelper().write(data, toFile: url)
 				self.saveCount = countElements(data)
 				
 				//move temp file to iCloud, or wherever
@@ -84,6 +92,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 				documentPicker.delegate = self;
 				documentPicker.modalPresentationStyle = .FullScreen
 				self.inSave = true
+				self.saveURL = url
 				self.presentViewController(documentPicker, animated: true) { () -> Void in
 				}
 			}
@@ -138,41 +147,48 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	{
 		if self.inOpen {
 			self.inOpen = false
-			
 			self.importButton.hidden = true
 			self.importStatus.startAnimating()
 			
-			var reader:CSVReader = CSVReader(contentsOfURL: url)
-			var table = reader.read()
-			HealthKitHelper.sharedInstance.importSamples(table, completion: { (count) -> () in
-				dispatch_async(dispatch_get_main_queue(), { () -> Void in
-					if count <= 0 {
-						var alertView = UIAlertView()
-						alertView.title = NSLocalizedString("Import Failed", comment: "Import Failed - title")
-						let locationDisplay:String = NSLocalizedString("The import of your data has failed. No data was imported. Please check your data format and try again, or don't, I'm not your mother.", comment: "Import Failed - message")
-						alertView.message = locationDisplay
-						alertView.addButtonWithTitle("Dismiss")
-						alertView.show()
-					} else {
-						var alertView = UIAlertView()
-						alertView.title = NSLocalizedString("Success!", comment: "Import success - title")
-						var locationDisplay:String = NSLocalizedString("We imported %lu records.", comment: "Import success - message")
-						locationDisplay = String(format: locationDisplay, count)
-						alertView.message = locationDisplay
-						alertView.addButtonWithTitle("Yeah!")
-						alertView.show()
-					}
-					self.importButton.hidden = false
-					self.importStatus.stopAnimating()
+			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+				var table = CSVHelper().read(contentsOfURL: url)
+				HealthKitHelper.sharedInstance.importSamples(table, completion: { (count) -> () in
+					dispatch_async(dispatch_get_main_queue(), { () -> Void in
+						if count <= 0 {
+							var alertView = UIAlertView()
+							alertView.title = NSLocalizedString("Import Failed", comment: "Import Failed - title")
+							let locationDisplay:String = NSLocalizedString("The import of your data has failed. No data was imported. Please check your data format and try again, or don't, I'm not your mother.", comment: "Import Failed - message")
+							alertView.message = locationDisplay
+							alertView.addButtonWithTitle("Dismiss")
+							alertView.show()
+						} else {
+							var alertView = UIAlertView()
+							alertView.title = NSLocalizedString("Success!", comment: "Import success - title")
+							var locationDisplay:String = NSLocalizedString("We imported %lu records.", comment: "Import success - message")
+							locationDisplay = String(format: locationDisplay, count)
+							alertView.message = locationDisplay
+							alertView.addButtonWithTitle("Yeah!")
+							alertView.show()
+						}
+						self.importButton.hidden = false
+						self.importStatus.stopAnimating()
+					})
 				})
 			})
 		}
 		
 		else if self.inSave {
 			self.inSave = false
+			
+			//cleanup temp file
+			if let tempURL = self.saveURL {
+				NSFileManager.defaultManager().removeItemAtPath(tempURL.path!, error:nil)
+			}
+			
+			//indicate success
 			var alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Success!", comment: "Export success - title")
-			var locationDisplay:String = NSLocalizedString("We exported %lu records.", comment: "Export success - message")
+			var locationDisplay:String = NSLocalizedString("We exported %lu records!", comment: "Export success - message")
 			locationDisplay = String(format: locationDisplay, self.saveCount)
 			alertView.message = locationDisplay
 			alertView.addButtonWithTitle("Yeah!")
@@ -184,6 +200,11 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	{
 		self.inOpen = false
 		self.inSave = false
+		
+		//cleanup temp file
+		if let tempURL = self.saveURL {
+			NSFileManager.defaultManager().removeItemAtPath(tempURL.path!, error:nil)
+		}
 	}
 
     /*

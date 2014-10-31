@@ -11,7 +11,7 @@ import CoreLocation
 
 //MARK: Constants
 let kLocationUserPref:String = "trackLocation"
-let kLocationHelperNotification:String = "com.cyberdev.com.LocationHelper.kLocationHelperNotification"
+let kLocationHelperNotification:String = "com.cyberdev.LocationHelper.kLocationHelperNotification"
 
 class LocationHelper: NSObject, CLLocationManagerDelegate {
 
