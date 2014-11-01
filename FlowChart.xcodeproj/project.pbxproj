@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		010719E419F1A9AD006CA4AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010719E319F1A9AD006CA4AA /* AppDelegate.swift */; };
-		010719E719F1A9AD006CA4AA /* Flowchart.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 010719E519F1A9AD006CA4AA /* Flowchart.xcdatamodeld */; };
 		010719E919F1A9AD006CA4AA /* ControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010719E819F1A9AD006CA4AA /* ControlsViewController.swift */; };
 		010719EC19F1A9AD006CA4AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 010719EA19F1A9AD006CA4AA /* Main.storyboard */; };
 		010719EE19F1A9AD006CA4AA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 010719ED19F1A9AD006CA4AA /* Images.xcassets */; };
@@ -36,7 +35,6 @@
 		010719DE19F1A9AD006CA4AA /* Flowchart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flowchart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		010719E219F1A9AD006CA4AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		010719E319F1A9AD006CA4AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		010719E619F1A9AD006CA4AA /* Flowchart.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Flowchart.xcdatamodel; sourceTree = "<group>"; };
 		010719E819F1A9AD006CA4AA /* ControlsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsViewController.swift; sourceTree = "<group>"; };
 		010719EB19F1A9AD006CA4AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		010719ED19F1A9AD006CA4AA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -104,7 +102,6 @@
 				010719EA19F1A9AD006CA4AA /* Main.storyboard */,
 				010719EF19F1A9AD006CA4AA /* LaunchScreen.xib */,
 				010719ED19F1A9AD006CA4AA /* Images.xcassets */,
-				010719E519F1A9AD006CA4AA /* Flowchart.xcdatamodeld */,
 				010719E119F1A9AD006CA4AA /* Supporting Files */,
 			);
 			name = FlowChart;
@@ -278,7 +275,6 @@
 				010719E919F1A9AD006CA4AA /* ControlsViewController.swift in Sources */,
 				015DA37219F486EB00D7157A /* HealthKitHelper.swift in Sources */,
 				01352EC01A0003DB003EE2A8 /* CSVHelper.swift in Sources */,
-				010719E719F1A9AD006CA4AA /* Flowchart.xcdatamodeld in Sources */,
 				0132BB7319F4210000ACFBF6 /* LocationHelper.swift in Sources */,
 				0132BB7119F36F3C00ACFBF6 /* SettingsViewController.swift in Sources */,
 				010719E419F1A9AD006CA4AA /* AppDelegate.swift in Sources */,
@@ -495,19 +491,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		010719E519F1A9AD006CA4AA /* Flowchart.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				010719E619F1A9AD006CA4AA /* Flowchart.xcdatamodel */,
-			);
-			currentVersion = 010719E619F1A9AD006CA4AA /* Flowchart.xcdatamodel */;
-			path = Flowchart.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 010719D619F1A9AD006CA4AA /* Project object */;
 }

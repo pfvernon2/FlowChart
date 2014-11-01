@@ -75,7 +75,7 @@
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="I4l-N9-og6">
                                 <rect key="frame" x="253" y="427" width="94" height="29"/>
                                 <connections>
-                                    <action selector="puffAction:" destination="vXZ-lx-hvc" eventType="valueChanged" id="4Lq-7z-iGS"/>
+                                    <action selector="inhalerAction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="9o7-IV-4CS"/>
                                 </connections>
                             </stepper>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4E8-Pr-t4u">
@@ -206,16 +206,16 @@
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="flow" destination="3fp-ez-oe9" id="ZTE-e1-zE0"/>
                         <outlet property="flowAverageLabel" destination="BLY-L9-8Cj" id="Hf0-34-V0N"/>
+                        <outlet property="flowPicker" destination="3fp-ez-oe9" id="ws9-WN-XN5"/>
                         <outlet property="flowSubmit" destination="3sf-YP-s3Y" id="Dbp-nq-vGZ"/>
                         <outlet property="flowSubmitStatus" destination="Ods-a4-8Dw" id="HoZ-yx-7RZ"/>
+                        <outlet property="inhalerAverageLabel" destination="i5I-uN-2kC" id="7YW-kA-cYa"/>
+                        <outlet property="inhalerStepper" destination="I4l-N9-og6" id="bPc-FX-diM"/>
+                        <outlet property="inhalerSubmit" destination="rzg-dx-4CZ" id="cat-IN-M8l"/>
+                        <outlet property="inhalerSubmitStatus" destination="Ab7-Q4-ZIN" id="nv1-cV-5QL"/>
+                        <outlet property="inhalerValueLabel" destination="4E8-Pr-t4u" id="T8W-sT-qHc"/>
                         <outlet property="location" destination="qJl-eM-DIG" id="i39-EL-QKa"/>
-                        <outlet property="puffStepper" destination="I4l-N9-og6" id="kdB-BZ-vSw"/>
-                        <outlet property="puffs" destination="4E8-Pr-t4u" id="7FX-bJ-UiI"/>
-                        <outlet property="puffsAverageLabel" destination="i5I-uN-2kC" id="gJw-Pj-64n"/>
-                        <outlet property="puffsSubmit" destination="rzg-dx-4CZ" id="dog-B1-in9"/>
-                        <outlet property="puffsSubmitStatus" destination="Ab7-Q4-ZIN" id="dYq-oF-aoZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

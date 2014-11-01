@@ -13,34 +13,36 @@ let kMinDistanceUpdateMeters:Double = 1000
 
 class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 	
-	@IBOutlet var flow: UIPickerView!
+	//MARK: Controls
+	@IBOutlet var flowPicker: UIPickerView!
 	@IBOutlet var flowSubmit: UIButton!
 	@IBOutlet var flowSubmitStatus: UIActivityIndicatorView!
 	@IBOutlet var flowAverageLabel: UILabel!
 
-	@IBOutlet var puffs: UILabel!
-	@IBOutlet var puffsAverageLabel: UILabel!
-	@IBOutlet var puffsSubmit: UIButton!
-	@IBOutlet var puffsSubmitStatus: UIActivityIndicatorView!
-	@IBOutlet var puffStepper: UIStepper!
+	@IBOutlet var inhalerValueLabel: UILabel!
+	@IBOutlet var inhalerAverageLabel: UILabel!
+	@IBOutlet var inhalerSubmit: UIButton!
+	@IBOutlet var inhalerSubmitStatus: UIActivityIndicatorView!
+	@IBOutlet var inhalerStepper: UIStepper!
 	
 	@IBOutlet var location: UIButton!
 	
+	//MARK: Member Variables
 	var maxPeakFlow : Double = 0.0
 	var minPeakFlow : Double = 0.0
 	var avgPeakFlow : Double = 0.0
 	var avgInhaler : Double = 0.0
 
 	//MARK: Actions
-	@IBAction func puffAction(sender: UIStepper) {
-		puffs.text = String(Int(puffStepper.value))
+	@IBAction func inhalerAction(sender: UIStepper) {
+		inhalerValueLabel.text = String(Int(inhalerStepper.value))
 	}
 	
 	@IBAction func submitPEFRAction(sender: AnyObject) {
 		self.flowSubmit.hidden = true;
 		self.flowSubmitStatus.startAnimating();
 		
-		let flowRate = (flow.selectedRowInComponent(0)+1) * 10
+		let flowRate = (flowPicker.selectedRowInComponent(0)+1) * 10
 		
 		var location:CLLocation! = nil;
 		if LocationHelper.sharedInstance.locationManager != nil {
@@ -66,17 +68,17 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	}
 	
 	@IBAction func submitInhalerAction(sender: AnyObject) {
-		self.puffsSubmit.hidden = true;
-		self.puffsSubmitStatus.startAnimating();
+		self.inhalerSubmit.hidden = true;
+		self.inhalerSubmitStatus.startAnimating();
 
-		let puffs = Int(puffStepper.value)
+		let inhaler = Int(inhalerStepper.value)
 		
 		var location:CLLocation! = nil;
 		if LocationHelper.sharedInstance.locationManager != nil {
 			location = LocationHelper.sharedInstance.locationManager.location
 		}
 
-		HealthKitHelper.sharedInstance.writeInhalerUsage(Double(puffs), date:NSDate(), location:location) { (success, error) -> () in
+		HealthKitHelper.sharedInstance.writeInhalerUsage(Double(inhaler), date:NSDate(), location:location) { (success, error) -> () in
 			
 			if !success {
 				var alertView = UIAlertView()
@@ -87,8 +89,8 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			}
 			
 			self.delay(1.0, closure: { () -> () in
-				self.puffsSubmitStatus.stopAnimating();
-				self.puffsSubmit.hidden = false;
+				self.inhalerSubmitStatus.stopAnimating();
+				self.inhalerSubmit.hidden = false;
 				self.updateDisplay()
 			})
 		}
@@ -176,12 +178,12 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	
 	func updateDisplay() {
 		//create group so we can join on results and update the display atomically
-		let hkGroup:dispatch_group_t = dispatch_group_create();
+		let uiUpdateGroup:dispatch_group_t = dispatch_group_create();
 		
-		dispatch_group_enter(hkGroup);
+		dispatch_group_enter(uiUpdateGroup);
 		if !HealthKitHelper.sharedInstance.connect ({ (success, error) -> () in
 			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				dispatch_group_leave(hkGroup);
+				dispatch_group_leave(uiUpdateGroup);
 				
 				if (!success) {
 					var alertView = UIAlertView()
@@ -193,7 +195,7 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			})
 		})
 		{
-			dispatch_group_leave(hkGroup);
+			dispatch_group_leave(uiUpdateGroup);
 			
 			var alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Sorry", comment: "HealthKit not available - title")
@@ -205,40 +207,40 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		}
 		
 		//Get peak flow personal best
-		dispatch_group_enter(hkGroup);
+		dispatch_group_enter(uiUpdateGroup);
 		HealthKitHelper.sharedInstance.getMaxPeakFlowSample({ (peakFlow, error) -> () in
 			self.maxPeakFlow = peakFlow
-			dispatch_group_leave(hkGroup);
+			dispatch_group_leave(uiUpdateGroup);
 		})
 		
 		//Get peak flow personal worst
-		dispatch_group_enter(hkGroup);
+		dispatch_group_enter(uiUpdateGroup);
 		HealthKitHelper.sharedInstance.getMinPeakFlowSample({ (peakFlow, error) -> () in
 			self.minPeakFlow = peakFlow
-			dispatch_group_leave(hkGroup);
+			dispatch_group_leave(uiUpdateGroup);
 		})
 		
 		//get peak flow average
-		dispatch_group_enter(hkGroup);
+		dispatch_group_enter(uiUpdateGroup);
 		HealthKitHelper.sharedInstance.getPeakFlowAverage({ (peakFlow, error) -> () in
 			self.avgPeakFlow = peakFlow
-			dispatch_group_leave(hkGroup);
+			dispatch_group_leave(uiUpdateGroup);
 		})
 		
 		//Display inhaler average
-		dispatch_group_enter(hkGroup);
+		dispatch_group_enter(uiUpdateGroup);
 		HealthKitHelper.sharedInstance.getInhalerAverage({ (inhaler, error) -> () in
 			self.avgInhaler = inhaler
-			dispatch_group_leave(hkGroup);
+			dispatch_group_leave(uiUpdateGroup);
 		})
 		
-		dispatch_group_notify(hkGroup, dispatch_get_main_queue(), {
+		dispatch_group_notify(uiUpdateGroup, dispatch_get_main_queue(), {
 			//update location status
 			self.updateLocationButtonIcon()
 			
 			//update puffer stepper display
-			self.puffStepper.value = 0.0
-			self.puffs.text = String(Int(self.puffStepper.value))
+			self.inhalerStepper.value = 0.0
+			self.inhalerValueLabel.text = String(Int(self.inhalerStepper.value))
 			
 			//display peak flow average
 			let peakLabel:String = NSLocalizedString("Daily Average: ", comment: "Peak Flow Daily Average Label")
@@ -246,15 +248,15 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			
 			//display inhaler average
 			let inhalerLabel:String = NSLocalizedString("Daily Average: ", comment: "Inhaler Daily Average Label")
-			self.puffsAverageLabel.text = String(format: "%@: %0.2f", inhalerLabel, self.avgInhaler)
+			self.inhalerAverageLabel.text = String(format: "%@: %0.2f", inhalerLabel, self.avgInhaler)
 			
 			//udpate picker display
-			self.flow.reloadAllComponents()
-			self.flow.setNeedsDisplay()
+			self.flowPicker.reloadAllComponents()
+			self.flowPicker.setNeedsDisplay()
 			if self.avgPeakFlow > 0 {
-				self.flow.selectRow(Int((self.avgPeakFlow/10.0))-1, inComponent: 0, animated:true)
+				self.flowPicker.selectRow(Int((self.avgPeakFlow/10.0))-1, inComponent: 0, animated:true)
 			} else {
-				self.flow.selectRow((450/10)-1, inComponent: 0, animated:true)
+				self.flowPicker.selectRow((450/10)-1, inComponent: 0, animated:true)
 			}
 		})
 	}
@@ -309,11 +311,6 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		return String((row+1) * 10)
 	}
 	
-//	func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-//		return 36.0
-//	}
-	
-	//http://www.hopkinsmedicine.org/healthlibrary/test_procedures/pulmonary/peak_flow_measurement_92,P07755/
 	func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
 		
 		let value:Int = (row+1) * 10
@@ -340,6 +337,8 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			notationLabel.textColor = UIColor.whiteColor()
 			view.addSubview(notationLabel)
 			
+			//Color coding per standard:
+			//http://www.hopkinsmedicine.org/healthlibrary/test_procedures/pulmonary/peak_flow_measurement_92,P07755/
 			if maxPeakFlow == 0 {
 				valueLabel.textColor = UIColor.whiteColor()
 			}

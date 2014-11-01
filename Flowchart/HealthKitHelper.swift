@@ -53,7 +53,6 @@ class HealthKitHelper: NSObject {
 	}
 	
 	// MARK: - write
-	
 	func locationToMetadata(location:CLLocation?) -> Dictionary<String, NSNumber>? {
 		var lat:Double = 0.0
 		var long:Double = 0.0
@@ -173,8 +172,8 @@ class HealthKitHelper: NSObject {
 		})
 	}
 	
+	// MARK: - Read
 	// MARK: - Peak Flow Queries
-	
 	func getMaxPeakFlowSample(completion:(peakFlow:Double, error:NSError!)->()) {
 		let peakQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
 		
@@ -265,7 +264,6 @@ class HealthKitHelper: NSObject {
 	}
 	
 	// MARK: - Inhaler Queries
-
 	func getInhalerDailyAverageWithPredicate(predicate:NSPredicate!, completion:(inhaler:Double, error:NSError!)->()) {
 		let inhalerQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierInhalerUsage)
 		
@@ -346,7 +344,6 @@ class HealthKitHelper: NSObject {
 				peakFlowError = error
 				
 				//write headers
-				// TODO: - localization issues
 				peakFlowData.append(["type", "date", "value", "units", "metadata"])
 				
 				//ensure units are l/min
@@ -377,7 +374,6 @@ class HealthKitHelper: NSObject {
 				inhalerError = error
 				
 				//write headers
-				// TODO: - localization issues
 				inhalerData.append(["type", "date", "value", "units", "metadata"])
 				
 				//ensure units are counts (probably always will be)

@@ -10,6 +10,7 @@ import UIKit
 
 class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	
+	//MARK: Controls
 	@IBOutlet var recordLocationSwitch: UISwitch!
 	@IBOutlet var locationWarningImageView: UIImageView!
 	@IBOutlet var versionInfoLabel: UILabel!
@@ -20,11 +21,13 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	@IBOutlet var exportButton: UIButton!
 	@IBOutlet var exportStatus: UIActivityIndicatorView!
 	
+	//MARK: Member Variables
 	var inOpen:Bool = false
 	var inSave:Bool = false
 	var saveURL:NSURL? = nil
 	var saveCount:Int = 0
 
+	//MARK: Actions
 	@IBAction func doneAction(sender: AnyObject) {
 		self.dismissViewControllerAnimated(true, completion: nil)
 	}
@@ -104,6 +107,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 		self.updateDisplay()
 	}
 	
+	//MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -155,6 +159,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	//MARK: - DocumentPicker
 	func documentPicker(controller: UIDocumentPickerViewController, didPickDocumentAtURL url: NSURL)
 	{
+		//Do open operation
 		if self.inOpen {
 			self.inOpen = false
 			self.importButton.hidden = true
@@ -187,6 +192,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 			})
 		}
 		
+		//Do save operation
 		else if self.inSave {
 			self.inSave = false
 			
@@ -216,15 +222,4 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 			NSFileManager.defaultManager().removeItemAtPath(tempURL.path!, error:nil)
 		}
 	}
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
