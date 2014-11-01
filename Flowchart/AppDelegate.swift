@@ -15,8 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	var window: UIWindow?
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-#if DEBUG
 		//Make it easy to find our documents directory in the simulator
+#if TARGET_IPHONE_SIMULATOR
 		let docDir:NSURL = self.applicationDocumentsDirectory
 		println(docDir)
 #endif
