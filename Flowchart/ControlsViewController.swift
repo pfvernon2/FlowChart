@@ -16,17 +16,20 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	@IBOutlet var flow: UIPickerView!
 	@IBOutlet var flowSubmit: UIButton!
 	@IBOutlet var flowSubmitStatus: UIActivityIndicatorView!
+	@IBOutlet var flowAverageLabel: UILabel!
 
 	@IBOutlet var puffs: UILabel!
+	@IBOutlet var puffsAverageLabel: UILabel!
 	@IBOutlet var puffsSubmit: UIButton!
 	@IBOutlet var puffsSubmitStatus: UIActivityIndicatorView!
-	
 	@IBOutlet var puffStepper: UIStepper!
+	
 	@IBOutlet var location: UIButton!
 	
-	var maxPeakFlow : Int = 0
-	var minPeakFlow : Int = 0
-	var avgPeakFlow : Int = 0
+	var maxPeakFlow : Double = 0.0
+	var minPeakFlow : Double = 0.0
+	var avgPeakFlow : Double = 0.0
+	var avgInhaler : Double = 0.0
 
 	//MARK: Actions
 	@IBAction func puffAction(sender: UIStepper) {
@@ -140,6 +143,16 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
+		//Background Gradient
+		let colorTop = UIColor(red: 76.0/255.0, green: 233.0/255.0, blue: 204.0/255.0, alpha: 1.0).CGColor
+		let colorBottom = UIColor(red: 52.0/255.0, green: 170.0/255.0, blue: 220.0/255.0, alpha: 1.0).CGColor
+		let gl: CAGradientLayer = CAGradientLayer()
+		gl.colors = [ colorTop, colorBottom]
+		gl.locations = [ 0.0, 1.0]
+		gl.frame = self.view.frame
+		self.view.backgroundColor = UIColor.clearColor()
+		self.view.layer.insertSublayer(gl, atIndex: 0);
+		
 		NSNotificationCenter.defaultCenter().addObserverForName(kLocationHelperNotification, object:nil, queue:nil) { _ in
 			self.updateLocationButtonIcon()
 		}
@@ -162,13 +175,14 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	}
 	
 	func updateDisplay() {
-		self.updateLocationButtonIcon()
+		//create group so we can join on results and update the display atomically
+		let hkGroup:dispatch_group_t = dispatch_group_create();
 		
-		puffStepper.value = 0.0
-		puffs.text = String(Int(puffStepper.value))
-		
+		dispatch_group_enter(hkGroup);
 		if !HealthKitHelper.sharedInstance.connect ({ (success, error) -> () in
 			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				dispatch_group_leave(hkGroup);
+				
 				if (!success) {
 					var alertView = UIAlertView()
 					alertView.title = NSLocalizedString("Sorry", comment: "HealthKit access error - title")
@@ -179,6 +193,8 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			})
 		})
 		{
+			dispatch_group_leave(hkGroup);
+			
 			var alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Sorry", comment: "HealthKit not available - title")
 			alertView.message = NSLocalizedString("HealthKit is not available on this device.", comment: "HealthKit not available - message")
@@ -188,38 +204,58 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			return;
 		}
 		
-		//Get personal best
+		//Get peak flow personal best
+		dispatch_group_enter(hkGroup);
 		HealthKitHelper.sharedInstance.getMaxPeakFlowSample({ (peakFlow, error) -> () in
-			var peakFlowMax = ceil(peakFlow)
-			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				self.maxPeakFlow = (Int(peakFlowMax)/10) * 10
-				self.flow.reloadAllComponents()
-				self.flow.setNeedsDisplay()
-			})
+			self.maxPeakFlow = peakFlow
+			dispatch_group_leave(hkGroup);
 		})
 		
-		//Get personal worst
+		//Get peak flow personal worst
+		dispatch_group_enter(hkGroup);
 		HealthKitHelper.sharedInstance.getMinPeakFlowSample({ (peakFlow, error) -> () in
-			var peakFlowMin = ceil(peakFlow)
-			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				self.minPeakFlow = (Int(peakFlowMin)/10) * 10
-				self.flow.reloadAllComponents()
-				self.flow.setNeedsDisplay()
-			})
+			self.minPeakFlow = peakFlow
+			dispatch_group_leave(hkGroup);
 		})
 		
-		//select row representing moving average
+		//get peak flow average
+		dispatch_group_enter(hkGroup);
 		HealthKitHelper.sharedInstance.getPeakFlowAverage({ (peakFlow, error) -> () in
-			var peakFlowAverage = ceil(peakFlow)
-			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				//round down to nearest value in picker
-				self.avgPeakFlow = (Int(peakFlowAverage)/10) * 10
-				if self.avgPeakFlow > 0 {
-					self.flow.selectRow((self.avgPeakFlow/10)-1, inComponent: 0, animated:true)
-				} else {
-					self.flow.selectRow((450/10)-1, inComponent: 0, animated:true)
-				}
-			})
+			self.avgPeakFlow = peakFlow
+			dispatch_group_leave(hkGroup);
+		})
+		
+		//Display inhaler average
+		dispatch_group_enter(hkGroup);
+		HealthKitHelper.sharedInstance.getInhalerAverage({ (inhaler, error) -> () in
+			self.avgInhaler = inhaler
+			dispatch_group_leave(hkGroup);
+		})
+		
+		dispatch_group_notify(hkGroup, dispatch_get_main_queue(), {
+			//update location status
+			self.updateLocationButtonIcon()
+			
+			//update puffer stepper display
+			self.puffStepper.value = 0.0
+			self.puffs.text = String(Int(self.puffStepper.value))
+			
+			//display peak flow average
+			let peakLabel:String = NSLocalizedString("Daily Average: ", comment: "Peak Flow Daily Average Label")
+			self.flowAverageLabel.text = String(format: "%@: %0.2f", peakLabel, self.avgPeakFlow)
+			
+			//display inhaler average
+			let inhalerLabel:String = NSLocalizedString("Daily Average: ", comment: "Inhaler Daily Average Label")
+			self.puffsAverageLabel.text = String(format: "%@: %0.2f", inhalerLabel, self.avgInhaler)
+			
+			//udpate picker display
+			self.flow.reloadAllComponents()
+			self.flow.setNeedsDisplay()
+			if self.avgPeakFlow > 0 {
+				self.flow.selectRow(Int((self.avgPeakFlow/10.0))-1, inComponent: 0, animated:true)
+			} else {
+				self.flow.selectRow((450/10)-1, inComponent: 0, animated:true)
+			}
 		})
 	}
 	
@@ -260,13 +296,13 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			dispatch_get_main_queue(), closure)
 	}
 
-	//MARK: Picker lifecycle
+	//MARK: Picker datasource
 	func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
 		return 1
 	}
 	
 	func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-		return (800/100) * 10
+		return 800/10
 	}
 	
 	func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
@@ -293,38 +329,38 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			//Value label
 			var valueLabel:UILabel = UILabel(frame: CGRectMake(0, 0, pickerView.frame.size.width, 100))
 			valueLabel.textAlignment = .Center
-			valueLabel.font = UIFont.systemFontOfSize(36.0)
-			valueLabel.text = String(value)
+			valueLabel.font = UIFont.boldSystemFontOfSize(36.0)
+			valueLabel.text = String(value) //String(format: "%d L/min", value)
 			view.addSubview(valueLabel)
 			
 			//Notation label
 			var notationLabel:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
 			notationLabel.textAlignment = .Left
-			notationLabel.font = UIFont.boldSystemFontOfSize(18.0)
-			notationLabel.textColor = UIColor.lightGrayColor()
+			notationLabel.font = UIFont.systemFontOfSize(18.0)
+			notationLabel.textColor = UIColor.whiteColor()
 			view.addSubview(notationLabel)
 			
 			if maxPeakFlow == 0 {
 				valueLabel.textColor = UIColor.whiteColor()
 			}
-			else if Double(value) >= (Double(maxPeakFlow) * 0.8) {
-				valueLabel.textColor = UIColor.greenColor()
+			else if Double(value) >= (maxPeakFlow * 0.8) {
+				valueLabel.textColor = UIColor(red: 2.0/255.0, green: 183.0/255.0, blue: 35.0/255.0, alpha: 1.0)
 			}
-			else if Double(value) >= (Double(maxPeakFlow) * 0.5) {
-				valueLabel.textColor = UIColor.yellowColor()
+			else if Double(value) >= (maxPeakFlow * 0.5) {
+				valueLabel.textColor = UIColor(red: 235.0/255.0, green: 240.0/255.0, blue: 5.0/255.0, alpha: 1.0)
 			}
 			else {
-				valueLabel.textColor = UIColor.redColor()
+				valueLabel.textColor = UIColor(red: 220.0/255.0, green: 26.0/255.0, blue: 100.0/255.0, alpha: 1.0)
 			}
 			
 			//Display min/max limits
-			if Double(value) == Double(self.avgPeakFlow) {
+			if value == Int(self.avgPeakFlow/10.0)*10 {
 				notationLabel.text = NSLocalizedString("Average", comment: "Flow rate display: Average")
 			}
-			else if Double(value) == Double(self.maxPeakFlow) {
+			else if value ==  Int(self.maxPeakFlow/10.0)*10 {
 				notationLabel.text = NSLocalizedString("Best", comment: "Flow rate display: Best")
 			}
-			else if Double(value) == Double(self.minPeakFlow) {
+			else if value == Int(self.minPeakFlow/10.0)*10 {
 				notationLabel.text = NSLocalizedString("Worst", comment: "Flow rate display: Worst")
 			} else {
 				notationLabel.text = ""

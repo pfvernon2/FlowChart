@@ -173,7 +173,7 @@ class HealthKitHelper: NSObject {
 		})
 	}
 	
-	// MARK: - read
+	// MARK: - Peak Flow Queries
 	
 	func getMaxPeakFlowSample(completion:(peakFlow:Double, error:NSError!)->()) {
 		let peakQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
@@ -232,7 +232,7 @@ class HealthKitHelper: NSObject {
 		healthStore.executeQuery(statsQuery)
 	}
 
-	func getPeakFlowMovingAverage(completion:(peakFlow:Double, error:NSError!)->()) {
+	func getPeakFlowAverageForLastMonth(completion:(peakFlow:Double, error:NSError!)->()) {
 		let past:NSDate = NSDate(timeIntervalSinceNow: -(60.0 * 60.0 * 24 * 30))
 		let now:NSDate = NSDate()
 		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: now, options: .None)
@@ -262,6 +262,53 @@ class HealthKitHelper: NSObject {
 				completion(peakFlow:peakResults, error:error)
 		})
 		healthStore.executeQuery(peakQuery)
+	}
+	
+	// MARK: - Inhaler Queries
+
+	func getInhalerDailyAverageWithPredicate(predicate:NSPredicate!, completion:(inhaler:Double, error:NSError!)->()) {
+		let inhalerQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierInhalerUsage)
+		
+		let statsQuery = HKStatisticsQuery(quantityType: inhalerQuantityType, quantitySamplePredicate: predicate, options: .CumulativeSum) { (query, statistics, error:NSError!) -> Void in
+			
+			var result = 0.0
+			if statistics != nil {
+				let countUnit = HKUnit.countUnit()
+				if let inhalerCount:HKQuantity = statistics.sumQuantity() {
+					//get cummulative counts for query
+					result = inhalerCount.doubleValueForUnit(countUnit)
+					
+					//get days between result dates
+					var startDate: NSDate? = statistics.startDate.copy() as? NSDate
+					var endDate: NSDate? = statistics.endDate.copy() as? NSDate
+					let calendar = NSCalendar.currentCalendar()
+					calendar.rangeOfUnit(NSCalendarUnit.DayCalendarUnit, startDate: &startDate, interval: nil, forDate: startDate!)
+					calendar.rangeOfUnit(NSCalendarUnit.DayCalendarUnit, startDate: &endDate, interval: nil, forDate: endDate!)
+					let difference:NSDateComponents = calendar.components(.DayCalendarUnit, fromDate: startDate!, toDate: endDate!, options: nil)
+					
+					let days:Double = Double(difference.day)
+					if days > 0.0 {
+						result /= days
+					}
+				}
+			}
+			
+			completion(inhaler:result, error:error)
+		}
+		
+		healthStore.executeQuery(statsQuery)
+	}
+	
+	func getInhalerDailyAverageForLastMonth(completion:(inhaler:Double, error:NSError!)->()) {
+		let past:NSDate = NSDate(timeIntervalSinceNow: -(60.0 * 60.0 * 24 * 30))
+		let now:NSDate = NSDate()
+		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: now, options: .None)
+		
+		self.getInhalerDailyAverageWithPredicate(datePredicate, completion);
+	}
+	
+	func getInhalerAverage(completion:(inhaler:Double, error:NSError!)->()) {
+		self.getInhalerDailyAverageWithPredicate(nil, completion)
 	}
 	
 	func exportInhalerSamples(completion:(inhaler: [HKQuantitySample], error:NSError!)->()) {
