@@ -145,16 +145,6 @@ class ControlsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		//Background Gradient
-		let colorTop = UIColor(red: 76.0/255.0, green: 233.0/255.0, blue: 204.0/255.0, alpha: 1.0).CGColor
-		let colorBottom = UIColor(red: 52.0/255.0, green: 170.0/255.0, blue: 220.0/255.0, alpha: 1.0).CGColor
-		let gl: CAGradientLayer = CAGradientLayer()
-		gl.colors = [ colorTop, colorBottom]
-		gl.locations = [ 0.0, 1.0]
-		gl.frame = self.view.frame
-		self.view.backgroundColor = UIColor.clearColor()
-		self.view.layer.insertSublayer(gl, atIndex: 0);
-		
 		NSNotificationCenter.defaultCenter().addObserverForName(kLocationHelperNotification, object:nil, queue:nil) { _ in
 			self.updateLocationButtonIcon()
 		}

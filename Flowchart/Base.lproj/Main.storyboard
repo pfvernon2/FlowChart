@@ -13,7 +13,7 @@
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS" customClass="GradientView" customModule="Flowchart" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -231,7 +231,7 @@
                         <viewControllerLayoutGuide type="top" id="Syl-NI-tjb"/>
                         <viewControllerLayoutGuide type="bottom" id="c8R-XS-F7c"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Ito-Wn-XYy">
+                    <view key="view" contentMode="scaleToFill" id="Ito-Wn-XYy" customClass="GradientView" customModule="Flowchart" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
