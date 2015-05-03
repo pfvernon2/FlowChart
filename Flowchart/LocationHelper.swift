@@ -12,6 +12,7 @@ import CoreLocation
 //MARK: Constants
 let kLocationUserPref:String = "trackLocation"
 let kLocationHelperNotification:String = "com.cyberdev.LocationHelper.kLocationHelperNotification"
+let kMinDistanceUpdateMeters:Double = 500
 
 class LocationHelper: NSObject, CLLocationManagerDelegate {
 
@@ -60,11 +61,35 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 	}
 	
 	func displayPlacemark() -> String {
-		let address:String = lastPlacemark.subThoroughfare != nil ? lastPlacemark.subThoroughfare : ""
-		let street:String = lastPlacemark.thoroughfare != nil ? lastPlacemark.thoroughfare : ""
-		let city:String = lastPlacemark.locality != nil ? lastPlacemark.locality : ""
-		let state:String = lastPlacemark.administrativeArea != nil ? lastPlacemark.administrativeArea : ""
-		let description:String = address + " " + street + ", " + city + ", " + state
+		let address:String? = lastPlacemark.subThoroughfare
+		let street:String? = lastPlacemark.thoroughfare
+		let city:String? = lastPlacemark.locality
+		let state:String? = lastPlacemark.administrativeArea
+		
+		var description:String = ""
+		if address != nil && street != nil {
+			description = address! + " " + street!;
+		}
+		
+		if city != nil {
+			if count(description) > 0 {
+				description += ", "
+			}
+			description += city!
+		}
+		
+		if state != nil {
+			if count(description) > 0 {
+				description += ", "
+			}
+			description += state!
+		}
+		
+		if count(description) > 0 {
+			description += "\n"
+		}
+		description += "(" + displayLocation() + ")"
+		
 		return description
 	}
 	
@@ -102,7 +127,7 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 			}
 			
 			else if placemarks.count > 0 {
-				self.lastPlacemark = placemarks[0] as CLPlacemark
+				self.lastPlacemark = placemarks[0] as! CLPlacemark
 			}
 			
 			else {
@@ -121,7 +146,7 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 	func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
 		println("Location authorization changed to: \(status.rawValue)")
 		authorizationStatus = status
-		accessAuthorized = self.authorizationStatus == CLAuthorizationStatus.AuthorizedWhenInUse
+		accessAuthorized = status == CLAuthorizationStatus.AuthorizedWhenInUse || status == CLAuthorizationStatus.AuthorizedAlways
 		
 		NSNotificationCenter.defaultCenter().postNotificationName(kLocationHelperNotification, object:nil)
 	}

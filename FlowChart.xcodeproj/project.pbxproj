@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		010719E419F1A9AD006CA4AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010719E319F1A9AD006CA4AA /* AppDelegate.swift */; };
-		010719E919F1A9AD006CA4AA /* ControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010719E819F1A9AD006CA4AA /* ControlsViewController.swift */; };
 		010719EC19F1A9AD006CA4AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 010719EA19F1A9AD006CA4AA /* Main.storyboard */; };
 		010719EE19F1A9AD006CA4AA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 010719ED19F1A9AD006CA4AA /* Images.xcassets */; };
 		010719F119F1A9AD006CA4AA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 010719EF19F1A9AD006CA4AA /* LaunchScreen.xib */; };
@@ -18,8 +17,12 @@
 		0132BB7319F4210000ACFBF6 /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0132BB7219F4210000ACFBF6 /* LocationHelper.swift */; };
 		01352EC01A0003DB003EE2A8 /* CSVHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EBF1A0003DB003EE2A8 /* CSVHelper.swift */; };
 		01352EC21A0748CB003EE2A8 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EC11A0748CB003EE2A8 /* GradientView.swift */; };
+		01352EC41A09E8D1003EE2A8 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EC31A09E8D1003EE2A8 /* CollectionViewController.swift */; };
+		01352EC61A09EC47003EE2A8 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EC51A09EC47003EE2A8 /* CollectionViewCell.swift */; };
 		015DA37219F486EB00D7157A /* HealthKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015DA37119F486EB00D7157A /* HealthKitHelper.swift */; };
 		01A9FE0919F4C8120001E223 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A9FE0819F4C8120001E223 /* HealthKit.framework */; };
+		01D093331A0B254F003B9252 /* PeakFlowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D093321A0B254F003B9252 /* PeakFlowViewController.swift */; };
+		01D093351A0B25CB003B9252 /* InhalerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D093341A0B25CB003B9252 /* InhalerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +39,6 @@
 		010719DE19F1A9AD006CA4AA /* Flowchart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flowchart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		010719E219F1A9AD006CA4AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		010719E319F1A9AD006CA4AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		010719E819F1A9AD006CA4AA /* ControlsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsViewController.swift; sourceTree = "<group>"; };
 		010719EB19F1A9AD006CA4AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		010719ED19F1A9AD006CA4AA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		010719F019F1A9AD006CA4AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -48,9 +50,13 @@
 		0132BB7219F4210000ACFBF6 /* LocationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		01352EBF1A0003DB003EE2A8 /* CSVHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSVHelper.swift; sourceTree = "<group>"; };
 		01352EC11A0748CB003EE2A8 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		01352EC31A09E8D1003EE2A8 /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		01352EC51A09EC47003EE2A8 /* CollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		015DA37119F486EB00D7157A /* HealthKitHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitHelper.swift; sourceTree = "<group>"; };
 		01A9FE0719F4C8110001E223 /* Flowchart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Flowchart.entitlements; sourceTree = SOURCE_ROOT; };
 		01A9FE0819F4C8120001E223 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		01D093321A0B254F003B9252 /* PeakFlowViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeakFlowViewController.swift; sourceTree = "<group>"; };
+		01D093341A0B25CB003B9252 /* InhalerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InhalerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,12 +103,15 @@
 			children = (
 				010719E319F1A9AD006CA4AA /* AppDelegate.swift */,
 				01352EC11A0748CB003EE2A8 /* GradientView.swift */,
-				010719E819F1A9AD006CA4AA /* ControlsViewController.swift */,
 				0132BB7019F36F3C00ACFBF6 /* SettingsViewController.swift */,
 				015DA37119F486EB00D7157A /* HealthKitHelper.swift */,
 				0132BB7219F4210000ACFBF6 /* LocationHelper.swift */,
 				01352EBF1A0003DB003EE2A8 /* CSVHelper.swift */,
 				010719EA19F1A9AD006CA4AA /* Main.storyboard */,
+				01352EC31A09E8D1003EE2A8 /* CollectionViewController.swift */,
+				01352EC51A09EC47003EE2A8 /* CollectionViewCell.swift */,
+				01D093321A0B254F003B9252 /* PeakFlowViewController.swift */,
+				01D093341A0B25CB003B9252 /* InhalerViewController.swift */,
 				010719EF19F1A9AD006CA4AA /* LaunchScreen.xib */,
 				010719ED19F1A9AD006CA4AA /* Images.xcassets */,
 				010719E119F1A9AD006CA4AA /* Supporting Files */,
@@ -275,10 +284,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				010719E919F1A9AD006CA4AA /* ControlsViewController.swift in Sources */,
+				01D093331A0B254F003B9252 /* PeakFlowViewController.swift in Sources */,
 				015DA37219F486EB00D7157A /* HealthKitHelper.swift in Sources */,
+				01352EC61A09EC47003EE2A8 /* CollectionViewCell.swift in Sources */,
 				01352EC01A0003DB003EE2A8 /* CSVHelper.swift in Sources */,
+				01D093351A0B25CB003B9252 /* InhalerViewController.swift in Sources */,
 				0132BB7319F4210000ACFBF6 /* LocationHelper.swift in Sources */,
+				01352EC41A09E8D1003EE2A8 /* CollectionViewController.swift in Sources */,
 				01352EC21A0748CB003EE2A8 /* GradientView.swift in Sources */,
 				0132BB7119F36F3C00ACFBF6 /* SettingsViewController.swift in Sources */,
 				010719E419F1A9AD006CA4AA /* AppDelegate.swift in Sources */,
@@ -357,7 +369,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -393,7 +405,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -408,7 +420,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Flowchart/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = Flowchart;
 				PROVISIONING_PROFILE = "";
@@ -423,7 +435,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Flowchart/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = Flowchart;
 				PROVISIONING_PROFILE = "";

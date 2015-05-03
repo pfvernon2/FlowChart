@@ -81,7 +81,7 @@ class CSVHelper: NSObject {
 				var escaped = field.stringByReplacingOccurrencesOfString("\"", withString: "\"\"", options: NSStringCompareOptions.LiteralSearch, range: nil)
 				var quoted = "\"" + escaped + "\""
 				
-				if countElements(row) > 0 {
+				if count(row) > 0 {
 					row += ","
 				}
 				row += quoted

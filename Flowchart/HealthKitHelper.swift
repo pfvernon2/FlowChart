@@ -37,7 +37,10 @@ class HealthKitHelper: NSObject {
 			let writeTypes = [peakFlowType, inhalerUsageType]
 			let readTypes = [peakFlowType, inhalerUsageType]
 
-			self.healthStore.requestAuthorizationToShareTypes(NSSet(array:writeTypes), readTypes: NSSet(array:readTypes), completion: {
+			self.healthStore.requestAuthorizationToShareTypes(NSSet(array:writeTypes) as Set<NSObject>,
+				readTypes: NSSet(array:readTypes) as Set<NSObject>,
+				completion:
+				{
 				(success:Bool, error:NSError!) -> Void in
 				if error != nil {
 					println("HealthKit access denied: " + error.localizedDescription)
@@ -73,7 +76,7 @@ class HealthKitHelper: NSObject {
 		
 		let peakFlowSample = HKQuantitySample(type: peakQuantityType, quantity: peakQuantity, startDate: date, endDate: date, metadata:metadata)
 		
-		self.writeSample(peakFlowSample, completion)
+		self.writeSample(peakFlowSample, completion: completion)
 	}
 	
 	func writeInhalerUsage(usage:Double, date:NSDate, location:CLLocation!, completion:(success:Bool, error:NSError!)->()) {
@@ -84,7 +87,7 @@ class HealthKitHelper: NSObject {
 		
 		let usageSample = HKQuantitySample(type: usageQuantityType, quantity: usageQuantity, startDate: date, endDate: date, metadata:metadata)
 		
-		self.writeSample(usageSample, completion)
+		self.writeSample(usageSample, completion: completion)
 	}
 	
 	func writeSample(sample:HKQuantitySample, completion:(success:Bool, error:NSError!)->()) {
@@ -122,21 +125,21 @@ class HealthKitHelper: NSObject {
 			}
 				
 			else if record.count == columns.count {
-				var dict:Dictionary = NSDictionary(objects:record, forKeys:columns)
+				var dict:NSDictionary = NSDictionary(objects:record, forKeys:columns as [AnyObject])
 				
 				//We support: July 8, 2014 8:00 AM
-				let dateString:String = dict["date"] as String
+				let dateString:String = dict["date"] as! String
 				let recordDate = self.dateFormatter.dateFromString(dateString)
 				if recordDate == nil {
 					continue;
 				}
 				
-				let currType:String = dict["type"] as String
-				let currValue:Double = NSNumberFormatter().numberFromString(dict["value"] as String)!.doubleValue
+				let currType:String = dict["type"] as! String
+				let currValue:Double = NSNumberFormatter().numberFromString(dict["value"] as! String)!.doubleValue
 				
 				if let currMetadata:String = dict["metadata"] as? String {
 					// TODO: - Import lat/long metadata... might want to change export to make it easier on ourselves
-					if countElements(currMetadata) > 0 {
+					if count(currMetadata) > 0 {
 						println(currMetadata)
 					}
 				}
@@ -236,16 +239,16 @@ class HealthKitHelper: NSObject {
 		let now:NSDate = NSDate()
 		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: now, options: .None)
 		
-		self.getPeakFlowAverageWithPredicate(datePredicate, completion)
+		self.getPeakFlowAverageWithPredicate(datePredicate, completion: completion)
 	}
 	
 	func getPeakFlowAverage(completion:(peakFlow:Double, error:NSError!)->()) {
-		self.getPeakFlowAverageWithPredicate(nil, completion)
+		self.getPeakFlowAverageWithPredicate(nil, completion: completion)
 	}
 	
 	func exportPeakFlowSamples(completion:(peakFlow: [HKQuantitySample], error:NSError!)->()){
-		let past:NSDate = NSDate.distantPast() as NSDate
-		let future:NSDate = NSDate.distantFuture() as NSDate
+		let past:NSDate = NSDate.distantPast() as! NSDate
+		let future:NSDate = NSDate.distantFuture() as! NSDate
 		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: future, options: .None)
 		
 		let peakQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
@@ -255,7 +258,7 @@ class HealthKitHelper: NSObject {
 				(query, results, error) in
 				
 				if (error == nil) {
-					peakResults = results as [HKQuantitySample]
+					peakResults = results as! [HKQuantitySample]
 				}
 				
 				completion(peakFlow:peakResults, error:error)
@@ -280,9 +283,9 @@ class HealthKitHelper: NSObject {
 					var startDate: NSDate? = statistics.startDate.copy() as? NSDate
 					var endDate: NSDate? = statistics.endDate.copy() as? NSDate
 					let calendar = NSCalendar.currentCalendar()
-					calendar.rangeOfUnit(NSCalendarUnit.DayCalendarUnit, startDate: &startDate, interval: nil, forDate: startDate!)
-					calendar.rangeOfUnit(NSCalendarUnit.DayCalendarUnit, startDate: &endDate, interval: nil, forDate: endDate!)
-					let difference:NSDateComponents = calendar.components(.DayCalendarUnit, fromDate: startDate!, toDate: endDate!, options: nil)
+					calendar.rangeOfUnit(NSCalendarUnit.CalendarUnitDay, startDate: &startDate, interval: nil, forDate: startDate!)
+					calendar.rangeOfUnit(NSCalendarUnit.CalendarUnitDay, startDate: &endDate, interval: nil, forDate: endDate!)
+					let difference:NSDateComponents = calendar.components(NSCalendarUnit.CalendarUnitDay, fromDate: startDate!, toDate: endDate!, options: nil)
 					
 					let days:Double = Double(difference.day)
 					if days > 0.0 {
@@ -302,16 +305,16 @@ class HealthKitHelper: NSObject {
 		let now:NSDate = NSDate()
 		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: now, options: .None)
 		
-		self.getInhalerDailyAverageWithPredicate(datePredicate, completion);
+		self.getInhalerDailyAverageWithPredicate(datePredicate, completion: completion);
 	}
 	
 	func getInhalerAverage(completion:(inhaler:Double, error:NSError!)->()) {
-		self.getInhalerDailyAverageWithPredicate(nil, completion)
+		self.getInhalerDailyAverageWithPredicate(nil, completion: completion)
 	}
 	
 	func exportInhalerSamples(completion:(inhaler: [HKQuantitySample], error:NSError!)->()) {
-		let past:NSDate = NSDate.distantPast() as NSDate
-		let future:NSDate = NSDate.distantFuture() as NSDate
+		let past:NSDate = NSDate.distantPast() as! NSDate
+		let future:NSDate = NSDate.distantFuture() as! NSDate
 		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: future, options: .None)
 
 		let inhalerQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierInhalerUsage)
@@ -321,7 +324,7 @@ class HealthKitHelper: NSObject {
 				(query, results, error) in
 				
 				if (error == nil) {
-					inhalerResults = results as [HKQuantitySample]
+					inhalerResults = results as! [HKQuantitySample]
 				}
 
 				completion(inhaler:inhalerResults, error:error)

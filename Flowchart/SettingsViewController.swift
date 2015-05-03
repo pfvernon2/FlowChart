@@ -72,7 +72,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 				//create temp file with well known name
 				let dir:String = NSTemporaryDirectory()
 				let appName:AnyObject? = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName")
-				let filename:String = String(format: "%@.csv", appName as String)
+				let filename:String = String(format: "%@.csv", appName as! String)
 				let path:String = dir.stringByAppendingPathComponent(filename)
 				let url:NSURL = NSURL.fileURLWithPath(path)!
 				
@@ -88,7 +88,7 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 				}
 				
 				CSVHelper().write(data, toFile: url)
-				self.saveCount = countElements(data)
+				self.saveCount = count(data)
 				
 				//move temp file to iCloud, or wherever
 				let documentPicker = UIDocumentPickerViewController(URL: url, inMode: .ExportToService)
