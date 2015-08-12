@@ -47,7 +47,7 @@ class PeakFlowViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		HealthKitHelper.sharedInstance.writePeakFlowSample(Double(flowRate), date:NSDate(), location:location) { (success, error) -> () in
 			
 			if !success {
-				var alertView = UIAlertView()
+				let alertView = UIAlertView()
 				alertView.title = NSLocalizedString("Peak Flow Update Failed", comment: "Peak Flow Update Failed - title")
 				alertView.message = NSLocalizedString("Unable to access your HealthKit information. Please confirm this app is configured access your HealthKit data in Settings->Privacy->Health.", comment: "Peak Flow Update Failed - message")
 				alertView.addButtonWithTitle("Dismiss")
@@ -72,7 +72,7 @@ class PeakFlowViewController: UIViewController, UIPickerViewDataSource, UIPicker
 				dispatch_group_leave(uiUpdateGroup);
 				
 				if (!success) {
-					var alertView = UIAlertView()
+					let alertView = UIAlertView()
 					alertView.title = NSLocalizedString("Sorry", comment: "HealthKit access error - title")
 					alertView.message = NSLocalizedString("We were unable to access your data in HealthKit.\n\nYou can correct this in your iPhone Settings under Privacy/Health", comment: "HealthKit access error - message")
 					alertView.addButtonWithTitle("Dismiss")
@@ -83,7 +83,7 @@ class PeakFlowViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		{
 			dispatch_group_leave(uiUpdateGroup);
 			
-			var alertView = UIAlertView()
+			let alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Sorry", comment: "HealthKit not available - title")
 			alertView.message = NSLocalizedString("HealthKit is not available on this device.", comment: "HealthKit not available - message")
 			alertView.addButtonWithTitle("Dismiss")
@@ -147,11 +147,11 @@ class PeakFlowViewController: UIViewController, UIPickerViewDataSource, UIPicker
 		return 800/10
 	}
 	
-	func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+	func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
 		return String((row+1) * 10)
 	}
 	
-	func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+	func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
 		
 		let value:Int = (row+1) * 10
 		
@@ -160,18 +160,18 @@ class PeakFlowViewController: UIViewController, UIPickerViewDataSource, UIPicker
 			result = view
 		}
 		else {
-			var view:UIView = UIView(frame: CGRectMake(0, 0, pickerView.frame.size.width, 100))
-			view.setTranslatesAutoresizingMaskIntoConstraints(false)
+			let view:UIView = UIView(frame: CGRectMake(0, 0, pickerView.frame.size.width, 100))
+			view.translatesAutoresizingMaskIntoConstraints = false
 			
 			//Value label
-			var valueLabel:UILabel = UILabel(frame: CGRectMake(0, 0, pickerView.frame.size.width, 100))
+			let valueLabel:UILabel = UILabel(frame: CGRectMake(0, 0, pickerView.frame.size.width, 100))
 			valueLabel.textAlignment = .Center
 			valueLabel.font = UIFont.boldSystemFontOfSize(36.0)
 			valueLabel.text = String(value) //String(format: "%d L/min", value)
 			view.addSubview(valueLabel)
 			
 			//Notation label
-			var notationLabel:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
+			let notationLabel:UILabel = UILabel(frame: CGRectMake(10, 0, pickerView.frame.size.width/4.0, 100))
 			notationLabel.textAlignment = .Left
 			notationLabel.font = UIFont.systemFontOfSize(18.0)
 			notationLabel.textColor = UIColor.whiteColor()

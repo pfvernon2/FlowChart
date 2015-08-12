@@ -20,14 +20,14 @@ class CollectionViewCell: UICollectionViewCell {
 		self.initCell();
 	}
 	
-	required init(coder aDecoder: NSCoder) {
+	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 		self.initCell();
 	}
 	
 	func initCell() {
-		self.setTranslatesAutoresizingMaskIntoConstraints(false);
-		self.autoresizingMask = .FlexibleHeight | .FlexibleWidth;
+		self.translatesAutoresizingMaskIntoConstraints = false;
+		self.autoresizingMask = [.FlexibleHeight, .FlexibleWidth];
 	}
 	
 //	override func drawRect(rect: CGRect) {

@@ -18,7 +18,7 @@ class GradientView: UIView {
 		self.applyGradient(frame)
 	}
  
-	required init(coder: NSCoder) {
+	required init?(coder: NSCoder) {
 		super.init(coder: coder)
 		
 		self.applyGradient(self.frame)
@@ -40,7 +40,7 @@ class GradientView: UIView {
 			self.gradientLayer!.locations = [0.0, 1.0]
 			
 			self.backgroundColor = UIColor.clearColor()
-			self.layer.insertSublayer(self.gradientLayer, atIndex: 0);
+			self.layer.insertSublayer(self.gradientLayer!, atIndex: 0);
 		}
 		
 		self.gradientLayer!.frame = frame

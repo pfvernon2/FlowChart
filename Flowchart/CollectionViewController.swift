@@ -25,7 +25,7 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 	//MARK: Actions
 	func locationAction(sender: AnyObject) {
 		if (!LocationHelper.sharedInstance.trackLocationPref) {
-			var alertView = UIAlertView()
+			let alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Your location is unknown", comment: "Your location unknown - title")
 			alertView.message = NSLocalizedString("Enable location tracking in Settings if you wish to record your location with your HealthKit data.", comment: "Your location - enable in prefs")
 			alertView.addButtonWithTitle("Dismiss")
@@ -33,7 +33,7 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 		}
 			
 		else if (!LocationHelper.sharedInstance.accessAuthorized) {
-			var alertView = UIAlertView()
+			let alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Your location is unavailable", comment: "Your location unavailable - title")
 			alertView.message = NSLocalizedString("You have opted to have this app record your location but you have not authorized access to your location information. You can disable this option in settings or enable access to your location in your iPhone Settings under Privacy/Location Services.", comment: "Your location - enable in settings")
 			alertView.addButtonWithTitle("Dismiss")
@@ -41,7 +41,7 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 		}
 			
 		else if LocationHelper.sharedInstance.lastPlacemark != nil {
-			var alertView = UIAlertView()
+			let alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Your location", comment: "Your location - title")
 			let locationDisplay:String = LocationHelper.sharedInstance.displayPlacemark()
 			alertView.message = locationDisplay
@@ -50,7 +50,7 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 		}
 			
 		else if LocationHelper.sharedInstance.locationResolved {
-			var alertView = UIAlertView()
+			let alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Your location", comment: "Your location - title")
 			let locationDisplay:String = LocationHelper.sharedInstance.displayLocation()
 			alertView.message = locationDisplay
@@ -59,7 +59,7 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 		}
 			
 		else {
-			var alertView = UIAlertView()
+			let alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Your location cannot be determined", comment: "Your location not determined - title")
 			let locationDisplay:String = LocationHelper.sharedInstance.displayLocation()
 			alertView.message = locationDisplay
@@ -107,7 +107,7 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //#warning Incomplete method implementation -- Return the number of items in the section
-        return count(self.sectionTitles)
+        return self.sectionTitles.count
     }
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -138,7 +138,7 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 		
 		cell.contents.addConstraint(NSLayoutConstraint(item: cell.controller.view, attribute: .Bottom, relatedBy: .Equal, toItem: cell.contents, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
 
-		cell.controller.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+		cell.controller.view.translatesAutoresizingMaskIntoConstraints = false
 		cell.controller.view.sizeToFit()
 		cell.controller.view.layoutIfNeeded()
 		cell.setNeedsDisplay()
@@ -171,10 +171,10 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 		var view:UICollectionReusableView? = nil;
 		
 		if kind == UICollectionElementKindSectionHeader {
-			view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "header", forIndexPath: indexPath) as? UICollectionReusableView
+			view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "header", forIndexPath: indexPath)
 		}
 		else if kind == UICollectionElementKindSectionFooter {
-			view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "footer", forIndexPath: indexPath) as? UICollectionReusableView
+			view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "footer", forIndexPath: indexPath) 
 			
 			for subview in view!.subviews {
 				if let buttonView:UIButton = subview as? UIButton {
@@ -215,7 +215,7 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 
 	func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
 	{
-		let sectionCount = CGFloat(count(self.sectionTitles))
+		let sectionCount = CGFloat(self.sectionTitles.count)
 		
 		var retval:CGSize = collectionView.frame.size;
 		
@@ -274,19 +274,19 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 			
 		else if userPref && !accessAuth {
 			self.locationButton.enabled = true;
-			var image:UIImage? = UIImage(named:"warning")
+			let image:UIImage? = UIImage(named:"warning")
 			self.locationButton.setImage(image, forState: .Normal);
 		}
 			
 		else if userPref && !locationResolved {
 			self.locationButton.enabled = true;
-			var image:UIImage? = UIImage(named:"location empty")
+			let image:UIImage? = UIImage(named:"location empty")
 			self.locationButton.setImage(image, forState: .Normal);
 		}
 			
 		else {
 			self.locationButton.enabled = true;
-			var image:UIImage? = UIImage(named:"location")
+			let image:UIImage? = UIImage(named:"location")
 			self.locationButton.setImage(image, forState: .Normal);
 		}
 	}

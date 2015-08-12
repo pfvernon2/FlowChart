@@ -37,7 +37,7 @@ class InhalerViewController: UIViewController {
 		HealthKitHelper.sharedInstance.writeInhalerUsage(Double(inhaler), date:NSDate(), location:location) { (success, error) -> () in
 			
 			if !success {
-				var alertView = UIAlertView()
+				let alertView = UIAlertView()
 				alertView.title = NSLocalizedString("Inhaler Usage Failed", comment: "Inhaler Usage Failed - title")
 				alertView.message = NSLocalizedString("Unable to access your HealthKit information. Please confirm this app is configured access your HealthKit data in Settings->Privacy->Health.", comment: "Inhaler Usage Failed - message")
 				alertView.addButtonWithTitle("Dismiss")
@@ -77,7 +77,7 @@ class InhalerViewController: UIViewController {
 				dispatch_group_leave(uiUpdateGroup);
 				
 				if (!success) {
-					var alertView = UIAlertView()
+					let alertView = UIAlertView()
 					alertView.title = NSLocalizedString("Sorry", comment: "HealthKit access error - title")
 					alertView.message = NSLocalizedString("We were unable to access your data in HealthKit.\n\nYou can correct this in your iPhone Settings under Privacy/Health", comment: "HealthKit access error - message")
 					alertView.addButtonWithTitle("Dismiss")
@@ -88,7 +88,7 @@ class InhalerViewController: UIViewController {
 		{
 			dispatch_group_leave(uiUpdateGroup);
 			
-			var alertView = UIAlertView()
+			let alertView = UIAlertView()
 			alertView.title = NSLocalizedString("Sorry", comment: "HealthKit not available - title")
 			alertView.message = NSLocalizedString("HealthKit is not available on this device.", comment: "HealthKit not available - message")
 			alertView.addButtonWithTitle("Dismiss")
