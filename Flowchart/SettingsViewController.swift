@@ -33,12 +33,12 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 	}
 	
 	@IBAction func warningTapAction(sender: AnyObject) {
-		let alertView = UIAlertView()
-		alertView.title = NSLocalizedString("Location Service Disabled", comment: "Location Service Disabled - title")
-		let locationDisplay:String = NSLocalizedString("You have opted to record your location however location services are not enabled for this application. You can correct this in your iPhone Settings under Privacy/Location Services.", comment: "Location Service Disabled - message")
-		alertView.message = locationDisplay
-		alertView.addButtonWithTitle("Dismiss")
-		alertView.show()
+        let locationDisplay:String = NSLocalizedString("You have opted to record your location however location services are not enabled for this application. You can correct this in your iPhone Settings under Privacy/Location Services.", comment: "Location Service Disabled - message")
+        let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Location Service Disabled", comment: "Location Service Disabled - title"),
+            message:  locationDisplay,
+            preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
 	}
 	
 	@IBAction func importAction(sender: AnyObject) {
@@ -61,12 +61,12 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 			})
 			
 			if let _ = error {
-				let alertView = UIAlertView()
-				alertView.title = NSLocalizedString("Export Failed", comment: "Export Failed - title")
-				let locationDisplay:String = NSLocalizedString("We were unable to access your HealthKit data. Please ensure that you have granted this app access to your HealthKit data in Settings->Privacy->Health.", comment: "Export Failed - message")
-				alertView.message = locationDisplay
-				alertView.addButtonWithTitle("Dismiss")
-				alertView.show()
+                let locationDisplay:String = NSLocalizedString("We were unable to access your HealthKit data. Please ensure that you have granted this app access to your HealthKit data in Settings->Privacy->Health.", comment: "Export Failed - message")
+                let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Export Failed", comment: "Export Failed - title"),
+                    message:  locationDisplay,
+                    preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
 			}
 			else {
 				//create temp file with well known name
@@ -160,20 +160,18 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 				HealthKitHelper.sharedInstance.importSamples(table, completion: { (count) -> () in
 					dispatch_async(dispatch_get_main_queue(), { () -> Void in
 						if count <= 0 {
-							let alertView = UIAlertView()
-							alertView.title = NSLocalizedString("Import Failed", comment: "Import Failed - title")
-							let locationDisplay:String = NSLocalizedString("The import of your data has failed. No data was imported. Please check your data format and try again, or don't, I'm not your mother.", comment: "Import Failed - message")
-							alertView.message = locationDisplay
-							alertView.addButtonWithTitle("Dismiss")
-							alertView.show()
+                            let locationDisplay:String = NSLocalizedString("The import of your data has failed. No data was imported. Please check your data format and try again, or don't, I'm not your mother.", comment: "Import Failed - message")
+                            let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Import Failed", comment: "Import Failed - title"),
+                                message:  locationDisplay,
+                                preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
 						} else {
-							let alertView = UIAlertView()
-							alertView.title = NSLocalizedString("Success!", comment: "Import success - title")
-							var locationDisplay:String = NSLocalizedString("We imported %lu records.", comment: "Import success - message")
-							locationDisplay = String(format: locationDisplay, count)
-							alertView.message = locationDisplay
-							alertView.addButtonWithTitle("Yeah!")
-							alertView.show()
+                            let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Success!", comment: "Import success - title"),
+                                message:  nil,
+                                preferredStyle: .Alert)
+                            alert.addAction(UIAlertAction(title: NSLocalizedString("Yeah!", comment:""), style: .Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
 						}
 						self.importButton.hidden = false
 						self.importStatus.stopAnimating()
@@ -195,13 +193,12 @@ class SettingsViewController: UIViewController, UIDocumentPickerDelegate {
 			}
 			
 			//indicate success
-			let alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Success!", comment: "Export success - title")
-			var locationDisplay:String = NSLocalizedString("We exported %lu records!", comment: "Export success - message")
-			locationDisplay = String(format: locationDisplay, self.saveCount)
-			alertView.message = locationDisplay
-			alertView.addButtonWithTitle("Yeah!")
-			alertView.show()
+            let locationDisplay:String = NSLocalizedString("We exported %lu records!", comment: "Export success - message")
+            let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Success!", comment: "Import success - title"),
+                message:  locationDisplay,
+                preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Yeah!", comment:""), style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
 		}
 	}
 	

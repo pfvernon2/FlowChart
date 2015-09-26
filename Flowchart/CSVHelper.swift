@@ -13,7 +13,7 @@ class CSVHelper: NSObject {
 	let delimiter:Character = ","
 	
 	func read(contentsOfURL url: NSURL, useEncoding encoding: UInt = NSUTF8StringEncoding) -> [[String]] {
-		var characterData:String = try! String(contentsOfFile: url.path!, encoding: encoding)
+		let characterData:String = try! String(contentsOfFile: url.path!, encoding: encoding)
 		var table:[[String]] = []
 		
 		var quoted:Bool = false

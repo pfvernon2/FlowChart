@@ -25,46 +25,46 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 	//MARK: Actions
 	func locationAction(sender: AnyObject) {
 		if (!LocationHelper.sharedInstance.trackLocationPref) {
-			let alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Your location is unknown", comment: "Your location unknown - title")
-			alertView.message = NSLocalizedString("Enable location tracking in Settings if you wish to record your location with your HealthKit data.", comment: "Your location - enable in prefs")
-			alertView.addButtonWithTitle("Dismiss")
-			alertView.show()
+            let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Your location is unknown", comment: "Your location unknown - title"),
+                message:  NSLocalizedString("Enable location tracking in Settings if you wish to record your location with your HealthKit data.", comment: "Your location - enable in prefs"),
+                preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
 		}
 			
 		else if (!LocationHelper.sharedInstance.accessAuthorized) {
-			let alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Your location is unavailable", comment: "Your location unavailable - title")
-			alertView.message = NSLocalizedString("You have opted to have this app record your location but you have not authorized access to your location information. You can disable this option in settings or enable access to your location in your iPhone Settings under Privacy/Location Services.", comment: "Your location - enable in settings")
-			alertView.addButtonWithTitle("Dismiss")
-			alertView.show()
+            let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Your location is unavailable", comment: "Your location unavailable - title"),
+                message:  NSLocalizedString("You have opted to have this app record your location but you have not authorized access to your location information. You can disable this option in settings or enable access to your location in your iPhone Settings under Privacy/Location Services.", comment: "Your location - enable in settings"),
+                preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
 		}
 			
 		else if LocationHelper.sharedInstance.lastPlacemark != nil {
-			let alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Your location", comment: "Your location - title")
-			let locationDisplay:String = LocationHelper.sharedInstance.displayPlacemark()
-			alertView.message = locationDisplay
-			alertView.addButtonWithTitle("Dismiss")
-			alertView.show()
+            let locationDisplay:String = LocationHelper.sharedInstance.displayPlacemark()
+            let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Your location", comment: "Your location - title"),
+                message:  locationDisplay,
+                preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
 		}
 			
 		else if LocationHelper.sharedInstance.locationResolved {
-			let alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Your location", comment: "Your location - title")
-			let locationDisplay:String = LocationHelper.sharedInstance.displayLocation()
-			alertView.message = locationDisplay
-			alertView.addButtonWithTitle("Dismiss")
-			alertView.show()
+            let locationDisplay:String = LocationHelper.sharedInstance.displayLocation()
+            let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Your location", comment: "Your location - title"),
+                message:  locationDisplay,
+                preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
 		}
 			
 		else {
-			let alertView = UIAlertView()
-			alertView.title = NSLocalizedString("Your location cannot be determined", comment: "Your location not determined - title")
-			let locationDisplay:String = LocationHelper.sharedInstance.displayLocation()
-			alertView.message = locationDisplay
-			alertView.addButtonWithTitle("Dismiss")
-			alertView.show()
+            let locationDisplay:String = LocationHelper.sharedInstance.displayLocation()
+            let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Your location cannot be determined", comment: "Your location not determined - title"),
+                message:  locationDisplay,
+                preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
 		}
 	}
 	

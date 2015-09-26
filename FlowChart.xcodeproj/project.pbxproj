@@ -12,7 +12,6 @@
 		010719EE19F1A9AD006CA4AA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 010719ED19F1A9AD006CA4AA /* Images.xcassets */; };
 		010719F119F1A9AD006CA4AA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 010719EF19F1A9AD006CA4AA /* LaunchScreen.xib */; };
 		010719FD19F1A9AE006CA4AA /* FlowchartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010719FC19F1A9AE006CA4AA /* FlowchartTests.swift */; };
-		01071A0B19F23252006CA4AA /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01071A0A19F23252006CA4AA /* CoreLocation.framework */; };
 		0132BB7119F36F3C00ACFBF6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0132BB7019F36F3C00ACFBF6 /* SettingsViewController.swift */; };
 		0132BB7319F4210000ACFBF6 /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0132BB7219F4210000ACFBF6 /* LocationHelper.swift */; };
 		01352EC01A0003DB003EE2A8 /* CSVHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EBF1A0003DB003EE2A8 /* CSVHelper.swift */; };
@@ -20,7 +19,7 @@
 		01352EC41A09E8D1003EE2A8 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EC31A09E8D1003EE2A8 /* CollectionViewController.swift */; };
 		01352EC61A09EC47003EE2A8 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EC51A09EC47003EE2A8 /* CollectionViewCell.swift */; };
 		015DA37219F486EB00D7157A /* HealthKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015DA37119F486EB00D7157A /* HealthKitHelper.swift */; };
-		01A9FE0919F4C8120001E223 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A9FE0819F4C8120001E223 /* HealthKit.framework */; };
+		0162BD661BB636660039DDC0 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0162BD651BB636660039DDC0 /* HealthKit.framework */; };
 		01D093331A0B254F003B9252 /* PeakFlowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D093321A0B254F003B9252 /* PeakFlowViewController.swift */; };
 		01D093351A0B25CB003B9252 /* InhalerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D093341A0B25CB003B9252 /* InhalerViewController.swift */; };
 /* End PBXBuildFile section */
@@ -42,10 +41,9 @@
 		010719EB19F1A9AD006CA4AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		010719ED19F1A9AD006CA4AA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		010719F019F1A9AD006CA4AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		010719F619F1A9AE006CA4AA /* Flowchart.temp_caseinsensitive_rename.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Flowchart.temp_caseinsensitive_rename.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		010719F619F1A9AE006CA4AA /* Flowchart.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Flowchart.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		010719FB19F1A9AE006CA4AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		010719FC19F1A9AE006CA4AA /* FlowchartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowchartTests.swift; sourceTree = "<group>"; };
-		01071A0A19F23252006CA4AA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		0132BB7019F36F3C00ACFBF6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		0132BB7219F4210000ACFBF6 /* LocationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		01352EBF1A0003DB003EE2A8 /* CSVHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSVHelper.swift; sourceTree = "<group>"; };
@@ -53,8 +51,8 @@
 		01352EC31A09E8D1003EE2A8 /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		01352EC51A09EC47003EE2A8 /* CollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		015DA37119F486EB00D7157A /* HealthKitHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitHelper.swift; sourceTree = "<group>"; };
+		0162BD651BB636660039DDC0 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		01A9FE0719F4C8110001E223 /* Flowchart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Flowchart.entitlements; sourceTree = SOURCE_ROOT; };
-		01A9FE0819F4C8120001E223 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		01D093321A0B254F003B9252 /* PeakFlowViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeakFlowViewController.swift; sourceTree = "<group>"; };
 		01D093341A0B25CB003B9252 /* InhalerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InhalerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -64,8 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01071A0B19F23252006CA4AA /* CoreLocation.framework in Frameworks */,
-				01A9FE0919F4C8120001E223 /* HealthKit.framework in Frameworks */,
+				0162BD661BB636660039DDC0 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,7 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				010719DE19F1A9AD006CA4AA /* Flowchart.app */,
-				010719F619F1A9AE006CA4AA /* Flowchart.temp_caseinsensitive_rename.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest */,
+				010719F619F1A9AE006CA4AA /* Flowchart.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -150,8 +147,7 @@
 		01071A0919F22D04006CA4AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				01A9FE0819F4C8120001E223 /* HealthKit.framework */,
-				01071A0A19F23252006CA4AA /* CoreLocation.framework */,
+				0162BD651BB636660039DDC0 /* HealthKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -192,7 +188,7 @@
 			);
 			name = FlowchartTests;
 			productName = FlowchartTests;
-			productReference = 010719F619F1A9AE006CA4AA /* Flowchart.temp_caseinsensitive_rename.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest */;
+			productReference = 010719F619F1A9AE006CA4AA /* Flowchart.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -356,6 +352,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -372,7 +369,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -399,6 +397,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -408,7 +407,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -422,9 +422,10 @@
 				CODE_SIGN_ENTITLEMENTS = Flowchart.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Flowchart/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cyberdev.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Flowchart;
 				PROVISIONING_PROFILE = "";
@@ -438,9 +439,10 @@
 				CODE_SIGN_ENTITLEMENTS = Flowchart.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Flowchart/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cyberdev.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Flowchart;
 				PROVISIONING_PROFILE = "";
@@ -451,10 +453,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -462,7 +461,7 @@
 				INFOPLIST_FILE = FlowchartTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cyberdev.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Flowchart.temp_caseinsensitive_rename.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests;
+				PRODUCT_NAME = Flowchart;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Flowchart.app/Flowchart";
 			};
 			name = Debug;
@@ -471,14 +470,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = FlowchartTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cyberdev.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Flowchart.temp_caseinsensitive_rename.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests;
+				PRODUCT_NAME = Flowchart;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Flowchart.app/Flowchart";
 			};
 			name = Release;
