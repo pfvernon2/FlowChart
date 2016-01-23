@@ -33,17 +33,18 @@ class CSVHelper: NSObject {
 				continue
 			}
 				
-				//check for quote sequence start
+            //check for quote sequence start
 			else if current == "\"" && !testEscaped {
 				quoted = !quoted
 			}
 				
-				//if not quoted check for record delimiter(s)
-				// supporting bare CR & LF, not required by RFC4180 but common
+            //if not quoted check for record delimiter(s)
+            // supporting bare CR & LF, not required by RFC4180 but common
 			else if !quoted && (current == "\r" || current == "\n") {
 				testRecordEnd = true
 				continue
 			}
+                
 			else if !quoted && (current == "\r\n" || testRecordEnd) {
 				record.append(field)
 				table.append(record)
@@ -54,13 +55,13 @@ class CSVHelper: NSObject {
 				}
 			}
 				
-				//if not quoted check for field delimiter
+            //if not quoted check for field delimiter
 			else if !quoted && current == self.delimiter {
 				record.append(field)
 				field = ""
 			}
 				
-				//add character to current field
+            //add character to current field
 			else {
 				field.append(current)
 			}
