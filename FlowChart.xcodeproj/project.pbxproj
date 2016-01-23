@@ -8,18 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		010719E419F1A9AD006CA4AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010719E319F1A9AD006CA4AA /* AppDelegate.swift */; };
-		010719E719F1A9AD006CA4AA /* Flowchart.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 010719E519F1A9AD006CA4AA /* Flowchart.xcdatamodeld */; };
-		010719E919F1A9AD006CA4AA /* ControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010719E819F1A9AD006CA4AA /* ControlsViewController.swift */; };
 		010719EC19F1A9AD006CA4AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 010719EA19F1A9AD006CA4AA /* Main.storyboard */; };
 		010719EE19F1A9AD006CA4AA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 010719ED19F1A9AD006CA4AA /* Images.xcassets */; };
 		010719F119F1A9AD006CA4AA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 010719EF19F1A9AD006CA4AA /* LaunchScreen.xib */; };
 		010719FD19F1A9AE006CA4AA /* FlowchartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010719FC19F1A9AE006CA4AA /* FlowchartTests.swift */; };
-		01071A0819F22CCB006CA4AA /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01071A0719F22CCB006CA4AA /* HealthKit.framework */; };
-		01071A0B19F23252006CA4AA /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01071A0A19F23252006CA4AA /* CoreLocation.framework */; };
 		0132BB7119F36F3C00ACFBF6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0132BB7019F36F3C00ACFBF6 /* SettingsViewController.swift */; };
 		0132BB7319F4210000ACFBF6 /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0132BB7219F4210000ACFBF6 /* LocationHelper.swift */; };
+		01352EC01A0003DB003EE2A8 /* CSVHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EBF1A0003DB003EE2A8 /* CSVHelper.swift */; };
+		01352EC21A0748CB003EE2A8 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EC11A0748CB003EE2A8 /* GradientView.swift */; };
+		01352EC41A09E8D1003EE2A8 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EC31A09E8D1003EE2A8 /* CollectionViewController.swift */; };
+		01352EC61A09EC47003EE2A8 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01352EC51A09EC47003EE2A8 /* CollectionViewCell.swift */; };
 		015DA37219F486EB00D7157A /* HealthKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015DA37119F486EB00D7157A /* HealthKitHelper.swift */; };
-		01E987E319F45B7500854F20 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E987E219F45B7500854F20 /* CoreDataHelper.swift */; };
+		0162BD661BB636660039DDC0 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0162BD651BB636660039DDC0 /* HealthKit.framework */; };
+		01D093331A0B254F003B9252 /* PeakFlowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D093321A0B254F003B9252 /* PeakFlowViewController.swift */; };
+		01D093351A0B25CB003B9252 /* InhalerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D093341A0B25CB003B9252 /* InhalerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,24 +35,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		010719DE19F1A9AD006CA4AA /* FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		010719DE19F1A9AD006CA4AA /* Flowchart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flowchart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		010719E219F1A9AD006CA4AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		010719E319F1A9AD006CA4AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		010719E619F1A9AD006CA4AA /* Flowchart.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Flowchart.xcdatamodel; sourceTree = "<group>"; };
-		010719E819F1A9AD006CA4AA /* ControlsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsViewController.swift; sourceTree = "<group>"; };
 		010719EB19F1A9AD006CA4AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		010719ED19F1A9AD006CA4AA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		010719F019F1A9AD006CA4AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		010719F619F1A9AE006CA4AA /* FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		010719F619F1A9AE006CA4AA /* Flowchart.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Flowchart.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		010719FB19F1A9AE006CA4AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		010719FC19F1A9AE006CA4AA /* FlowchartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowchartTests.swift; sourceTree = "<group>"; };
-		01071A0619F22CCB006CA4AA /* Flowchart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Flowchart.entitlements; sourceTree = "<group>"; };
-		01071A0719F22CCB006CA4AA /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		01071A0A19F23252006CA4AA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		0132BB7019F36F3C00ACFBF6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		0132BB7219F4210000ACFBF6 /* LocationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
+		01352EBF1A0003DB003EE2A8 /* CSVHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSVHelper.swift; sourceTree = "<group>"; };
+		01352EC11A0748CB003EE2A8 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		01352EC31A09E8D1003EE2A8 /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		01352EC51A09EC47003EE2A8 /* CollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		015DA37119F486EB00D7157A /* HealthKitHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitHelper.swift; sourceTree = "<group>"; };
-		01E987E219F45B7500854F20 /* CoreDataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
+		0162BD651BB636660039DDC0 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		01A9FE0719F4C8110001E223 /* Flowchart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Flowchart.entitlements; sourceTree = SOURCE_ROOT; };
+		01D093321A0B254F003B9252 /* PeakFlowViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeakFlowViewController.swift; sourceTree = "<group>"; };
+		01D093341A0B25CB003B9252 /* InhalerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InhalerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,8 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01071A0819F22CCB006CA4AA /* HealthKit.framework in Frameworks */,
-				01071A0B19F23252006CA4AA /* CoreLocation.framework in Frameworks */,
+				0162BD661BB636660039DDC0 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,8 +89,8 @@
 		010719DF19F1A9AD006CA4AA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				010719DE19F1A9AD006CA4AA /* FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename.app */,
-				010719F619F1A9AE006CA4AA /* FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest */,
+				010719DE19F1A9AD006CA4AA /* Flowchart.app */,
+				010719F619F1A9AE006CA4AA /* Flowchart.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -96,15 +99,18 @@
 			isa = PBXGroup;
 			children = (
 				010719E319F1A9AD006CA4AA /* AppDelegate.swift */,
-				010719E819F1A9AD006CA4AA /* ControlsViewController.swift */,
+				01352EC11A0748CB003EE2A8 /* GradientView.swift */,
 				0132BB7019F36F3C00ACFBF6 /* SettingsViewController.swift */,
 				015DA37119F486EB00D7157A /* HealthKitHelper.swift */,
 				0132BB7219F4210000ACFBF6 /* LocationHelper.swift */,
-				01E987E219F45B7500854F20 /* CoreDataHelper.swift */,
+				01352EBF1A0003DB003EE2A8 /* CSVHelper.swift */,
 				010719EA19F1A9AD006CA4AA /* Main.storyboard */,
-				010719ED19F1A9AD006CA4AA /* Images.xcassets */,
+				01352EC31A09E8D1003EE2A8 /* CollectionViewController.swift */,
+				01352EC51A09EC47003EE2A8 /* CollectionViewCell.swift */,
+				01D093321A0B254F003B9252 /* PeakFlowViewController.swift */,
+				01D093341A0B25CB003B9252 /* InhalerViewController.swift */,
 				010719EF19F1A9AD006CA4AA /* LaunchScreen.xib */,
-				010719E519F1A9AD006CA4AA /* Flowchart.xcdatamodeld */,
+				010719ED19F1A9AD006CA4AA /* Images.xcassets */,
 				010719E119F1A9AD006CA4AA /* Supporting Files */,
 			);
 			name = FlowChart;
@@ -114,7 +120,7 @@
 		010719E119F1A9AD006CA4AA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				01071A0619F22CCB006CA4AA /* Flowchart.entitlements */,
+				01A9FE0719F4C8110001E223 /* Flowchart.entitlements */,
 				010719E219F1A9AD006CA4AA /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -141,8 +147,7 @@
 		01071A0919F22D04006CA4AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				01071A0A19F23252006CA4AA /* CoreLocation.framework */,
-				01071A0719F22CCB006CA4AA /* HealthKit.framework */,
+				0162BD651BB636660039DDC0 /* HealthKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -150,26 +155,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		010719DD19F1A9AD006CA4AA /* FlowChart */ = {
+		010719DD19F1A9AD006CA4AA /* Flowchart */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 01071A0019F1A9AE006CA4AA /* Build configuration list for PBXNativeTarget "FlowChart" */;
+			buildConfigurationList = 01071A0019F1A9AE006CA4AA /* Build configuration list for PBXNativeTarget "Flowchart" */;
 			buildPhases = (
 				010719DA19F1A9AD006CA4AA /* Sources */,
 				010719DB19F1A9AD006CA4AA /* Frameworks */,
+				01352EBE19FF5D9E003EE2A8 /* Update Build Number On Archive */,
 				010719DC19F1A9AD006CA4AA /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = FlowChart;
+			name = Flowchart;
 			productName = Flowchart;
-			productReference = 010719DE19F1A9AD006CA4AA /* FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename.app */;
+			productReference = 010719DE19F1A9AD006CA4AA /* Flowchart.app */;
 			productType = "com.apple.product-type.application";
 		};
-		010719F519F1A9AE006CA4AA /* FlowChartTests */ = {
+		010719F519F1A9AE006CA4AA /* FlowchartTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 01071A0319F1A9AE006CA4AA /* Build configuration list for PBXNativeTarget "FlowChartTests" */;
+			buildConfigurationList = 01071A0319F1A9AE006CA4AA /* Build configuration list for PBXNativeTarget "FlowchartTests" */;
 			buildPhases = (
 				010719F219F1A9AE006CA4AA /* Sources */,
 				010719F319F1A9AE006CA4AA /* Frameworks */,
@@ -180,9 +186,9 @@
 			dependencies = (
 				010719F819F1A9AE006CA4AA /* PBXTargetDependency */,
 			);
-			name = FlowChartTests;
+			name = FlowchartTests;
 			productName = FlowchartTests;
-			productReference = 010719F619F1A9AE006CA4AA /* FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests.xctest */;
+			productReference = 010719F619F1A9AE006CA4AA /* Flowchart.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -191,7 +197,9 @@
 		010719D619F1A9AD006CA4AA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Frank Vernon";
 				TargetAttributes = {
 					010719DD19F1A9AD006CA4AA = {
@@ -199,6 +207,9 @@
 						DevelopmentTeam = K8SUWT674B;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
 								enabled = 1;
 							};
 						};
@@ -209,7 +220,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 010719D919F1A9AD006CA4AA /* Build configuration list for PBXProject "FlowChart" */;
+			buildConfigurationList = 010719D919F1A9AD006CA4AA /* Build configuration list for PBXProject "Flowchart" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -222,8 +233,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				010719DD19F1A9AD006CA4AA /* FlowChart */,
-				010719F519F1A9AE006CA4AA /* FlowChartTests */,
+				010719DD19F1A9AD006CA4AA /* Flowchart */,
+				010719F519F1A9AE006CA4AA /* FlowchartTests */,
 			);
 		};
 /* End PBXProject section */
@@ -248,17 +259,38 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		01352EBE19FF5D9E003EE2A8 /* Update Build Number On Archive */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Update Build Number On Archive";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\nfi";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		010719DA19F1A9AD006CA4AA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				010719E919F1A9AD006CA4AA /* ControlsViewController.swift in Sources */,
+				01D093331A0B254F003B9252 /* PeakFlowViewController.swift in Sources */,
 				015DA37219F486EB00D7157A /* HealthKitHelper.swift in Sources */,
-				010719E719F1A9AD006CA4AA /* Flowchart.xcdatamodeld in Sources */,
+				01352EC61A09EC47003EE2A8 /* CollectionViewCell.swift in Sources */,
+				01352EC01A0003DB003EE2A8 /* CSVHelper.swift in Sources */,
+				01D093351A0B25CB003B9252 /* InhalerViewController.swift in Sources */,
 				0132BB7319F4210000ACFBF6 /* LocationHelper.swift in Sources */,
+				01352EC41A09E8D1003EE2A8 /* CollectionViewController.swift in Sources */,
+				01352EC21A0748CB003EE2A8 /* GradientView.swift in Sources */,
 				0132BB7119F36F3C00ACFBF6 /* SettingsViewController.swift in Sources */,
-				01E987E319F45B7500854F20 /* CoreDataHelper.swift in Sources */,
 				010719E419F1A9AD006CA4AA /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,7 +308,7 @@
 /* Begin PBXTargetDependency section */
 		010719F819F1A9AE006CA4AA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 010719DD19F1A9AD006CA4AA /* FlowChart */;
+			target = 010719DD19F1A9AD006CA4AA /* Flowchart */;
 			targetProxy = 010719F719F1A9AE006CA4AA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -320,7 +352,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -335,7 +369,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -362,6 +397,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -371,7 +407,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -382,13 +419,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Flowchart/Flowchart.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Flowchart.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Flowchart/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cyberdev.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Flowchart;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -397,13 +436,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Flowchart/Flowchart.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Flowchart.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Flowchart/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cyberdev.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Flowchart;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
@@ -412,18 +453,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = FlowchartTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename.app/FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cyberdev.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Flowchart;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Flowchart.app/Flowchart";
 			};
 			name = Debug;
 		};
@@ -431,21 +470,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = FlowchartTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_renameTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename.app/FlowChart.temp_caseinsensitive_rename.temp_caseinsensitive_renamet.temp_caseinsensitive_rename";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cyberdev.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Flowchart;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Flowchart.app/Flowchart";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		010719D919F1A9AD006CA4AA /* Build configuration list for PBXProject "FlowChart" */ = {
+		010719D919F1A9AD006CA4AA /* Build configuration list for PBXProject "Flowchart" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				010719FE19F1A9AE006CA4AA /* Debug */,
@@ -454,7 +491,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		01071A0019F1A9AE006CA4AA /* Build configuration list for PBXNativeTarget "FlowChart" */ = {
+		01071A0019F1A9AE006CA4AA /* Build configuration list for PBXNativeTarget "Flowchart" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01071A0119F1A9AE006CA4AA /* Debug */,
@@ -463,7 +500,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		01071A0319F1A9AE006CA4AA /* Build configuration list for PBXNativeTarget "FlowChartTests" */ = {
+		01071A0319F1A9AE006CA4AA /* Build configuration list for PBXNativeTarget "FlowchartTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01071A0419F1A9AE006CA4AA /* Debug */,
@@ -473,19 +510,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		010719E519F1A9AD006CA4AA /* Flowchart.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				010719E619F1A9AD006CA4AA /* Flowchart.xcdatamodel */,
-			);
-			currentVersion = 010719E619F1A9AD006CA4AA /* Flowchart.xcdatamodel */;
-			path = Flowchart.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 010719D619F1A9AD006CA4AA /* Project object */;
 }

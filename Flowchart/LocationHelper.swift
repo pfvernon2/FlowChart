@@ -11,7 +11,8 @@ import CoreLocation
 
 //MARK: Constants
 let kLocationUserPref:String = "trackLocation"
-let kLocationHelperNotification:String = "com.cyberdev.com.LocationHelper.kLocationHelperNotification"
+let kLocationHelperNotification:String = "com.cyberdev.LocationHelper.kLocationHelperNotification"
+let kMinDistanceUpdateMeters:Double = 500
 
 class LocationHelper: NSObject, CLLocationManagerDelegate {
 
@@ -39,7 +40,7 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 
 	//MARK: Utilities
 	func setUserLocationTrackingUserPref(enableTracking:Bool) {
-		var userDefaults = NSUserDefaults.standardUserDefaults()
+		let userDefaults = NSUserDefaults.standardUserDefaults()
 		userDefaults.setBool(enableTracking, forKey:kLocationUserPref)
 		userDefaults.synchronize()
 		
@@ -53,24 +54,48 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 	}
 	
 	func getUserLocationTrackingUserPref() -> Bool {
-		var userDefaults = NSUserDefaults.standardUserDefaults()
+		let userDefaults = NSUserDefaults.standardUserDefaults()
 		userDefaults.synchronize()
-		var trackLocation:Bool = userDefaults.boolForKey(kLocationUserPref)
+		let trackLocation:Bool = userDefaults.boolForKey(kLocationUserPref)
 		return trackLocation
 	}
 	
 	func displayPlacemark() -> String {
-		let address:String = lastPlacemark.subThoroughfare != nil ? lastPlacemark.subThoroughfare : ""
-		let street:String = lastPlacemark.thoroughfare != nil ? lastPlacemark.thoroughfare : ""
-		let city:String = lastPlacemark.locality != nil ? lastPlacemark.locality : ""
-		let state:String = lastPlacemark.administrativeArea != nil ? lastPlacemark.administrativeArea : ""
-		let description:String = address + " " + street + ", " + city + ", " + state
+		let address:String? = lastPlacemark.subThoroughfare
+		let street:String? = lastPlacemark.thoroughfare
+		let city:String? = lastPlacemark.locality
+		let state:String? = lastPlacemark.administrativeArea
+		
+		var description:String = ""
+		if address != nil && street != nil {
+			description = address! + " " + street!;
+		}
+		
+		if city != nil {
+			if description.characters.count > 0 {
+				description += ", "
+			}
+			description += city!
+		}
+		
+		if state != nil {
+			if description.characters.count > 0 {
+				description += ", "
+			}
+			description += state!
+		}
+		
+		if description.characters.count > 0 {
+			description += "\n"
+		}
+		description += "(" + displayLocation() + ")"
+		
 		return description
 	}
 	
 	func displayLocation() -> String {
-		let lat = String(format: "%.8f", arguments:[locationManager.location.coordinate.latitude])
-		let long = String(format: "%.8f", arguments:[locationManager.location.coordinate.longitude])
+		let lat = String(format: "%.8f", arguments:[locationManager.location!.coordinate.latitude])
+		let long = String(format: "%.8f", arguments:[locationManager.location!.coordinate.longitude])
 		let description = lat + ", " + long
 		return description
 	}
@@ -87,39 +112,41 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 	}
 	
 	func stop() {
-		locationManager.stopUpdatingLocation()
+		if locationManager != nil {
+			locationManager.stopUpdatingLocation()
+		}
 	}
 	
 	//MARK: CLLocationManagerDelegate
-	func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+	func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 		locationResolved = true
 		
-		CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: {(placemarks, error)->Void in
+		CLGeocoder().reverseGeocodeLocation(manager.location!, completionHandler: {(placemarks, error)->Void in
 			if (error != nil) {
-				println("Reverse geocoder failed with error: " + error.localizedDescription)
+				print("Reverse geocoder failed with error: " + error!.localizedDescription)
 			}
 			
-			else if placemarks.count > 0 {
-				self.lastPlacemark = placemarks[0] as CLPlacemark
+			else if placemarks!.count > 0 {
+				self.lastPlacemark = placemarks?[0]
 			}
 			
 			else {
-				println("no placemark returned from geocoder")
+				print("no placemark returned from geocoder")
 			}
 			
 			NSNotificationCenter.defaultCenter().postNotificationName(kLocationHelperNotification, object:nil)
 		})
 	}
 	
-	func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-		println("Location resolution failed")
+	func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+		print("Location resolution failed")
 		NSNotificationCenter.defaultCenter().postNotificationName(kLocationHelperNotification, object:nil)
 	}
 	
-	func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-		println("Location authorization changed to: \(status.rawValue)")
+	func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+		print("Location authorization changed to: \(status.rawValue)")
 		authorizationStatus = status
-		accessAuthorized = self.authorizationStatus == CLAuthorizationStatus.AuthorizedWhenInUse
+		accessAuthorized = status == CLAuthorizationStatus.AuthorizedWhenInUse || status == CLAuthorizationStatus.AuthorizedAlways
 		
 		NSNotificationCenter.defaultCenter().postNotificationName(kLocationHelperNotification, object:nil)
 	}
