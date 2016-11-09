@@ -16,55 +16,55 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 	var locationButton: UIButton!
 
 	//MARK: Member variables
-	var selectedSection: NSIndexPath = NSIndexPath(forItem: 0, inSection: 0)
+	var selectedSection: IndexPath = IndexPath(item: 0, section: 0)
 	let sectionTitles = [
 		NSLocalizedString("Peak Expiratory Flow", comment: "Peak Expiratory Flow -  section title"),
 		NSLocalizedString("Inhaler Usage", comment: "Inhaler Usage -  section title")
 	]
 	
 	//MARK: Actions
-	func locationAction(sender: AnyObject) {
+	func locationAction(_ sender: AnyObject) {
 		if (!LocationHelper.sharedInstance.trackLocationPref) {
             let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Your location is unknown", comment: "Your location unknown - title"),
                 message:  NSLocalizedString("Enable location tracking in Settings if you wish to record your location with your HealthKit data.", comment: "Your location - enable in prefs"),
-                preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
 		}
 			
 		else if (!LocationHelper.sharedInstance.accessAuthorized) {
             let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Your location is unavailable", comment: "Your location unavailable - title"),
                 message:  NSLocalizedString("You have opted to have this app record your location but you have not authorized access to your location information. You can disable this option in settings or enable access to your location in your iPhone Settings under Privacy/Location Services.", comment: "Your location - enable in settings"),
-                preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
 		}
 			
 		else if LocationHelper.sharedInstance.lastPlacemark != nil {
             let locationDisplay:String = LocationHelper.sharedInstance.displayPlacemark()
             let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Your location", comment: "Your location - title"),
                 message:  locationDisplay,
-                preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
 		}
 			
 		else if LocationHelper.sharedInstance.locationResolved {
             let locationDisplay:String = LocationHelper.sharedInstance.displayLocation()
             let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Your location", comment: "Your location - title"),
                 message:  locationDisplay,
-                preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
 		}
 			
 		else {
             let locationDisplay:String = LocationHelper.sharedInstance.displayLocation()
             let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Your location cannot be determined", comment: "Your location not determined - title"),
                 message:  locationDisplay,
-                preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
 		}
 	}
 	
@@ -74,13 +74,13 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 		
 		self.clearsSelectionOnViewWillAppear = false
 		
-		NSNotificationCenter.defaultCenter().addObserverForName(kLocationHelperNotification, object:nil, queue:nil) { _ in
+		NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: kLocationHelperNotification), object:nil, queue:nil) { _ in
 			self.updateLocationButtonIcon()
 		}
 	}
 	
 	deinit {
-		NSNotificationCenter.defaultCenter().removeObserver(self)
+		NotificationCenter.default.removeObserver(self)
 	}
 
     override func didReceiveMemoryWarning() {
@@ -100,29 +100,29 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         //#warning Incomplete method implementation -- Return the number of sections
         return 1
     }
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //#warning Incomplete method implementation -- Return the number of items in the section
         return self.sectionTitles.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-		let cell:CollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as!CollectionViewCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		let cell:CollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as!CollectionViewCell
 
 		cell.titleLabel.text = self.sectionTitles[indexPath.row]
 	
 		let storyboard = UIStoryboard(name: "Main", bundle: nil)
 		if indexPath.row == 0 {
-			let sectionController:PeakFlowViewController = storyboard.instantiateViewControllerWithIdentifier("peakflow") as! PeakFlowViewController
+			let sectionController:PeakFlowViewController = storyboard.instantiateViewController(withIdentifier: "peakflow") as! PeakFlowViewController
 			sectionController.flowAverageLabel = cell.subTitleLabel
 			sectionController.updateDisplay()
 			cell.controller = sectionController as UIViewController
 		} else if indexPath.row == 1 {
-			let sectionController:InhalerViewController = storyboard.instantiateViewControllerWithIdentifier("inhaler") as! InhalerViewController
+			let sectionController:InhalerViewController = storyboard.instantiateViewController(withIdentifier: "inhaler") as! InhalerViewController
 			sectionController.inhalerAverageLabel = cell.subTitleLabel
 			sectionController.updateDisplay()
 			cell.controller = sectionController as UIViewController
@@ -130,13 +130,13 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 		
 		cell.contents.addSubview(cell.controller.view)
 		
-		cell.contents.addConstraint(NSLayoutConstraint(item: cell.controller.view, attribute: .Leading, relatedBy: .Equal, toItem: cell.contents, attribute: .Leading, multiplier: 1.0, constant: 0.0))
+		cell.contents.addConstraint(NSLayoutConstraint(item: cell.controller.view, attribute: .leading, relatedBy: .equal, toItem: cell.contents, attribute: .leading, multiplier: 1.0, constant: 0.0))
 		
-		cell.contents.addConstraint(NSLayoutConstraint(item: cell.controller.view, attribute: .Trailing, relatedBy: .Equal, toItem: cell.contents, attribute: .Trailing, multiplier: 1.0, constant: 0.0))
+		cell.contents.addConstraint(NSLayoutConstraint(item: cell.controller.view, attribute: .trailing, relatedBy: .equal, toItem: cell.contents, attribute: .trailing, multiplier: 1.0, constant: 0.0))
 		
-		cell.contents.addConstraint(NSLayoutConstraint(item: cell.controller.view, attribute: .Top, relatedBy: .Equal, toItem: cell.contents, attribute: .Top, multiplier: 1.0, constant: 0.0))
+		cell.contents.addConstraint(NSLayoutConstraint(item: cell.controller.view, attribute: .top, relatedBy: .equal, toItem: cell.contents, attribute: .top, multiplier: 1.0, constant: 0.0))
 		
-		cell.contents.addConstraint(NSLayoutConstraint(item: cell.controller.view, attribute: .Bottom, relatedBy: .Equal, toItem: cell.contents, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
+		cell.contents.addConstraint(NSLayoutConstraint(item: cell.controller.view, attribute: .bottom, relatedBy: .equal, toItem: cell.contents, attribute: .bottom, multiplier: 1.0, constant: 0.0))
 
 		cell.controller.view.translatesAutoresizingMaskIntoConstraints = false
 		cell.controller.view.sizeToFit()
@@ -149,12 +149,12 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
     // MARK: UICollectionViewDelegate
 
     // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         return true
     }
 
     // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
 		
 		self.selectedSection = indexPath
 		collectionView.performBatchUpdates({ () -> Void in
@@ -164,23 +164,23 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
         return true
     }
 
-	override func collectionView(collectionView: UICollectionView,
+	override func collectionView(_ collectionView: UICollectionView,
 		viewForSupplementaryElementOfKind kind: String,
-		atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView
+		at indexPath: IndexPath) -> UICollectionReusableView
 	{
 		var view:UICollectionReusableView? = nil;
 		
 		if kind == UICollectionElementKindSectionHeader {
-			view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "header", forIndexPath: indexPath)
+			view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath)
 		}
 		else if kind == UICollectionElementKindSectionFooter {
-			view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "footer", forIndexPath: indexPath) 
+			view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath) 
 			
 			for subview in view!.subviews {
 				if let buttonView:UIButton = subview as? UIButton {
 					if buttonView.tag == 1 {
 						self.locationButton = buttonView
-						self.locationButton.addTarget(self, action: "locationAction:", forControlEvents: UIControlEvents.TouchUpInside)
+						self.locationButton.addTarget(self, action: #selector(CollectionViewController.locationAction(_:)), for: UIControlEvents.touchUpInside)
 						updateLocationButtonIcon()
 						break;
 					}
@@ -213,7 +213,7 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 	let footerHeight:CGFloat = 50.0
 	let minHeight:CGFloat = 50.0
 
-	func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
 	{
 		let sectionCount = CGFloat(self.sectionTitles.count)
 		
@@ -233,18 +233,18 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 //		return UIEdgeInsetsMake(20, 0, 0, 0);
 //	}
 
-	func collectionView(collectionView: UICollectionView,
+	func collectionView(_ collectionView: UICollectionView,
 		layout collectionViewLayout: UICollectionViewLayout,
-		minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat
+		minimumInteritemSpacingForSectionAt section: Int) -> CGFloat
 	{
 		return cellSpacing
 	}
 	
-	func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
 		return cellSpacing
 	}
 	
-	func collectionView(collectionView: UICollectionView, layout
+	func collectionView(_ collectionView: UICollectionView, layout
 		collectionViewLayout: UICollectionViewLayout,
 		referenceSizeForHeaderInSection section: Int) -> CGSize
 	{
@@ -253,7 +253,7 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 		return retval
 	}
 	
-	func collectionView(collectionView: UICollectionView, layout
+	func collectionView(_ collectionView: UICollectionView, layout
 		collectionViewLayout: UICollectionViewLayout,
 		referenceSizeForFooterInSection section: Int) -> CGSize
 	{
@@ -269,25 +269,25 @@ class CollectionViewController: UICollectionViewController, UICollectionViewDele
 		let locationResolved:Bool = LocationHelper.sharedInstance.locationResolved
 		
 		if !userPref {
-			self.locationButton.enabled = false;
+			self.locationButton.isEnabled = false;
 		}
 			
 		else if userPref && !accessAuth {
-			self.locationButton.enabled = true;
+			self.locationButton.isEnabled = true;
 			let image:UIImage? = UIImage(named:"warning")
-			self.locationButton.setImage(image, forState: .Normal);
+			self.locationButton.setImage(image, for: UIControlState());
 		}
 			
 		else if userPref && !locationResolved {
-			self.locationButton.enabled = true;
+			self.locationButton.isEnabled = true;
 			let image:UIImage? = UIImage(named:"location empty")
-			self.locationButton.setImage(image, forState: .Normal);
+			self.locationButton.setImage(image, for: UIControlState());
 		}
 			
 		else {
-			self.locationButton.enabled = true;
+			self.locationButton.isEnabled = true;
 			let image:UIImage? = UIImage(named:"location")
-			self.locationButton.setImage(image, forState: .Normal);
+			self.locationButton.setImage(image, for: UIControlState());
 		}
 	}
 

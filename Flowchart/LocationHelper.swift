@@ -39,9 +39,9 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 	var trackLocationPref : Bool = false
 
 	//MARK: Utilities
-	func setUserLocationTrackingUserPref(enableTracking:Bool) {
-		let userDefaults = NSUserDefaults.standardUserDefaults()
-		userDefaults.setBool(enableTracking, forKey:kLocationUserPref)
+	func setUserLocationTrackingUserPref(_ enableTracking:Bool) {
+		let userDefaults = UserDefaults.standard
+		userDefaults.set(enableTracking, forKey:kLocationUserPref)
 		userDefaults.synchronize()
 		
 		self.trackLocationPref = self.getUserLocationTrackingUserPref()
@@ -54,9 +54,9 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 	}
 	
 	func getUserLocationTrackingUserPref() -> Bool {
-		let userDefaults = NSUserDefaults.standardUserDefaults()
+		let userDefaults = UserDefaults.standard
 		userDefaults.synchronize()
-		let trackLocation:Bool = userDefaults.boolForKey(kLocationUserPref)
+		let trackLocation:Bool = userDefaults.bool(forKey: kLocationUserPref)
 		return trackLocation
 	}
 	
@@ -118,7 +118,7 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 	}
 	
 	//MARK: CLLocationManagerDelegate
-	func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 		locationResolved = true
 		
 		CLGeocoder().reverseGeocodeLocation(manager.location!, completionHandler: {(placemarks, error)->Void in
@@ -134,20 +134,20 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 				print("no placemark returned from geocoder")
 			}
 			
-			NSNotificationCenter.defaultCenter().postNotificationName(kLocationHelperNotification, object:nil)
+			NotificationCenter.default.post(name: Notification.Name(rawValue: kLocationHelperNotification), object:nil)
 		})
 	}
 	
-	func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+	func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
 		print("Location resolution failed")
-		NSNotificationCenter.defaultCenter().postNotificationName(kLocationHelperNotification, object:nil)
+		NotificationCenter.default.post(name: Notification.Name(rawValue: kLocationHelperNotification), object:nil)
 	}
 	
-	func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+	func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
 		print("Location authorization changed to: \(status.rawValue)")
 		authorizationStatus = status
-		accessAuthorized = status == CLAuthorizationStatus.AuthorizedWhenInUse || status == CLAuthorizationStatus.AuthorizedAlways
+		accessAuthorized = status == CLAuthorizationStatus.authorizedWhenInUse || status == CLAuthorizationStatus.authorizedAlways
 		
-		NSNotificationCenter.defaultCenter().postNotificationName(kLocationHelperNotification, object:nil)
+		NotificationCenter.default.post(name: Notification.Name(rawValue: kLocationHelperNotification), object:nil)
 	}
 }

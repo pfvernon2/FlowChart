@@ -19,12 +19,12 @@ class InhalerViewController: UIViewController {
 
 	var avgInhaler : Double = 0.0
 
-	@IBAction func inhalerAction(sender: UIStepper) {
+	@IBAction func inhalerAction(_ sender: UIStepper) {
 		inhalerValueLabel.text = String(Int(inhalerStepper.value))
 	}
 
-	@IBAction func submitInhalerAction(sender: AnyObject) {
-		self.inhalerSubmit.hidden = true;
+	@IBAction func submitInhalerAction(_ sender: AnyObject) {
+		self.inhalerSubmit.isHidden = true;
 		self.inhalerSubmitStatus.startAnimating();
 		
 		let inhaler = Int(inhalerStepper.value)
@@ -34,19 +34,19 @@ class InhalerViewController: UIViewController {
 			location = LocationHelper.sharedInstance.locationManager.location
 		}
 		
-		HealthKitHelper.sharedInstance.writeInhalerUsage(Double(inhaler), date:NSDate(), location:location) { (success, error) -> () in
+		HealthKitHelper.sharedInstance.writeInhalerUsage(Double(inhaler), date:Date(), location:location) { (success, error) -> () in
 			
 			if !success {
                 let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Inhaler Usage Failed", comment: "Inhaler Usage Failed - title"),
                     message:  NSLocalizedString("Unable to access your HealthKit information. Please confirm this app is configured access your HealthKit data in Settings->Privacy->Health.", comment: "Inhaler Usage Failed - message"),
-                    preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                    preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
 			}
 			
 			self.delay(1.0, closure: { () -> () in
 				self.inhalerSubmitStatus.stopAnimating();
-				self.inhalerSubmit.hidden = false;
+				self.inhalerSubmit.isHidden = false;
 				self.updateDisplay()
 			})
 		}
@@ -63,48 +63,48 @@ class InhalerViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 	
-	override func viewDidAppear(animated: Bool) {
+	override func viewDidAppear(_ animated: Bool) {
 		self.updateDisplay()
 	}
 
 	func updateDisplay() {
 		//create group so we can join on results and update the display atomically
-		let uiUpdateGroup:dispatch_group_t = dispatch_group_create();
+		let uiUpdateGroup:DispatchGroup = DispatchGroup();
 		
-		dispatch_group_enter(uiUpdateGroup);
+		uiUpdateGroup.enter();
 		if !HealthKitHelper.sharedInstance.connect ({ (success, error) -> () in
-			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				dispatch_group_leave(uiUpdateGroup);
+			DispatchQueue.main.async(execute: { () -> Void in
+				uiUpdateGroup.leave();
 				
 				if (!success) {
                     let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Sorry", comment: "HealthKit access error - title"),
                         message:  NSLocalizedString("We were unable to access your data in HealthKit.\n\nYou can correct this in your iPhone Settings under Privacy/Health", comment: "HealthKit access error - message"),
-                        preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
+                        preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
 				}
 			})
 		})
 		{
-			dispatch_group_leave(uiUpdateGroup);
+			uiUpdateGroup.leave();
 			
             let alert:UIAlertController = UIAlertController(title: NSLocalizedString("Sorry", comment: "HealthKit not available - title"),
                 message:  NSLocalizedString("HealthKit is not available on this device.", comment: "HealthKit not available - message"),
-                preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment:""), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
 			
 			return;
 		}
 		
 		//Display inhaler average
-		dispatch_group_enter(uiUpdateGroup);
+		uiUpdateGroup.enter();
 		HealthKitHelper.sharedInstance.getInhalerAverage({ (inhaler, error) -> () in
 			self.avgInhaler = inhaler
-			dispatch_group_leave(uiUpdateGroup);
+			uiUpdateGroup.leave();
 		})
 		
-		dispatch_group_notify(uiUpdateGroup, dispatch_get_main_queue(), {
+		uiUpdateGroup.notify(queue: DispatchQueue.main, execute: {
 			//display inhaler usage average
 			let peakLabel:String = NSLocalizedString("Daily Average", comment: "Inhaler Daily Average Label")
 			self.inhalerAverageLabel.text = String(format: "%@: %0.2f", peakLabel, self.avgInhaler)
@@ -115,13 +115,9 @@ class InhalerViewController: UIViewController {
 		})
 	}
 
-	func delay(delay:Double, closure:()->()) {
-		dispatch_after(
-			dispatch_time(
-				DISPATCH_TIME_NOW,
-				Int64(delay * Double(NSEC_PER_SEC))
-			),
-			dispatch_get_main_queue(), closure)
+	func delay(_ delay:Double, closure:@escaping ()->()) {
+		DispatchQueue.main.asyncAfter(
+			deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
 	}
 
     /*

@@ -11,9 +11,9 @@ import HealthKit
 import CoreLocation
 
 class HealthKitHelper: NSObject {
-	var dateFormatter = NSDateFormatter()
+	var dateFormatter = DateFormatter()
 
-	let healthStore:HKHealthStore = HKHealthStore();
+	let healthStore:HKHealthStore = HKHealthStore()
 	
 	//Singleton access
 	class var sharedInstance:HealthKitHelper {
@@ -29,24 +29,24 @@ class HealthKitHelper: NSObject {
 		dateFormatter.dateFormat = "MM/dd/yy hh:mm a"
 	}
 
-	func connect(completion:(success:Bool, error:NSError!)->()) -> Bool {
+	func connect(_ completion:@escaping (_ success:Bool, _ error:NSError?)->()) -> Bool {
 		// Set up an HKHealthStore, asking the user for read/write permissions. 
 		if (HKHealthStore.isHealthDataAvailable()) {
-			let peakFlowType:HKQuantityType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)!
-			let inhalerUsageType:HKQuantityType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierInhalerUsage)!
+			let peakFlowType:HKQuantityType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.peakExpiratoryFlowRate)!
+			let inhalerUsageType:HKQuantityType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.inhalerUsage)!
 			let writeTypes = [peakFlowType, inhalerUsageType]
 			let readTypes = [peakFlowType, inhalerUsageType]
             
-			self.healthStore.requestAuthorizationToShareTypes(NSSet(array:writeTypes) as? Set<HKSampleType>,
-				readTypes: NSSet(array:readTypes)as? Set<HKObjectType>,
+			self.healthStore.requestAuthorization(toShare: NSSet(array:writeTypes) as? Set<HKSampleType>,
+				read: NSSet(array:readTypes)as? Set<HKObjectType>,
 				completion:
 				{
 				(success:Bool, error:NSError?) -> Void in
 				if error != nil {
 					print("HealthKit access denied: " + error!.localizedDescription)
 				}
-				completion(success: success, error: error)
-			})
+				completion(success, error)
+			} as! (Bool, Error?) -> Void)
 		} else {
 			print("HealthKit not available on device")
 			return false
@@ -56,7 +56,7 @@ class HealthKitHelper: NSObject {
 	}
 	
 	// MARK: - write
-	func locationToMetadata(location:CLLocation?) -> Dictionary<String, NSNumber>? {
+	func locationToMetadata(_ location:CLLocation?) -> Dictionary<String, NSNumber>? {
 		var lat:Double = 0.0
 		var long:Double = 0.0
 		if location != nil {
@@ -68,49 +68,48 @@ class HealthKitHelper: NSObject {
 		return nil
 	}
 	
-	func writePeakFlowSample(flowRate:Double, date:NSDate, location:CLLocation!, completion:(success:Bool, error:NSError!)->()) {
-		let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
+	func writePeakFlowSample(_ flowRate:Double, date:Date, location:CLLocation!, completion:@escaping (_ success:Bool, _ error:NSError?)->()) {
+		let peakUnit = HKUnit.liter().unitDivided(by: HKUnit.minute())
 		let peakQuantity = HKQuantity(unit:peakUnit, doubleValue:flowRate)
-		let peakQuantityType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
+		let peakQuantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.peakExpiratoryFlowRate)
 		let metadata = self.locationToMetadata(location)
 		
-		let peakFlowSample = HKQuantitySample(type: peakQuantityType!, quantity: peakQuantity, startDate: date, endDate: date, metadata:metadata)
+		let peakFlowSample = HKQuantitySample(type: peakQuantityType!, quantity: peakQuantity, start: date, end: date, metadata:metadata)
 		
 		self.writeSample(peakFlowSample, completion: completion)
 	}
 	
-	func writeInhalerUsage(usage:Double, date:NSDate, location:CLLocation!, completion:(success:Bool, error:NSError!)->()) {
-		let usageUnit = HKUnit.countUnit()
+	func writeInhalerUsage(_ usage:Double, date:Date, location:CLLocation!, completion:@escaping (_ success:Bool, _ error:NSError?)->()) {
+		let usageUnit = HKUnit.count()
 		let usageQuantity = HKQuantity(unit: usageUnit, doubleValue:usage)
-		let usageQuantityType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierInhalerUsage)
+		let usageQuantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.inhalerUsage)
 		let metadata = self.locationToMetadata(location)
 		
-		let usageSample = HKQuantitySample(type: usageQuantityType!, quantity: usageQuantity, startDate: date, endDate: date, metadata:metadata)
+		let usageSample = HKQuantitySample(type: usageQuantityType!, quantity: usageQuantity, start: date, end: date, metadata:metadata)
 		
 		self.writeSample(usageSample, completion: completion)
 	}
 	
-	func writeSample(sample:HKQuantitySample, completion:(success:Bool, error:NSError!)->()) {
-		healthStore.saveObject(sample, withCompletion: {
-			(success:Bool, error:NSError?) -> Void in
+	func writeSample(_ sample:HKQuantitySample, completion:@escaping (_ success:Bool, _ error:NSError?)->()) {
+		healthStore.save(sample, withCompletion: { (success, error) in
 			if (!success) {
 				print("HealthKit access denied: " + error!.localizedDescription)
 			}
 			
-			dispatch_async(dispatch_get_main_queue(), { () -> Void in
-				completion(success: success, error: error)
+			DispatchQueue.main.async(execute: { () -> Void in
+				completion(success, error as NSError?)
 			})
 		})
 	}
 
-	func importSamples(records:[[String]], completion:(count:Int)->()) {
+	func importSamples(_ records:[[String]], completion:@escaping (_ count:Int)->()) {
 		var imported = 0
-		var columns = []
+		var columns = [String]()
 		
 		let lock:NSLock = NSLock()
-		let hkGroup:dispatch_group_t = dispatch_group_create();
+		let hkGroup:DispatchGroup = DispatchGroup();
 		
-		for (index,record) in records.enumerate() {
+		for (index,record) in records.enumerated() {
 			print(record)
 			if index == 0 {
 				//check min required headers
@@ -118,24 +117,24 @@ class HealthKitHelper: NSObject {
 					record.contains("date") &&
 					record.contains("value")
 				{
-					columns = record
+					columns = record as [String]
 				} else {
 					break
 				}
 			}
 				
 			else if record.count == columns.count {
-				let dict:NSDictionary = NSDictionary(objects:record, forKeys:columns as! [NSCopying])
+				let dict:NSDictionary = NSDictionary(objects:record, forKeys:columns as [NSCopying])
 				
 				//We support: July 8, 2014 8:00 AM
 				let dateString:String = dict["date"] as! String
-				let recordDate = self.dateFormatter.dateFromString(dateString)
+				let recordDate = self.dateFormatter.date(from: dateString)
 				if recordDate == nil {
 					continue;
 				}
 				
 				let currType:String = dict["type"] as! String
-				let currValue:Double = NSNumberFormatter().numberFromString(dict["value"] as! String)!.doubleValue
+				let currValue:Double = NumberFormatter().number(from: dict["value"] as! String)!.doubleValue
 				
 				if let currMetadata:String = dict["metadata"] as? String {
 					// TODO: - Import lat/long metadata... might want to change export to make it easier on ourselves
@@ -144,114 +143,116 @@ class HealthKitHelper: NSObject {
 					}
 				}
 				
-				if currType == HKQuantityTypeIdentifierPeakExpiratoryFlowRate {
-					dispatch_group_enter(hkGroup);
-					self.writePeakFlowSample(currValue, date: recordDate!, location: nil, completion: { (success, error) -> () in
-						if success {
-							lock.lock()
-							++imported
-							lock.unlock()
-						}
-						dispatch_group_leave(hkGroup);
-					})
-				}
-					
-				else if currType == HKQuantityTypeIdentifierInhalerUsage {
-					dispatch_group_enter(hkGroup);
-					self.writeInhalerUsage(currValue, date: recordDate!, location: nil, completion: { (success, error) -> () in
-						if success {
-							lock.lock()
-							++imported
-							lock.unlock()
-						}
-						dispatch_group_leave(hkGroup);
-					})
-				}
+                switch currType {
+                case HKQuantityTypeIdentifier.peakExpiratoryFlowRate.rawValue:
+                    hkGroup.enter();
+                    self.writePeakFlowSample(currValue, date: recordDate!, location: nil, completion: { (success, error) -> () in
+                        if success {
+                            lock.lock()
+                            imported += 1
+                            lock.unlock()
+                        }
+                        hkGroup.leave();
+                    })
+                    
+                case HKQuantityTypeIdentifier.inhalerUsage.rawValue:
+                    hkGroup.enter();
+                    self.writeInhalerUsage(currValue, date: recordDate!, location: nil, completion: { (success, error) -> () in
+                        if success {
+                            lock.lock()
+                            imported += 1
+                            lock.unlock()
+                        }
+                        hkGroup.leave();
+                    })
+                default:
+                    break
+                }
 			}
 		}
 		
-		dispatch_group_notify(hkGroup, dispatch_get_main_queue(), {
-			completion(count:imported)
+		hkGroup.notify(queue: DispatchQueue.main, execute: {
+			completion(imported)
 		})
 	}
 	
 	// MARK: - Read
 	// MARK: - Peak Flow Queries
-	func getMaxPeakFlowSample(completion:(peakFlow:Double, error:NSError!)->()) {
-		let peakQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
+	func getMaxPeakFlowSample(_ completion:@escaping (_ peakFlow:Double, _ error:NSError?)->()) {
+		let peakQuantityType = HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.peakExpiratoryFlowRate)
 		
-		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType!, quantitySamplePredicate: nil, options: .DiscreteMax) { (query, statistics, error:NSError?) -> Void in
+		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType!, quantitySamplePredicate: nil, options: .discreteMax) { (query, statistics, error) -> Void in
 			
 			var result = 0.0
 			if statistics != nil {
-				let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
+				let peakUnit = HKUnit.liter().unitDivided(by: HKUnit.minute())
 				if let peakQuantity:HKQuantity = statistics!.maximumQuantity() {
-					result = peakQuantity.doubleValueForUnit(peakUnit)
+					result = peakQuantity.doubleValue(for: peakUnit)
 				}
 			}
 			
-			completion(peakFlow:result, error:error)
+			completion(result, error as NSError?)
 		}
 		
-		healthStore.executeQuery(statsQuery)
+		healthStore.execute(statsQuery)
 	}
 	
-	func getMinPeakFlowSample(completion:(peakFlow:Double, error:NSError!)->()) {
-		let peakQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
+	func getMinPeakFlowSample(_ completion:@escaping (_ peakFlow:Double, _ error:NSError?)->()) {
+		let peakQuantityType = HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.peakExpiratoryFlowRate)
 		
-		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType!, quantitySamplePredicate: nil, options: .DiscreteMin) { (query, statistics, error:NSError?) -> Void in
+		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType!, quantitySamplePredicate: nil, options: .discreteMin) { (query, statistics, error) -> Void in
 			
 			var result = 0.0
 			if statistics != nil {
-				let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
+				let peakUnit = HKUnit.liter().unitDivided(by: HKUnit.minute())
 				if let peakQuantity:HKQuantity = statistics!.minimumQuantity() {
-					result = peakQuantity.doubleValueForUnit(peakUnit)
+					result = peakQuantity.doubleValue(for: peakUnit)
 				}
 			}
 			
-			completion(peakFlow:result, error:error)
+			completion(result, error as NSError?)
 		}
 		
-		healthStore.executeQuery(statsQuery)
+		healthStore.execute(statsQuery)
 	}
 
-	func getPeakFlowAverageWithPredicate(predicate:NSPredicate!, completion:(peakFlow:Double, error:NSError!)->()) {
-		let peakQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
+	func getPeakFlowAverageWithPredicate(_ predicate:NSPredicate!, completion:@escaping (_ peakFlow:Double, _ error:NSError?)->()) {
+		let peakQuantityType = HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.peakExpiratoryFlowRate)
 		
-		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType!, quantitySamplePredicate: predicate, options: .DiscreteAverage) { (query, statistics, error:NSError?) -> Void in
+		let statsQuery = HKStatisticsQuery(quantityType: peakQuantityType!, quantitySamplePredicate: predicate, options: .discreteAverage) { (query, statistics, error) -> Void in
 			
 			var result = 0.0
 			if statistics != nil {
-				let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
+				let peakUnit = HKUnit.liter().unitDivided(by: HKUnit.minute())
 				if let peakQuantity:HKQuantity = statistics!.averageQuantity() {
-					result = peakQuantity.doubleValueForUnit(peakUnit)
+					result = peakQuantity.doubleValue(for: peakUnit)
 				}
 			}
 			
-			completion(peakFlow:result, error:error)
+			completion(result, error as NSError?)
 		}
 		
-		healthStore.executeQuery(statsQuery)
+		healthStore.execute(statsQuery)
 	}
 
-	func getPeakFlowAverageForLastMonth(completion:(peakFlow:Double, error:NSError!)->()) {
-		let past:NSDate = NSDate(timeIntervalSinceNow: -(60.0 * 60.0 * 24 * 30))
-		let now:NSDate = NSDate()
-		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: now, options: .None)
+	func getPeakFlowAverageForLastMonth(_ completion:@escaping (_ peakFlow:Double, _ error:NSError?)->()) {
+		let past:Date = Date(timeIntervalSinceNow: -(60.0 * 60.0 * 24 * 30))
+		let now:Date = Date()
+		let datePredicate = HKQuery.predicateForSamples(withStart: past, end: now, options: HKQueryOptions())
 		
 		self.getPeakFlowAverageWithPredicate(datePredicate, completion: completion)
 	}
 	
-	func getPeakFlowAverage(completion:(peakFlow:Double, error:NSError!)->()) {
+	func getPeakFlowAverage(_ completion:@escaping (_ peakFlow:Double, _ error:NSError?)->()) {
 		self.getPeakFlowAverageWithPredicate(nil, completion: completion)
 	}
 	
-	func exportPeakFlowSamples(completion:(peakFlow: [HKQuantitySample], error:NSError!)->()){
-		let past:NSDate = NSDate.distantPast() 
-		let future:NSDate = NSDate.distantFuture() 
-		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: future, options: .None)
+	func exportPeakFlowSamples(_ completion:@escaping (_ peakFlow: [HKQuantitySample], _ error:NSError?)->()){
+		let past:Date = Date.distantPast 
+		let future:Date = Date.distantFuture 
+		let datePredicate = HKQuery.predicateForSamples(withStart: past, end: future, options: HKQueryOptions())
 		
-		let peakQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)
+		let peakQuantityType = HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.peakExpiratoryFlowRate)
 		var peakResults = [HKQuantitySample]()
 		let peakQuery = HKSampleQuery(sampleType: peakQuantityType!, predicate: datePredicate,
 			limit: 0, sortDescriptors: nil, resultsHandler: {
@@ -261,63 +262,59 @@ class HealthKitHelper: NSObject {
 					peakResults = results as! [HKQuantitySample]
 				}
 				
-				completion(peakFlow:peakResults, error:error)
+				completion(peakResults, error as NSError?)
 		})
-		healthStore.executeQuery(peakQuery)
+		healthStore.execute(peakQuery)
 	}
 	
 	// MARK: - Inhaler Queries
-	func getInhalerDailyAverageWithPredicate(predicate:NSPredicate!, completion:(inhaler:Double, error:NSError!)->()) {
-		let inhalerQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierInhalerUsage)
+	func getInhalerDailyAverageWithPredicate(_ predicate:NSPredicate!, completion:@escaping (_ inhaler:Double, _ error:NSError?)->()) {
+		let inhalerQuantityType = HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.inhalerUsage)
 		
-		let statsQuery = HKStatisticsQuery(quantityType: inhalerQuantityType!, quantitySamplePredicate: predicate, options: .CumulativeSum) { (query, statistics, error:NSError?) -> Void in
+		let statsQuery = HKStatisticsQuery(quantityType: inhalerQuantityType!, quantitySamplePredicate: predicate, options: .cumulativeSum) { (query, statistics, error) -> Void in
 			
 			var result = 0.0
 			if statistics != nil {
-				let countUnit = HKUnit.countUnit()
+				let countUnit = HKUnit.count()
 				if let inhalerCount:HKQuantity = statistics!.sumQuantity() {
 					//get cummulative counts for query
-					result = inhalerCount.doubleValueForUnit(countUnit)
+					result = inhalerCount.doubleValue(for: countUnit)
 					
 					//get days between result dates
-					var startDate: NSDate? = statistics!.startDate.copy() as? NSDate
-					var endDate: NSDate? = statistics!.endDate.copy() as? NSDate
-					let calendar = NSCalendar.currentCalendar()
-					calendar.rangeOfUnit(NSCalendarUnit.Day, startDate: &startDate, interval: nil, forDate: startDate!)
-					calendar.rangeOfUnit(NSCalendarUnit.Day, startDate: &endDate, interval: nil, forDate: endDate!)
-					let difference:NSDateComponents = calendar.components(NSCalendarUnit.Day, fromDate: startDate!, toDate: endDate!, options: [])
-					
-					let days:Double = Double(difference.day)
-					if days > 0.0 {
-						result /= days
-					}
+                    if let startDate:Date = (statistics!.startDate as NSDate).copy() as? Date, let endDate:Date = (statistics!.endDate as NSDate).copy() as? Date {
+                        let components = Calendar.current.dateComponents([Calendar.Component.day], from: startDate, to: endDate)
+                        let days:Double = Double(components.day!)
+                        if days > 0.0 {
+                            result /= days
+                        }
+                    }
 				}
 			}
 			
-			completion(inhaler:result, error:error)
+			completion(result, error as NSError?)
 		}
 		
-		healthStore.executeQuery(statsQuery)
+		healthStore.execute(statsQuery)
 	}
 	
-	func getInhalerDailyAverageForLastMonth(completion:(inhaler:Double, error:NSError!)->()) {
-		let past:NSDate = NSDate(timeIntervalSinceNow: -(60.0 * 60.0 * 24 * 30))
-		let now:NSDate = NSDate()
-		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: now, options: .None)
+	func getInhalerDailyAverageForLastMonth(_ completion:@escaping (_ inhaler:Double, _ error:NSError?)->()) {
+		let past:Date = Date(timeIntervalSinceNow: -(60.0 * 60.0 * 24 * 30))
+		let now:Date = Date()
+		let datePredicate = HKQuery.predicateForSamples(withStart: past, end: now, options: HKQueryOptions())
 		
 		self.getInhalerDailyAverageWithPredicate(datePredicate, completion: completion);
 	}
 	
-	func getInhalerAverage(completion:(inhaler:Double, error:NSError!)->()) {
+	func getInhalerAverage(_ completion:@escaping (_ inhaler:Double, _ error:NSError?)->()) {
 		self.getInhalerDailyAverageWithPredicate(nil, completion: completion)
 	}
 	
-	func exportInhalerSamples(completion:(inhaler: [HKQuantitySample], error:NSError!)->()) {
-		let past:NSDate = NSDate.distantPast() 
-		let future:NSDate = NSDate.distantFuture() 
-		let datePredicate = HKQuery.predicateForSamplesWithStartDate(past, endDate: future, options: .None)
+	func exportInhalerSamples(_ completion:@escaping (_ inhaler: [HKQuantitySample], _ error:NSError?)->()) {
+		let past:Date = Date.distantPast 
+		let future:Date = Date.distantFuture 
+		let datePredicate = HKQuery.predicateForSamples(withStart: past, end: future, options: HKQueryOptions())
 
-		let inhalerQuantityType = HKSampleType.quantityTypeForIdentifier(HKQuantityTypeIdentifierInhalerUsage)
+		let inhalerQuantityType = HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.inhalerUsage)
 		var inhalerResults = [HKQuantitySample]()
 		let inhalerQuery = HKSampleQuery(sampleType: inhalerQuantityType!, predicate: datePredicate,
 			limit: 0, sortDescriptors: nil, resultsHandler: {
@@ -327,22 +324,21 @@ class HealthKitHelper: NSObject {
 					inhalerResults = results as! [HKQuantitySample]
 				}
 
-				completion(inhaler:inhalerResults, error:error)
+				completion(inhalerResults, error as NSError?)
 		})
-		healthStore.executeQuery(inhalerQuery)
+		healthStore.execute(inhalerQuery)
 	}
 	
-	func exportSamples(completion:(peakFlow:[[String]], inhaler:[[String]], error:NSError!)->()) {
+	func exportSamples(_ completion:@escaping (_ peakFlow:[[String]], _ inhaler:[[String]], _ error:NSError?)->()) {
 		//background export process
-		let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-		dispatch_async(dispatch_get_global_queue(priority, 0)) {
+		DispatchQueue.global().async {
 			//create group so we can join operations
-			let hkGroup:dispatch_group_t = dispatch_group_create();
+			let hkGroup:DispatchGroup = DispatchGroup();
 			
 			//export Peak Flow
 			var peakFlowData:[[String]] = [[String]]()
 			var peakFlowError:NSError!
-			dispatch_group_enter(hkGroup);
+			hkGroup.enter();
 			self.exportPeakFlowSamples { (peakFlow, error) -> () in
 				peakFlowError = error
 				
@@ -350,29 +346,29 @@ class HealthKitHelper: NSObject {
 				peakFlowData.append(["type", "date", "value", "units", "metadata"])
 				
 				//ensure units are l/min
-				let peakUnit = HKUnit.literUnit().unitDividedByUnit(HKUnit.minuteUnit())
+				let peakUnit = HKUnit.liter().unitDivided(by: HKUnit.minute())
 				let peakUnitString = peakUnit.unitString
-				let peakQuantityDescriptor = HKQuantityTypeIdentifierPeakExpiratoryFlowRate
-				for (_, sample) in peakFlow.enumerate() {
-					let date = self.dateFormatter.stringFromDate(sample.startDate)
-					let flowRate = sample.quantity.doubleValueForUnit(peakUnit);
+				let peakQuantityDescriptor = HKQuantityTypeIdentifier.peakExpiratoryFlowRate
+				for (_, sample) in peakFlow.enumerated() {
+					let date = self.dateFormatter.string(from: sample.startDate)
+					let flowRate = sample.quantity.doubleValue(for: peakUnit);
 					var metadataString = ""
 					if let metadata = sample.metadata {
 						metadataString =  "\(metadata)"
 					}
 					
-					peakFlowData.append([peakQuantityDescriptor, date, "\(flowRate)", peakUnitString, metadataString])
+					peakFlowData.append([peakQuantityDescriptor.rawValue, date, "\(flowRate)", peakUnitString, metadataString])
 					
-					print(sample.metadata)
+					print(sample.metadata ?? "missing sample")
 				}
 				
-				dispatch_group_leave(hkGroup);
+				hkGroup.leave();
 			}
 			
 			//Export Inhaler
 			var inhalerData:[[String]] = [[String]]()
 			var inhalerError:NSError!
-			dispatch_group_enter(hkGroup);
+			hkGroup.enter();
 			self.exportInhalerSamples { (inhaler, error) -> () in
 				inhalerError = error
 				
@@ -380,32 +376,32 @@ class HealthKitHelper: NSObject {
 				inhalerData.append(["type", "date", "value", "units", "metadata"])
 				
 				//ensure units are counts (probably always will be)
-				let inhalerUnit = HKUnit.countUnit()
+				let inhalerUnit = HKUnit.count()
 				let inhalerUnitString = inhalerUnit.unitString
-				let inhalerQuantityDescriptor = HKQuantityTypeIdentifierInhalerUsage
-				for (_, sample) in inhaler.enumerate() {
-					let date = self.dateFormatter.stringFromDate(sample.startDate)
-					let count = sample.quantity.doubleValueForUnit(inhalerUnit);
+				let inhalerQuantityDescriptor = HKQuantityTypeIdentifier.inhalerUsage
+				for (_, sample) in inhaler.enumerated() {
+					let date = self.dateFormatter.string(from: sample.startDate)
+					let count = sample.quantity.doubleValue(for: inhalerUnit);
 					var metadataString = ""
 					if let metadata = sample.metadata {
 						metadataString =  "\(metadata)"
 					}
 					
-					inhalerData.append([inhalerQuantityDescriptor, date, "\(count)", inhalerUnitString, metadataString])
+					inhalerData.append([inhalerQuantityDescriptor.rawValue, date, "\(count)", inhalerUnitString, metadataString])
 				}
 				
-				dispatch_group_leave(hkGroup);
+				hkGroup.leave();
 			}
 			
 			//Join workers and switch to main thread for error handling -or- completion
-			dispatch_group_notify(hkGroup, dispatch_get_main_queue(), {
+			hkGroup.notify(queue: DispatchQueue.main, execute: {
 				//report one of the errors, if any
 				var resultError = peakFlowError
 				if resultError == nil {
 					resultError = inhalerError
 				}
 				
-				completion(peakFlow: peakFlowData, inhaler: inhalerData, error:resultError)
+				completion(peakFlowData, inhalerData, resultError)
 			})
 		}
 	}

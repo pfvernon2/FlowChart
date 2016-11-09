@@ -27,7 +27,7 @@ class CollectionViewCell: UICollectionViewCell {
 	
 	func initCell() {
 		self.translatesAutoresizingMaskIntoConstraints = false;
-		self.autoresizingMask = [.FlexibleHeight, .FlexibleWidth];
+		self.autoresizingMask = [.flexibleHeight, .flexibleWidth];
 	}
 	
 //	override func drawRect(rect: CGRect) {
